@@ -1,0 +1,24 @@
+{
+  "name": "saif-vegdani-tuition-academy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Premium Tuition Academy Website for Saif Barkat Vegdani (Standards 3–12)",
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "build:client": "npm run build --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
+  },
+  "keywords": [
+    "tuition-classes",
+    "saif-vegdani",
+    "gseb",
+    "cbse",
+    "commerce-tuition",
+    "mern-stack"
+  ],
+  "author": "Saif Barkat Vegdani",
+  "license": "ISC"
+}

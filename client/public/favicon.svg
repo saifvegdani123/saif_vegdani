@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="30" fill="#070817" stroke="#C6A15B" stroke-width="2"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#C6A15B" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.6"/>
+  <text x="32" y="39" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-weight="700" font-size="20" fill="#C6A15B" letter-spacing="1">SV</text>
+</svg>
