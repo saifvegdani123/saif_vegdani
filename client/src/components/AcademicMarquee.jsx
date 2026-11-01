@@ -5,6 +5,7 @@ import { Sparkles, Award, GraduationCap, Clock, BookOpen, CheckCircle, ShieldChe
 /**
  * AcademicMarquee
  * Calm, editorial infinite ticker presenting verified institutional credentials.
+ * Text meets hard minimums (≥ 13px), pauses on hover, and respects reduced motion.
  */
 export default function AcademicMarquee() {
   const marqueeItems = [
@@ -46,27 +47,27 @@ export default function AcademicMarquee() {
   ];
 
   return (
-    <section className="bg-ivory border-y border-border-soft py-3.5 sm:py-4 overflow-hidden relative shadow-2xs" aria-label="Academic Highlights">
-      {/* Subtle Sheen */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gold/5 via-gold/10 to-gold/5 pointer-events-none" />
-
-      <Marquee duration={34} pauseOnHover={true} gap="gap-6 sm:gap-8" fadeWidth="w-12 sm:w-28">
+    <section
+      className="bg-ivory border-y border-border-soft py-3 sm:py-4 overflow-hidden relative"
+      aria-label="Academic Highlights"
+    >
+      <Marquee duration={36} pauseOnHover={true} gap="gap-6 sm:gap-8" fadeWidth="w-12 sm:w-28">
         {marqueeItems.map((item, idx) => {
           const Icon = item.icon;
           return (
             <div
               key={idx}
-              className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full bg-surface-pure/90 border border-gold/30 shadow-2xs transition-all cursor-default group"
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-pure border border-border-soft shadow-xs transition-colors cursor-default"
             >
-              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-ivory-light border border-gold/40 flex items-center justify-center text-gold-dark shrink-0">
-                <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <div className="w-6 h-6 rounded-full bg-ivory-light border border-gold/40 flex items-center justify-center text-gold-dark shrink-0">
+                <Icon className="w-3.5 h-3.5" />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] sm:text-[11px] font-bold tracking-wider uppercase text-charcoal group-hover:text-midnight transition-colors">
+              <div className="flex items-center gap-2 text-xs sm:text-[13px]">
+                <span className="font-bold tracking-wider uppercase text-charcoal">
                   {item.label}
                 </span>
-                <span className="text-border-soft text-xs">✦</span>
-                <span className="text-[10px] font-medium text-charcoal-muted hidden md:inline">
+                <span className="text-gold-dark text-xs font-semibold">•</span>
+                <span className="text-charcoal-muted font-normal hidden md:inline">
                   {item.detail}
                 </span>
               </div>

@@ -1,16 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion } from "framer-motion";
-import { Lightbulb, RotateCcw, Trophy, UserCheck } from "lucide-react";
-import SpotlightCard from "./ui/SpotlightCard";
+import { Lightbulb, RotateCcw, Trophy, UserCheck, BookOpen } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function TeachingPhilosophy() {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const gridRef = useRef(null);
+  const listRef = useRef(null);
   const quoteRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export default function TeachingPhilosophy() {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Header
+      // Header entrance
       gsap.from(headerRef.current, {
         opacity: 0,
         y: 24,
@@ -35,24 +33,24 @@ export default function TeachingPhilosophy() {
         }
       });
 
-      // 4 Principles Grid
-      gsap.from(gridRef.current?.children || [], {
+      // Principles List Items entrance
+      gsap.from(listRef.current?.children || [], {
         opacity: 0,
-        y: 32,
+        y: 28,
         duration: 0.8,
-        stagger: 0.12,
+        stagger: 0.14,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: gridRef.current,
+          trigger: listRef.current,
           start: "top 85%",
           toggleActions: "play none none none"
         }
       });
 
-      // Editorial Quote
+      // Full-width quote entrance
       gsap.from(quoteRef.current, {
         opacity: 0,
-        y: 20,
+        y: 24,
         duration: 0.75,
         ease: "power2.out",
         scrollTrigger: {
@@ -73,7 +71,7 @@ export default function TeachingPhilosophy() {
       title: "Concept Clarity Over Rote Memorisation",
       eyebrow: "Foundational Understanding",
       narrative:
-        "Rote learning creates exam anxiety and fails whenever questions deviate from standard textbook templates. We deconstruct syllabus chapters into transparent conceptual steps, ensuring mathematical formulas, scientific laws, and commercial principles are understood from their origins."
+        "Rote learning creates exam anxiety and breaks down whenever questions deviate from standard textbook templates. We deconstruct syllabus chapters into transparent conceptual steps, ensuring mathematical formulas, scientific laws, and commercial principles are understood from their origins."
     },
     {
       num: "02",
@@ -105,96 +103,91 @@ export default function TeachingPhilosophy() {
     <section
       ref={sectionRef}
       id="philosophy"
-      className="py-20 lg:py-28 bg-ivory border-b border-border-soft"
+      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
       aria-label="Teaching Philosophy"
     >
-      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* Section Eyebrow */}
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-border-soft/60">
-          <span className="text-[10.5px] font-mono font-bold tracking-[0.22em] text-gold-dark uppercase">
-            05 / TEACHING PHILOSOPHY
-          </span>
-          <span className="text-[11px] font-sans text-charcoal-muted font-medium">
-            Core Pedagogical Principles
-          </span>
-        </div>
+      <div className="site-container">
+        {/* Section Eyebrow & Header */}
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <div className="eyebrow-badge mb-3">
+            <BookOpen className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+            <span>05 / TEACHING PHILOSOPHY</span>
+          </div>
 
-        {/* Section Header */}
-        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] text-charcoal font-bold tracking-tight leading-tight">
-            A Disciplined Philosophy of True Mastery
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-4">
+            A Disciplined Philosophy of{" "}
+            <span className="font-serif italic font-normal text-gold-dark">
+              True Mastery.
+            </span>
           </h2>
-          <p className="text-xs sm:text-sm text-charcoal-muted mt-3 leading-relaxed font-normal">
+
+          <p className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal mx-auto max-w-2xl">
             Education is not about rushed shortcuts or memorising blindly. It is about steady
             conceptual understanding, disciplined practice, and genuine confidence.
           </p>
         </div>
 
-        {/* Asymmetrical 2x2 Editorial Layout for the 4 Teaching Principles with Large Outlined Numerals */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-14">
-          {principles.map((item, idx) => {
+        {/* Editorial Two-Column Numbered List with Hairline Dividers (No chunky card boxes) */}
+        <div
+          ref={listRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-8 sm:gap-y-10 mb-10"
+        >
+          {principles.map((item) => {
             const Icon = item.icon;
             return (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -4, transition: { type: "spring", stiffness: 350, damping: 25 } }}
-                className="h-full"
+              <div
+                key={item.num}
+                className="pt-6 border-t border-border-soft group transition-colors"
               >
-                <SpotlightCard
-                  className="bg-surface-pure p-7 sm:p-9 rounded-[24px] border border-border-soft shadow-2xs hover:border-gold/50 transition-all flex flex-col justify-between h-full group relative overflow-hidden"
-                  spotlightColor="rgba(198, 161, 91, 0.12)"
-                  radius={350}
-                >
-                  {/* Subtle Large Outlined Numeral in Background */}
-                  <span
-                    className="absolute top-4 right-6 font-serif text-6xl sm:text-7xl font-bold text-gold/10 select-none pointer-events-none group-hover:text-gold/20 transition-colors"
-                    aria-hidden="true"
-                  >
-                    {item.num}
-                  </span>
-
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="w-11 h-11 rounded-[14px] border border-gold/35 flex items-center justify-center text-gold-dark bg-ivory-light shadow-2xs group-hover:border-gold transition-colors">
-                        <Icon className="w-5 h-5 text-gold-dark" />
-                      </div>
-                      <span className="font-serif font-bold text-xl text-gold/80 group-hover:text-gold transition-colors">
-                        {item.num}
-                      </span>
-                    </div>
-
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-gold-dark block mb-1.5">
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="font-serif font-bold text-2xl sm:text-3xl text-gold-dark tracking-tight">
+                      {item.num}
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-[0.14em] text-gold-dark/90 font-mono">
                       {item.eyebrow}
                     </span>
-                    <h3 className="font-serif text-xl sm:text-[22px] font-bold text-charcoal tracking-tight mb-3 group-hover:text-midnight transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs sm:text-[13px] text-charcoal/80 leading-relaxed font-normal">
-                      {item.narrative}
-                    </p>
                   </div>
-                </SpotlightCard>
-              </motion.div>
+                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-border-soft flex items-center justify-center text-gold-dark group-hover:border-gold group-hover:bg-ivory-light transition-all shrink-0">
+                    <Icon className="w-4 h-4 text-gold-dark" />
+                  </div>
+                </div>
+
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-charcoal tracking-tight mb-2.5 group-hover:text-midnight transition-colors">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm sm:text-base text-charcoal/80 leading-relaxed font-normal">
+                  {item.narrative}
+                </p>
+              </div>
             );
           })}
         </div>
 
-        {/* Editorial Philosophical Statement Quote */}
+        {/* Editorial Philosophical Statement Quote - Midnight Band */}
         <div
           ref={quoteRef}
-          className="max-w-3xl mx-auto p-7 sm:p-9 rounded-[24px] bg-midnight text-white border border-gold/30 text-center relative shadow-lg overflow-hidden"
+          className="rounded-2xl bg-midnight text-white p-8 sm:p-12 relative overflow-hidden shadow-xl border border-midnight-subtle"
         >
-          {/* Subtle gold top divider */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-60" />
+          {/* Subtle gold accent top hairline */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" />
 
-          <p className="font-serif text-base sm:text-lg italic leading-relaxed text-white/95 mb-4">
-            “When students truly grasp the foundational principles, fear disappears. With
-            structured guidance and consistent practice, academic confidence becomes second nature.”
-          </p>
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-gold-light tracking-wider uppercase">
-            <span>— Saif Barkat Vegdani</span>
-            <span className="text-white/30">|</span>
-            <span className="text-white/70">B.Com, B.Ed</span>
+          <div className="max-w-3xl mx-auto text-center relative z-10">
+            <span className="font-serif text-5xl text-gold/40 block leading-none select-none mb-2">
+              &ldquo;
+            </span>
+            <p className="font-serif text-lg sm:text-xl md:text-2xl italic leading-relaxed text-ivory-light mb-6">
+              When students truly grasp the foundational principles, fear disappears. With structured
+              guidance and consistent practice, academic confidence becomes second nature.
+            </p>
+            <div className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-gold tracking-wider uppercase font-mono">
+              <span className="text-ivory">Saif Barkat Vegdani</span>
+              <span className="text-gold/50">•</span>
+              <span className="text-gold-light">B.Com, B.Ed</span>
+              <span className="text-gold/50">•</span>
+              <span className="text-ivory-light/70 font-normal">Principal Educator</span>
+            </div>
           </div>
         </div>
       </div>

@@ -14,8 +14,8 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-[#F6F1E6] text-charcoal border-t border-border-soft relative overflow-hidden" aria-label="Institutional Footer">
-      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-12 pt-16 pb-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-12 border-b border-border-soft">
+      <div className="site-container pt-12 pb-10 sm:pt-14 sm:pb-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-border-soft">
           {/* Col 1: Identity & Credentials (5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div>
@@ -37,25 +37,25 @@ export default function Footer() {
                   <span className="font-serif font-bold text-xl text-charcoal tracking-tight block leading-tight">
                     S.V. Tutorial
                   </span>
-                  <span className="text-[9.5px] font-sans font-semibold tracking-[0.22em] text-gold-dark uppercase mt-0.5 block">
+                  <span className="text-xs font-semibold tracking-[0.14em] text-gold-dark uppercase mt-0.5 block font-mono">
                     Saif Barkat Vegdani · Tuition Classes
                   </span>
                 </div>
               </div>
 
-              <p className="text-xs sm:text-[13px] text-charcoal-muted leading-relaxed mb-6 font-normal max-w-md">
+              <p className="text-sm text-charcoal-muted leading-relaxed mb-6 font-normal max-w-md">
                 Personalised tuition classes for Standards 3–12. Focused on building ironclad
                 conceptual fundamentals, consistent daily practice, and confident exam performance under
-                the direct guidance of a B.Com & B.Ed qualified educator.
+                the direct guidance of a B.Com &amp; B.Ed qualified educator.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5">
               <div className="inline-flex items-center gap-2 text-xs text-charcoal font-semibold px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft shadow-2xs">
-                <ShieldCheck className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-gold-dark shrink-0" />
                 <span>8 Years Verified Record</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 text-xs text-charcoal-muted font-medium px-3 py-1.5 rounded-full bg-surface-pure border border-border-soft">
+              <div className="inline-flex items-center gap-1.5 text-xs text-charcoal-muted font-medium px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft font-mono">
                 <span>B.Com, B.Ed</span>
               </div>
             </div>
@@ -63,17 +63,17 @@ export default function Footer() {
 
           {/* Col 2: Academic Divisions (3 cols) */}
           <div className="lg:col-span-3">
-            <h4 className="font-serif text-xs font-bold text-gold-dark uppercase tracking-widest mb-4">
+            <h4 className="font-serif text-sm font-bold text-gold-dark uppercase tracking-widest mb-4">
               Academic Divisions
             </h4>
-            <ul className="space-y-3 text-xs text-charcoal/80">
+            <ul className="space-y-3 text-xs sm:text-sm text-charcoal/80">
               <li>
                 <a
                   href="#classes"
                   className="hover:text-gold-dark transition-colors flex items-center justify-between group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform">Primary & Middle (Std 3–8)</span>
-                  <span className="text-[10px] text-charcoal-muted">GSEB & CBSE</span>
+                  <span className="group-hover:translate-x-1 transition-transform">Primary &amp; Middle (Std 3–8)</span>
+                  <span className="text-xs text-charcoal-muted font-mono">GSEB &amp; CBSE</span>
                 </a>
               </li>
               <li>
@@ -82,7 +82,7 @@ export default function Footer() {
                   className="hover:text-gold-dark transition-colors flex items-center justify-between group"
                 >
                   <span className="group-hover:translate-x-1 transition-transform">Secondary Board (Std 9–10)</span>
-                  <span className="text-[10px] text-charcoal-muted">GSEB Only</span>
+                  <span className="text-xs text-charcoal-muted font-mono">GSEB Only</span>
                 </a>
               </li>
               <li>
@@ -91,7 +91,7 @@ export default function Footer() {
                   className="hover:text-gold-dark transition-colors flex items-center justify-between group"
                 >
                   <span className="group-hover:translate-x-1 transition-transform">Higher Secondary (Std 11–12)</span>
-                  <span className="text-[10px] text-gold-dark font-medium">Commerce</span>
+                  <span className="text-xs text-gold-dark font-medium font-mono">Commerce</span>
                 </a>
               </li>
               <li>
@@ -110,26 +110,34 @@ export default function Footer() {
                   <span className="group-hover:translate-x-1 transition-transform inline-block">Teaching Methodology</span>
                 </a>
               </li>
+              <li>
+                <a
+                  href="#faq"
+                  className="hover:text-gold-dark transition-colors block group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">Frequently Asked Questions</span>
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Col 3: Navigation & Timings (4 cols) */}
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
-              <h4 className="font-serif text-xs font-bold text-gold-dark uppercase tracking-widest mb-4">
+              <h4 className="font-serif text-sm font-bold text-gold-dark uppercase tracking-widest mb-4">
                 Operational Schedule
               </h4>
-              <div className="p-4 rounded-[16px] bg-surface-pure border border-border-soft mb-5 shadow-2xs">
+              <div className="p-4 rounded-xl bg-surface-pure border border-border-soft mb-5 shadow-2xs">
                 <div className="flex items-start gap-2.5">
                   <Clock className="w-4 h-4 text-gold-dark mt-0.5 shrink-0" />
                   <div>
-                    <span className="text-charcoal-muted block text-[10.5px] uppercase tracking-wider">
+                    <span className="text-charcoal-muted block text-xs uppercase tracking-wider font-mono">
                       Confirmed Evening Window:
                     </span>
                     <strong className="text-charcoal text-sm font-semibold block mt-0.5">
                       4:30 PM – 8:00 PM
                     </strong>
-                    <span className="text-[10.5px] text-charcoal-muted block mt-0.5">
+                    <span className="text-xs text-charcoal-muted block mt-0.5">
                       Monday to Saturday (Evening Batches)
                     </span>
                   </div>
@@ -141,16 +149,16 @@ export default function Footer() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-full bg-midnight hover:bg-midnight-card text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-colors shadow-sm border border-gold/40"
+              className="inline-flex items-center justify-center gap-2 w-full min-h-[48px] py-3.5 px-4 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-all shadow-sm border border-gold/40"
             >
-              <MessageCircle className="w-4 h-4 text-gold" />
+              <MessageCircle className="w-4 h-4 text-gold shrink-0" />
               <span>WhatsApp Admission Desk</span>
             </a>
           </div>
         </div>
 
         {/* Bottom Strip: Copyright & Back to Top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-charcoal-muted">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-charcoal-muted">
           <p>© 2026 S.V. Tutorial — Saif Barkat Vegdani Tuition Classes. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="text-gold-dark font-medium">
@@ -159,7 +167,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={scrollToTop}
-              className="p-1.5 rounded-full bg-surface-pure hover:bg-ivory-tint text-charcoal border border-border-soft transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-gold cursor-pointer"
+              className="min-h-[44px] min-w-[44px] rounded-full bg-surface-pure hover:bg-ivory-light text-charcoal border border-border-soft transition-colors flex items-center justify-center cursor-pointer shadow-xs"
               aria-label="Back to top of page"
             >
               <ArrowUp className="w-4 h-4" />

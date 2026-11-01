@@ -13,13 +13,12 @@ import CurriculumDiagnostic from "./components/CurriculumDiagnostic";
 import TeachingPhilosophy from "./components/TeachingPhilosophy";
 import TeacherProfile from "./components/TeacherProfile";
 import BatchTimings from "./components/BatchTimings";
-import ClassroomGallery from "./components/ClassroomGallery";
 import AdmissionsEnquiry from "./components/AdmissionsEnquiry";
 import FAQSection from "./components/FAQSection";
 import Footer from "./components/Footer";
 import WhatsAppFloating from "./components/WhatsAppFloating";
-import CustomCursor from "./components/ui/CustomCursor";
 import IntroLoader from "./components/ui/IntroLoader";
+import CustomCursor from "./components/ui/CustomCursor";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,6 +48,8 @@ export default function App() {
       touchMultiplier: 1.2
     });
 
+    window.__lenis = lenis;
+
     lenis.on("scroll", ScrollTrigger.update);
 
     const rafCallback = (time) => {
@@ -65,6 +66,7 @@ export default function App() {
     return () => {
       clearTimeout(timer);
       lenis.destroy();
+      delete window.__lenis;
       gsap.ticker.remove(rafCallback);
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
@@ -75,7 +77,7 @@ export default function App() {
       {/* Editorial Multilingual Opening Loader with StrictMode Double-Invoke Protection */}
       <IntroLoader />
 
-      {/* Subtle Custom Desktop Cursor Glow (Inert on touch) */}
+      {/* World-Class GPU-Accelerated Custom Cursor (Desktop Mouse Only) */}
       <CustomCursor />
 
       {/* Fine Editorial Champagne Gold Scroll Progress Indicator */}
@@ -106,7 +108,6 @@ export default function App() {
         <TeachingPhilosophy />
         <TeacherProfile />
         <BatchTimings />
-        <ClassroomGallery />
         <AdmissionsEnquiry />
         <FAQSection />
       </main>

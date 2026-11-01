@@ -1,12 +1,20 @@
 /**
  * Reusable WhatsApp Enquiry Utility
- * Generates verified international phone links with URL-encoded messages
+ * Generates verified international phone links with URL-encoded messages.
+ * Derives phone number exclusively from VITE_WHATSAPP_NUMBER.
  */
 
-// Configurable WhatsApp business phone number
-// Default placeholder: 919876543210 (International format without '+' or spaces)
-export const DEFAULT_WHATSAPP_NUMBER =
-  import.meta.env.VITE_WHATSAPP_NUMBER || "919876543210";
+const envNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+const isPlaceholder = !envNumber || envNumber === "919876543210" || envNumber.trim() === "";
+
+if (import.meta.env.DEV && isPlaceholder) {
+  console.warn(
+    "[S.V. Tutorial Notice] VITE_WHATSAPP_NUMBER is missing or set to placeholder in client environment. Owner must supply real number in client/.env"
+  );
+}
+
+// Configurable WhatsApp business phone number derived solely from environment
+export const DEFAULT_WHATSAPP_NUMBER = (envNumber || "").trim();
 
 /**
  * Creates a formatted WhatsApp click-to-chat URL
@@ -15,9 +23,11 @@ export const DEFAULT_WHATSAPP_NUMBER =
  * @returns {string} - Complete WhatsApp web/app URL
  */
 export function createWhatsAppUrl(message, phoneNumber = DEFAULT_WHATSAPP_NUMBER) {
-  const cleanPhone = String(phoneNumber).replace(/[^0-9]/g, "");
+  const cleanPhone = String(phoneNumber || "").replace(/[^0-9]/g, "");
   const encodedText = encodeURIComponent(message.trim());
-  return `https://wa.me/${cleanPhone}?text=${encodedText}`;
+  return cleanPhone
+    ? `https://wa.me/${cleanPhone}?text=${encodedText}`
+    : `https://wa.me/?text=${encodedText}`;
 }
 
 /**

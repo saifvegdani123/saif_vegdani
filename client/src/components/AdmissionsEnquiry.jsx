@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Send, CheckCircle2, AlertTriangle, Clock, Loader2 } from "lucide-react";
+import { MessageCircle, Send, CheckCircle2, AlertTriangle, Clock, Loader2, Sparkles } from "lucide-react";
 import { getFormSubmissionWhatsAppUrl, createWhatsAppUrl } from "../utils/whatsapp";
 import saifDeskImg from "../assets/saif-vegdani-desk.jpg";
 import logoImg from "../assets/logo.png";
-import SpotlightCard from "./ui/SpotlightCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,10 +92,11 @@ export default function AdmissionsEnquiry() {
     setSubmissionError("");
     setHasShakeError(false);
 
-    // Phone validation
+    // Strict 10-digit Indian mobile validation: starts with 6, 7, 8, or 9
     const cleanPhone = formData.phoneNumber.replace(/[^0-9]/g, "");
-    if (cleanPhone.length < 10) {
-      setSubmissionError("Please provide a valid 10-digit WhatsApp or mobile number.");
+    const indianPhoneRegex = /^[6-9]\d{9}$/;
+    if (!indianPhoneRegex.test(cleanPhone)) {
+      setSubmissionError("Please provide a valid 10-digit Indian mobile number (starting with 6, 7, 8, or 9).");
       setHasShakeError(true);
       return;
     }
@@ -114,7 +114,7 @@ export default function AdmissionsEnquiry() {
           studentName: formData.studentName,
           standard: formData.standard,
           board: formData.board,
-          phoneNumber: formData.phoneNumber,
+          phoneNumber: cleanPhone,
           preferredContact: formData.preferredContact,
           message: formData.message
         })
@@ -124,7 +124,7 @@ export default function AdmissionsEnquiry() {
 
       if (response.ok && result.success) {
         setSubmissionSuccess(true);
-        setSubmittedData({ ...formData });
+        setSubmittedData({ ...formData, phoneNumber: cleanPhone });
         setFormData({
           parentName: "",
           studentName: "",
@@ -161,78 +161,89 @@ export default function AdmissionsEnquiry() {
     <section
       ref={sectionRef}
       id="admissions"
-      className="py-20 lg:py-28 bg-ivory border-b border-border-soft"
+      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
       aria-label="Admissions Consultation Desk"
     >
-      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* Section Eyebrow */}
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-border-soft/60">
-          <span className="text-[10.5px] font-mono font-bold tracking-[0.22em] text-gold-dark uppercase">
-            09 / ADMISSION CONSULTATION
-          </span>
-          <span className="text-[11px] font-sans text-charcoal-muted font-medium">
-            Direct Parent Communication
-          </span>
+      <div className="site-container">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <div className="eyebrow-badge mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+            <span>08 / ADMISSION CONSULTATION</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">
+            Let&apos;s Find the Right{" "}
+            <span className="font-serif italic font-normal text-gold-dark">
+              Learning Path.
+            </span>
+          </h2>
+
+          <p className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal mx-auto max-w-2xl">
+            Every child has unique learning needs. Share your details and Saif Sir will assess
+            the appropriate curriculum division, batch timing, and foundational focus.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
-          {/* Left Column: Context & Contact Information (5 cols) */}
-          <div ref={leftColRef} className="lg:col-span-5 flex flex-col justify-between">
-            <div>
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] text-charcoal font-bold tracking-tight mb-4 leading-tight">
-                Let's Find the Right Learning Path.
-              </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Column: Context & Direct Contact Information (5 cols) */}
+          <div ref={leftColRef} className="lg:col-span-5 flex flex-col justify-between space-y-6">
+            <div className="bg-surface-pure rounded-2xl border border-border-soft p-6 sm:p-7 shadow-xs">
+              <h3 className="font-serif text-2xl font-bold text-charcoal tracking-tight mb-3">
+                Direct Educator Consultation
+              </h3>
 
-              <p className="text-xs sm:text-sm text-charcoal-muted mb-8 leading-relaxed font-normal">
-                Every child has unique learning needs. Share your details and Saif Sir will assess
-                the appropriate curriculum division, batch timing, and foundational focus during a
-                direct consultation.
+              <p className="text-sm text-charcoal-muted mb-6 leading-relaxed font-normal">
+                No administrative sales representatives or intermediaries. You speak directly with the
+                principal educator who will guide your child.
               </p>
 
               {/* Consultation Details List */}
-              <div className="space-y-3 mb-8">
-                <div className="flex items-start gap-3.5 p-4 rounded-[18px] bg-surface-pure border border-border-soft shadow-2xs">
-                  <div className="w-9 h-9 rounded-full bg-ivory-light border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
+              <div className="space-y-3.5">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-ivory-light border border-border-soft">
+                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
                     <Clock className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
+                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
                       Confirmed Evening Window
                     </h4>
-                    <p className="text-xs text-charcoal mt-0.5 font-medium">
+                    <p className="text-sm text-charcoal mt-0.5 font-medium">
                       4:30 PM – 8:00 PM (Monday to Saturday)
                     </p>
-                    <span className="text-[10.5px] text-charcoal-muted block mt-0.5 font-normal">
+                    <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
                       Standard-wise slots tailored upon discussion
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-4 rounded-[18px] bg-surface-pure border border-border-soft shadow-2xs">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-ivory-light border border-border-soft">
                   <img
                     src={saifDeskImg}
                     alt="Saif Barkat Vegdani"
-                    className="w-11 h-11 rounded-full object-cover object-top border-2 border-gold/40 shadow-xs shrink-0 mt-0.5"
-                    width={44}
-                    height={44}
+                    className="w-10 h-10 rounded-full object-cover object-top border-2 border-gold/40 shadow-xs shrink-0 mt-0.5"
+                    width={40}
+                    height={40}
                   />
                   <div>
-                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
-                      Direct Mentor Interaction
+                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
+                      Lead Faculty
                     </h4>
-                    <p className="text-xs text-charcoal mt-0.5 font-medium">
+                    <p className="text-sm text-charcoal mt-0.5 font-medium">
                       Saif Barkat Vegdani (B.Com, B.Ed)
                     </p>
-                    <span className="text-[10.5px] text-charcoal-muted block mt-0.5 font-normal">
-                      No intermediaries. Direct communication with the teacher.
+                    <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
+                      Direct phone &amp; classroom accountability
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Quick WhatsApp Alternative Box */}
-            <div className="p-6 rounded-[22px] bg-midnight text-white border border-gold/30 shadow-md">
+            {/* Quick WhatsApp Alternative Card */}
+            <div className="p-6 rounded-2xl bg-midnight text-white border border-midnight-subtle shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" />
+
               <div className="flex items-center gap-3 mb-3">
                 <img
                   src={logoImg}
@@ -242,7 +253,7 @@ export default function AdmissionsEnquiry() {
                   height={36}
                 />
                 <div>
-                  <span className="text-[9.5px] font-bold uppercase tracking-widest text-gold block">
+                  <span className="text-xs font-bold uppercase tracking-widest text-gold block font-mono">
                     S.V. Tutorial
                   </span>
                   <h4 className="font-serif text-base font-bold text-white">
@@ -250,42 +261,38 @@ export default function AdmissionsEnquiry() {
                   </h4>
                 </div>
               </div>
-              <p className="text-xs text-white/70 mb-4 leading-relaxed font-normal">
-                Parents who prefer immediate answers regarding batch seats and admissions can
-                connect directly with Saif Sir.
+              <p className="text-xs sm:text-sm text-white/75 mb-4 leading-relaxed font-normal">
+                Prefer immediate answers regarding batch seats, syllabus, and enrolment? Connect
+                directly with Saif Sir on WhatsApp.
               </p>
               <a
                 href={directWhatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
+                className="inline-flex items-center justify-center gap-2 w-full min-h-[48px] py-3 px-5 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
               >
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4 shrink-0" />
                 <span>Open WhatsApp Chat</span>
               </a>
             </div>
           </div>
 
-          {/* Right Column: Admission Form with Floating Focus Lines (7 cols) */}
+          {/* Right Column: Admission Form with 16px font inputs (7 cols) */}
           <div ref={rightColRef} className="lg:col-span-7">
-            <SpotlightCard
-              className="bg-surface-pure rounded-[28px] border border-border-soft p-7 sm:p-9 lg:p-10 shadow-sm relative group"
-              spotlightColor="rgba(198, 161, 91, 0.12)"
-              radius={400}
-            >
-              <div className="mb-7">
-                <span className="px-3.5 py-1 rounded-full bg-ivory-light text-gold-dark border border-border-soft text-[10px] font-bold uppercase tracking-wider inline-block">
-                  Admission Enquiry Form
+            <div className="bg-surface-pure rounded-2xl border border-border-soft p-6 sm:p-8 lg:p-10 shadow-xs relative">
+              <div className="mb-6 pb-4 border-b border-border-soft">
+                <span className="text-xs font-bold uppercase tracking-[0.14em] text-gold-dark font-mono block mb-1">
+                  Enrolment Consultation
                 </span>
-                <h3 className="font-serif text-2xl sm:text-3xl text-charcoal font-bold tracking-tight mt-2.5 mb-1.5">
-                  Begin Your Academic Journey
+                <h3 className="font-serif text-2xl sm:text-3xl text-charcoal font-bold tracking-tight">
+                  Reserve a Consultation Slot
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-muted leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-charcoal-muted mt-1 leading-relaxed font-normal">
                   Submit the student details below. Saif Sir will personally review and contact you within 24 operational hours.
                 </p>
               </div>
 
-              {/* Submission Error Banner with Gentle Shake Animation */}
+              {/* Submission Error Banner */}
               <AnimatePresence>
                 {submissionError && (
                   <motion.div
@@ -297,7 +304,7 @@ export default function AdmissionsEnquiry() {
                     }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.4 }}
-                    className="mb-6 p-4 rounded-[16px] bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-3"
+                    className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm flex items-start gap-3"
                   >
                     <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                     <div className="flex-1">
@@ -316,7 +323,7 @@ export default function AdmissionsEnquiry() {
                 )}
               </AnimatePresence>
 
-              {/* Form or Calm Success State */}
+              {/* Form or Success State */}
               <AnimatePresence mode="wait">
                 {submissionSuccess ? (
                   <motion.div
@@ -325,7 +332,7 @@ export default function AdmissionsEnquiry() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="p-7 sm:p-8 rounded-[22px] bg-ivory border border-gold/40 text-center"
+                    className="p-7 sm:p-8 rounded-2xl bg-ivory border border-gold/40 text-center"
                   >
                     <div className="w-14 h-14 rounded-full bg-gold/15 border-2 border-gold flex items-center justify-center text-gold-dark mx-auto mb-4">
                       <CheckCircle2 className="w-7 h-7" />
@@ -334,18 +341,18 @@ export default function AdmissionsEnquiry() {
                     <h4 className="font-serif text-2xl font-bold text-charcoal mb-2">
                       Enquiry Received
                     </h4>
-                    <p className="text-xs sm:text-sm text-charcoal-muted max-w-md mx-auto mb-6 leading-relaxed font-normal">
+                    <p className="text-sm text-charcoal-muted max-w-md mx-auto mb-6 leading-relaxed font-normal">
                       Thank you. Your admission enquiry has been safely received. Saif Sir will review and reach out to you directly regarding batch availability.
                     </p>
 
                     {submittedData && (
-                      <div className="bg-surface-pure p-4 rounded-[16px] border border-border-soft max-w-md mx-auto text-left text-xs mb-6 space-y-1.5">
+                      <div className="bg-surface-pure p-4 rounded-xl border border-border-soft max-w-md mx-auto text-left text-xs sm:text-sm mb-6 space-y-2">
                         <div className="flex justify-between text-charcoal">
                           <span className="text-charcoal-muted">Student:</span>
                           <strong>{submittedData.studentName}</strong>
                         </div>
                         <div className="flex justify-between text-charcoal">
-                          <span className="text-charcoal-muted">Standard & Board:</span>
+                          <span className="text-charcoal-muted">Standard &amp; Board:</span>
                           <strong>{submittedData.standard} ({submittedData.board})</strong>
                         </div>
                         <div className="flex justify-between text-charcoal">
@@ -361,7 +368,7 @@ export default function AdmissionsEnquiry() {
                           href={getFormSubmissionWhatsAppUrl(submittedData)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
+                          className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-all shadow-xs"
                         >
                           <MessageCircle className="w-4 h-4" />
                           <span>Speed up via WhatsApp</span>
@@ -373,7 +380,7 @@ export default function AdmissionsEnquiry() {
                           setSubmissionSuccess(false);
                           setSubmittedData(null);
                         }}
-                        className="px-5 py-3 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                        className="min-h-[44px] px-5 py-2.5 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
                       >
                         Submit Another Enquiry
                       </button>
@@ -386,7 +393,7 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="parentName"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Parent / Guardian Name <span className="text-gold-dark">*</span>
                         </label>
@@ -395,10 +402,11 @@ export default function AdmissionsEnquiry() {
                           id="parentName"
                           name="parentName"
                           required
+                          autoComplete="name"
                           value={formData.parentName}
                           onChange={handleChange}
                           placeholder="e.g. Ramesh Patel"
-                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
                         />
                       </div>
 
@@ -406,7 +414,7 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="studentName"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Student Name <span className="text-gold-dark">*</span>
                         </label>
@@ -415,10 +423,11 @@ export default function AdmissionsEnquiry() {
                           id="studentName"
                           name="studentName"
                           required
+                          autoComplete="off"
                           value={formData.studentName}
                           onChange={handleChange}
                           placeholder="e.g. Aryan Patel"
-                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
                         />
                       </div>
                     </div>
@@ -428,7 +437,7 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="standard"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Standard / Class <span className="text-gold-dark">*</span>
                         </label>
@@ -437,7 +446,7 @@ export default function AdmissionsEnquiry() {
                           name="standard"
                           value={formData.standard}
                           onChange={handleStandardChange}
-                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors cursor-pointer"
                         >
                           <option value="Std 3">Standard 3 (Primary)</option>
                           <option value="Std 4">Standard 4 (Primary)</option>
@@ -456,7 +465,7 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="board"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Curriculum Board <span className="text-gold-dark">*</span>
                         </label>
@@ -466,22 +475,22 @@ export default function AdmissionsEnquiry() {
                           value={formData.board}
                           onChange={handleChange}
                           disabled={["Std 9", "Std 10", "Std 11", "Std 12"].includes(formData.standard)}
-                          className={`w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors ${
+                          className={`w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors ${
                             ["Std 9", "Std 10", "Std 11", "Std 12"].includes(formData.standard)
                               ? "opacity-60 cursor-not-allowed"
-                              : ""
+                              : "cursor-pointer"
                           }`}
                         >
                           <option value="GSEB">Gujarat State Board (GSEB)</option>
                           <option value="CBSE">Central Board (CBSE)</option>
                         </select>
                         {["Std 9", "Std 10"].includes(formData.standard) && (
-                          <span className="text-[10px] text-charcoal-muted mt-1 block">
+                          <span className="text-xs text-charcoal-muted mt-1 block">
                             * Standards 9–10 are exclusively GSEB
                           </span>
                         )}
                         {["Std 11", "Std 12"].includes(formData.standard) && (
-                          <span className="text-[10px] text-charcoal-muted mt-1 block">
+                          <span className="text-xs text-charcoal-muted mt-1 block">
                             * Higher Secondary Commerce Stream
                           </span>
                         )}
@@ -493,12 +502,12 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="phoneNumber"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Mobile / WhatsApp Number <span className="text-gold-dark">*</span>
                         </label>
                         <div className="relative">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-charcoal-muted">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-charcoal-muted">
                             +91
                           </span>
                           <input
@@ -506,11 +515,14 @@ export default function AdmissionsEnquiry() {
                             id="phoneNumber"
                             name="phoneNumber"
                             required
+                            autoComplete="tel"
+                            inputMode="numeric"
+                            pattern="[6-9][0-9]{9}"
                             maxLength={10}
                             value={formData.phoneNumber}
                             onChange={handleChange}
                             placeholder="98765 43210"
-                            className="w-full pl-12 pr-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors font-medium tracking-wide"
+                            className="w-full min-h-[48px] pl-14 pr-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors font-medium tracking-wide"
                           />
                         </div>
                       </div>
@@ -519,7 +531,7 @@ export default function AdmissionsEnquiry() {
                       <div>
                         <label
                           htmlFor="preferredContact"
-                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                         >
                           Preferred Mode of Contact
                         </label>
@@ -528,7 +540,7 @@ export default function AdmissionsEnquiry() {
                           name="preferredContact"
                           value={formData.preferredContact}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                          className="w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-ivory border border-border-soft text-base text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors cursor-pointer"
                         >
                           <option value="WhatsApp">WhatsApp (Recommended)</option>
                           <option value="Phone Call">Phone Call</option>
@@ -540,7 +552,7 @@ export default function AdmissionsEnquiry() {
                     <div>
                       <label
                         htmlFor="message"
-                        className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5 font-mono"
                       >
                         Academic Notes / Specific Queries (Optional)
                       </label>
@@ -551,18 +563,16 @@ export default function AdmissionsEnquiry() {
                         value={formData.message}
                         onChange={handleChange}
                         placeholder="Mention any specific subject difficulty, school shift timings, or previous marks..."
-                        className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors resize-none font-normal"
+                        className="w-full px-4 py-3 rounded-xl bg-ivory border border-border-soft text-base text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors resize-none font-normal"
                       />
                     </div>
 
-                    {/* Submit Button with Morphing State */}
+                    {/* Submit Button */}
                     <div className="pt-2">
-                      <motion.button
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
+                      <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-6 rounded-full bg-midnight hover:bg-midnight-card text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-colors shadow-sm border border-gold/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2.5 w-full min-h-[48px] py-3.5 px-6 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-sm border border-gold/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       >
                         {isSubmitting ? (
                           <>
@@ -571,20 +581,20 @@ export default function AdmissionsEnquiry() {
                           </>
                         ) : (
                           <>
-                            <Send className="w-3.5 h-3.5" />
+                            <Send className="w-4 h-4" />
                             <span>Submit Admission Enquiry</span>
                           </>
                         )}
-                      </motion.button>
+                      </button>
                     </div>
 
-                    <p className="text-[10.5px] text-charcoal-muted text-center pt-1 font-normal">
+                    <p className="text-xs text-charcoal-muted text-center pt-1 font-normal">
                       Information is securely stored and directly reviewed by Saif Barkat Vegdani.
                     </p>
                   </form>
                 )}
               </AnimatePresence>
-            </SpotlightCard>
+            </div>
           </div>
         </div>
       </div>

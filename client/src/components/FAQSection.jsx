@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, MessageCircle } from "lucide-react";
+import { Plus, MessageCircle, HelpCircle } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,7 +23,7 @@ export default function FAQSection() {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Header
+      // Header entrance
       gsap.from(headerRef.current, {
         opacity: 0,
         y: 24,
@@ -36,7 +36,7 @@ export default function FAQSection() {
         }
       });
 
-      // FAQ List items stagger
+      // FAQ List items entrance
       gsap.from(listRef.current?.children || [], {
         opacity: 0,
         y: 20,
@@ -93,48 +93,47 @@ export default function FAQSection() {
     <section
       ref={sectionRef}
       id="faq"
-      className="py-20 lg:py-28 bg-ivory border-b border-border-soft"
+      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
       aria-label="Frequently Asked Questions"
     >
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Eyebrow */}
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-border-soft/60">
-          <span className="text-[10.5px] font-mono font-bold tracking-[0.22em] text-gold-dark uppercase">
-            10 / COMMON QUESTIONS
-          </span>
-          <span className="text-[11px] font-sans text-charcoal-muted font-medium">
-            Academic Policy & Admissions
-          </span>
-        </div>
+      <div className="site-container max-w-4xl">
+        {/* Section Header */}
+        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <div className="eyebrow-badge mb-3">
+            <HelpCircle className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+            <span>09 / COMMON QUESTIONS</span>
+          </div>
 
-        {/* Header */}
-        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-14">
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] text-charcoal font-bold tracking-tight leading-tight">
-            Frequently Asked Questions
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">
+            Frequently Asked{" "}
+            <span className="font-serif italic font-normal text-gold-dark">
+              Questions.
+            </span>
           </h2>
-          <p className="text-xs sm:text-sm text-charcoal-muted mt-3 leading-relaxed font-normal">
+
+          <p className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal mx-auto">
             Essential information for parents and students regarding boards, subject coverage,
             timings, and admissions.
           </p>
         </div>
 
         {/* Accordion List with Hairline Dividers & Plus-to-Cross Icon */}
-        <div ref={listRef} className="space-y-3">
+        <div ref={listRef} className="space-y-3.5">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
                 key={idx}
-                className="bg-surface-pure rounded-[20px] border border-border-soft overflow-hidden transition-colors shadow-2xs hover:border-gold/40"
+                className="bg-surface-pure rounded-2xl border border-border-soft overflow-hidden transition-colors shadow-2xs hover:border-gold/40"
               >
                 <button
                   type="button"
                   onClick={() => toggleFAQ(idx)}
-                  className="w-full px-6 py-5 sm:py-6 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold cursor-pointer"
+                  className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold cursor-pointer min-h-[56px]"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${idx}`}
                 >
-                  <span className="font-serif font-bold text-base sm:text-[19px] text-charcoal leading-snug">
+                  <span className="font-serif font-bold text-base sm:text-lg text-charcoal leading-snug">
                     {faq.q}
                   </span>
 
@@ -175,7 +174,7 @@ export default function FAQSection() {
                       }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 pt-1 text-xs sm:text-[13.5px] text-charcoal/80 leading-relaxed border-t border-border-soft/60 font-normal">
+                      <div className="px-6 pb-6 pt-2 text-sm sm:text-base text-charcoal/80 leading-relaxed border-t border-border-soft/60 font-normal">
                         {faq.a.split("\n").map((line, lIdx) => (
                           <p key={lIdx} className={lIdx > 0 ? "mt-2" : ""}>
                             {line}
@@ -192,16 +191,16 @@ export default function FAQSection() {
 
         {/* Footer Question Trigger */}
         <div className="mt-12 text-center">
-          <p className="text-xs text-charcoal-muted mb-3 font-normal">
+          <p className="text-sm text-charcoal-muted mb-3 font-normal">
             Have a question not addressed above?
           </p>
           <a
             href={whatsappFaqUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-surface-pure hover:bg-ivory-tint text-charcoal border border-border-soft text-xs font-semibold uppercase tracking-wider transition-colors shadow-2xs"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-surface-pure hover:bg-ivory-light text-charcoal border border-border-soft text-xs sm:text-sm font-semibold uppercase tracking-wider transition-colors shadow-2xs min-h-[44px]"
           >
-            <MessageCircle className="w-3.5 h-3.5 text-gold-dark" />
+            <MessageCircle className="w-4 h-4 text-gold-dark" />
             <span>Ask Saif Sir on WhatsApp</span>
           </a>
         </div>

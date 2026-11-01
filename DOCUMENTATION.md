@@ -18,6 +18,12 @@ The **S.V. Tutorial** digital platform is engineered to deliver a bespoke, high-
 - **Champagne Gold Detailing:** Hand-crafted hairlines, badges, and progress indicators in refined gold (`#C6A15B`, `#E8D19A`, `#775A1A`).
 - **Veracity First:** Strictly honest academic data; no fabricated testimonials, no exaggerated rankings, and clear curriculum boundaries (e.g., explicit exclusion of Science stream in 11–12).
 
+> [!IMPORTANT]
+> **Owner Decisions & Confirmations Required:**
+> 1. **Production Domain & Canonical URL:** The canonical domain `https://saifvegdani.edu/` in `index.html` and JSON-LD is a development placeholder and must be confirmed with the owner's registered domain (e.g., `.in` or `.com`).
+> 2. **WhatsApp Contact Number:** `VITE_WHATSAPP_NUMBER` must be set in `client/.env` to the owner's active WhatsApp business number.
+> 3. **Career Timeline Flag:** The supplied institutional tenures (Ignite Academy 2 yrs + Saraswati Classes 3 yrs + Good Shepherd Mission School 4 yrs) total 9 years if sequential, whereas overall stated career is 8 years. All durations are preserved exactly and await owner confirmation regarding concurrent roles.
+
 ---
 
 ## 2. Technology Stack & Architecture
@@ -74,7 +80,6 @@ saif/
 │       │   ├── TeachingPhilosophy.jsx # 4-pillar methodology breakdown
 │       │   ├── TeacherProfile.jsx # Saif Vegdani profile with dual-photo toggle
 │       │   ├── BatchTimings.jsx   # 4:30 PM–8:00 PM operational schedule
-│       │   ├── ClassroomGallery.jsx # Editorial grid with full-screen lightbox
 │       │   ├── AdmissionsEnquiry.jsx # Validated consultation request form
 │       │   ├── FAQSection.jsx     # Category-filtered accordion FAQ
 │       │   ├── Footer.jsx         # Archival institutional footer
