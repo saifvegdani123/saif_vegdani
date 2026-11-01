@@ -2,12 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Send, CheckCircle2, AlertTriangle, Clock, HelpCircle, Loader2 } from "lucide-react";
+import { MessageCircle, Send, CheckCircle2, AlertTriangle, Clock, Loader2 } from "lucide-react";
 import { getFormSubmissionWhatsAppUrl, createWhatsAppUrl } from "../utils/whatsapp";
 import saifDeskImg from "../assets/saif-vegdani-desk.jpg";
 import logoImg from "../assets/logo.png";
 import SpotlightCard from "./ui/SpotlightCard";
-import BorderBeam from "./ui/BorderBeam";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,14 +16,18 @@ export default function AdmissionsEnquiry() {
   const rightColRef = useRef(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       gsap.from(leftColRef.current, {
         opacity: 0,
-        x: -35,
-        duration: 0.9,
+        x: -25,
+        duration: 0.85,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -35,8 +38,8 @@ export default function AdmissionsEnquiry() {
 
       gsap.from(rightColRef.current, {
         opacity: 0,
-        x: 35,
-        duration: 0.9,
+        x: 25,
+        duration: 0.85,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -63,14 +66,12 @@ export default function AdmissionsEnquiry() {
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [submittedData, setSubmittedData] = useState(null);
+  const [hasShakeError, setHasShakeError] = useState(false);
 
   const handleStandardChange = (e) => {
     const val = e.target.value;
     let updatedBoard = formData.board;
 
-    // Board constraints per client specification:
-    // Standards 9-10 are GSEB only
-    // Standards 11-12 Commerce are GSEB
     if (["Std 9", "Std 10", "Std 11", "Std 12"].includes(val)) {
       updatedBoard = "GSEB";
     }
@@ -90,15 +91,17 @@ export default function AdmissionsEnquiry() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionError("");
-    setIsSubmitting(true);
+    setHasShakeError(false);
 
-    // Client-side phone sanity check
+    // Phone validation
     const cleanPhone = formData.phoneNumber.replace(/[^0-9]/g, "");
     if (cleanPhone.length < 10) {
       setSubmissionError("Please provide a valid 10-digit WhatsApp or mobile number.");
-      setIsSubmitting(false);
+      setHasShakeError(true);
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/enquiries", {
@@ -122,7 +125,6 @@ export default function AdmissionsEnquiry() {
       if (response.ok && result.success) {
         setSubmissionSuccess(true);
         setSubmittedData({ ...formData });
-        // Reset form inputs
         setFormData({
           parentName: "",
           studentName: "",
@@ -138,13 +140,14 @@ export default function AdmissionsEnquiry() {
             ? result.errors.join(", ")
             : result.message || "Failed to submit enquiry. Please try again.";
         setSubmissionError(errorMsg);
+        setHasShakeError(true);
       }
     } catch (err) {
       console.warn("Direct API call encountered network error:", err);
-      // If server is not yet booted, provide an immediate resilient fallback to WhatsApp
       setSubmissionError(
         "Direct server connection is currently unavailable. You can connect immediately with Saif Sir via WhatsApp below."
       );
+      setHasShakeError(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -155,43 +158,46 @@ export default function AdmissionsEnquiry() {
   );
 
   return (
-    <section ref={sectionRef} id="admissions" className="py-20 lg:py-28 bg-ivory border-b border-border-soft">
-      <div className="max-w-[1340px] mx-auto px-4 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          {/* Left Column: Reassuring Context & Contact Information (5 cols) */}
+    <section
+      ref={sectionRef}
+      id="admissions"
+      className="py-20 lg:py-28 bg-ivory border-b border-border-soft"
+      aria-label="Admissions Consultation Desk"
+    >
+      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-12">
+        {/* Section Eyebrow */}
+        <div className="flex items-center justify-between mb-8 pb-3 border-b border-border-soft/60">
+          <span className="text-[10.5px] font-mono font-bold tracking-[0.22em] text-gold-dark uppercase">
+            09 / ADMISSION CONSULTATION
+          </span>
+          <span className="text-[11px] font-sans text-charcoal-muted font-medium">
+            Direct Parent Communication
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+          {/* Left Column: Context & Contact Information (5 cols) */}
           <div ref={leftColRef} className="lg:col-span-5 flex flex-col justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-pure border border-border-soft text-[10.5px] font-bold tracking-[0.16em] uppercase text-midnight mb-3">
-                <img
-                  src={logoImg}
-                  alt="S.V. Tutorial"
-                  className="w-4 h-4 rounded-full object-cover border border-gold/40"
-                />
-                S.V. Tutorial Admissions
-              </div>
-
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] text-charcoal font-bold tracking-tight mb-4 leading-tight">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] text-charcoal font-bold tracking-tight mb-4 leading-tight">
                 Let's Find the Right Learning Path.
               </h2>
 
               <p className="text-xs sm:text-sm text-charcoal-muted mb-8 leading-relaxed font-normal">
                 Every child has unique learning needs. Share your details and Saif Sir will assess
                 the appropriate curriculum division, batch timing, and foundational focus during a
-                one-on-one consultation.
+                direct consultation.
               </p>
 
               {/* Consultation Details List */}
-              <div className="space-y-3.5 mb-8">
-                <motion.div
-                  whileHover={{ y: -2 }}
-                  className="flex items-start gap-3.5 p-4 rounded-[20px] bg-surface-pure border border-border-soft shadow-2xs hover:border-gold/40 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-full bg-ivory-light border border-gold/40 flex items-center justify-center text-gold shrink-0 mt-0.5">
-                    <Clock className="w-4 h-4 text-gold-dark" />
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start gap-3.5 p-4 rounded-[18px] bg-surface-pure border border-border-soft shadow-2xs">
+                  <div className="w-9 h-9 rounded-full bg-ivory-light border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
+                    <Clock className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
-                      Confirmed Batch Window
+                      Confirmed Evening Window
                     </h4>
                     <p className="text-xs text-charcoal mt-0.5 font-medium">
                       4:30 PM – 8:00 PM (Monday to Saturday)
@@ -200,16 +206,15 @@ export default function AdmissionsEnquiry() {
                       Standard-wise slots tailored upon discussion
                     </span>
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  whileHover={{ y: -2 }}
-                  className="flex items-start gap-3.5 p-4 rounded-[20px] bg-surface-pure border border-border-soft shadow-2xs hover:border-gold/40 transition-colors"
-                >
+                <div className="flex items-start gap-3.5 p-4 rounded-[18px] bg-surface-pure border border-border-soft shadow-2xs">
                   <img
                     src={saifDeskImg}
                     alt="Saif Barkat Vegdani"
-                    className="w-12 h-12 rounded-full object-cover object-top border-2 border-gold/40 shadow-xs shrink-0 mt-0.5"
+                    className="w-11 h-11 rounded-full object-cover object-top border-2 border-gold/40 shadow-xs shrink-0 mt-0.5"
+                    width={44}
+                    height={44}
                   />
                   <div>
                     <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
@@ -222,20 +227,22 @@ export default function AdmissionsEnquiry() {
                       No intermediaries. Direct communication with the teacher.
                     </span>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
 
             {/* Quick WhatsApp Alternative Box */}
-            <div className="p-6 rounded-[24px] bg-midnight text-white border border-gold/30 shadow-md">
+            <div className="p-6 rounded-[22px] bg-midnight text-white border border-gold/30 shadow-md">
               <div className="flex items-center gap-3 mb-3">
                 <img
                   src={logoImg}
                   alt="S.V. Tutorial"
-                  className="w-10 h-10 rounded-xl object-contain bg-midnight border border-gold/40 p-0.5 shrink-0 shadow-sm"
+                  className="w-9 h-9 rounded-xl object-contain bg-midnight border border-gold/40 p-0.5 shrink-0 shadow-xs"
+                  width={36}
+                  height={36}
                 />
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold block">
+                  <span className="text-[9.5px] font-bold uppercase tracking-widest text-gold block">
                     S.V. Tutorial
                   </span>
                   <h4 className="font-serif text-base font-bold text-white">
@@ -247,9 +254,7 @@ export default function AdmissionsEnquiry() {
                 Parents who prefer immediate answers regarding batch seats and admissions can
                 connect directly with Saif Sir.
               </p>
-              <motion.a
-                whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(198,161,91,0.4)" }}
-                whileTap={{ scale: 0.98 }}
+              <a
                 href={directWhatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -257,321 +262,328 @@ export default function AdmissionsEnquiry() {
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Open WhatsApp Chat</span>
-              </motion.a>
+              </a>
             </div>
           </div>
 
-          {/* Right Column: High-Converting Admission Form (7 cols) */}
+          {/* Right Column: Admission Form with Floating Focus Lines (7 cols) */}
           <div ref={rightColRef} className="lg:col-span-7">
             <SpotlightCard
-              className="bg-surface-pure rounded-[32px] border border-border-soft p-8 sm:p-10 shadow-sm relative group"
-              spotlightColor="rgba(198, 161, 91, 0.16)"
-              radius={450}
+              className="bg-surface-pure rounded-[28px] border border-border-soft p-7 sm:p-9 lg:p-10 shadow-sm relative group"
+              spotlightColor="rgba(198, 161, 91, 0.12)"
+              radius={400}
             >
-              {/* 21st.dev Border Beam on Admission Form */}
-              <BorderBeam duration={10} borderWidth={2} radius={32} />
-
-              <div className="mb-8">
+              <div className="mb-7">
                 <span className="px-3.5 py-1 rounded-full bg-ivory-light text-gold-dark border border-border-soft text-[10px] font-bold uppercase tracking-wider inline-block">
                   Admission Enquiry Form
                 </span>
                 <h3 className="font-serif text-2xl sm:text-3xl text-charcoal font-bold tracking-tight mt-2.5 mb-1.5">
                   Begin Your Academic Journey
                 </h3>
-                <p className="text-xs sm:text-sm text-charcoal-muted font-normal">
-                  Fill in your details below and Saif Sir will reach out within 24 operational hours.
+                <p className="text-xs sm:text-sm text-charcoal-muted leading-relaxed font-normal">
+                  Submit the student details below. Saif Sir will personally review and contact you within 24 operational hours.
                 </p>
               </div>
 
-              {/* Success Notification Box with Framer Motion AnimatePresence */}
-              <AnimatePresence>
-                {submissionSuccess && (
-                  <motion.div
-                    role="status"
-                    aria-live="polite"
-                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="mb-8 p-6 rounded-[24px] bg-ivory-light border border-gold/50 shadow-sm"
-                  >
-                    <div className="flex items-start gap-3.5">
-                      <CheckCircle2 className="w-6 h-6 text-gold shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-sm font-bold text-charcoal block">
-                          Enquiry Received Successfully
-                        </strong>
-                        <p className="text-xs text-charcoal-muted mt-1 leading-relaxed">
-                          Thank you for reaching out. Your enquiry details have been registered. Saif
-                          Sir will contact you via {submittedData?.preferredContact || "WhatsApp"}{" "}
-                          promptly.
-                        </p>
-
-                        {submittedData && (
-                          <div className="mt-4 pt-3 border-t border-border-soft flex flex-wrap gap-2 text-xs text-charcoal">
-                            <span className="px-3 py-1 rounded-full bg-surface-pure border border-border-soft">
-                              Student: <strong>{submittedData.studentName}</strong>
-                            </span>
-                            <span className="px-3 py-1 rounded-full bg-surface-pure border border-border-soft">
-                              Standard: <strong>{submittedData.standard}</strong>
-                            </span>
-                            <span className="px-3 py-1 rounded-full bg-surface-pure border border-border-soft">
-                              Board: <strong>{submittedData.board}</strong>
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Optional one-click WhatsApp sync */}
-                        {submittedData && (
-                          <div className="mt-4">
-                            <motion.a
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              href={getFormSubmissionWhatsAppUrl(submittedData)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-midnight text-gold text-xs font-bold uppercase tracking-wider hover:bg-midnight-card border border-gold/40 shadow-xs transition-colors"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                              <span>Continue on WhatsApp Now</span>
-                            </motion.a>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Error Alert Box with Framer Motion Shake Animation */}
+              {/* Submission Error Banner with Gentle Shake Animation */}
               <AnimatePresence>
                 {submissionError && (
                   <motion.div
-                    role="alert"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: [-6, 6, -4, 4, 0] }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.35 }}
-                    className="mb-6 p-4 rounded-[18px] bg-red-50/80 border border-red-200 text-red-900 text-xs flex items-start gap-3"
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      x: hasShakeError ? [-6, 6, -4, 4, -2, 2, 0] : 0
+                    }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.4 }}
+                    className="mb-6 p-4 rounded-[16px] bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-3"
                   >
                     <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="font-semibold block">Submission Notice:</strong>
-                      <span>{submissionError}</span>
+                    <div className="flex-1">
+                      <p className="font-medium">{submissionError}</p>
+                      <a
+                        href={directWhatsAppUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-midnight underline hover:text-gold-dark"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>Connect via WhatsApp Instead</span>
+                      </a>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="parentName"
-                      className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                    >
-                      Parent or Guardian Name <span className="text-gold-dark">*</span>
-                    </label>
-                    <input
-                      id="parentName"
-                      name="parentName"
-                      type="text"
-                      required
-                      placeholder="e.g. Ramesh Patel"
-                      value={formData.parentName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-[16px] bg-ivory-light border border-border-soft text-charcoal placeholder:text-charcoal-muted/60 text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
-                    />
-                  </div>
+              {/* Form or Calm Success State */}
+              <AnimatePresence mode="wait">
+                {submissionSuccess ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="p-7 sm:p-8 rounded-[22px] bg-ivory border border-gold/40 text-center"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-gold/15 border-2 border-gold flex items-center justify-center text-gold-dark mx-auto mb-4">
+                      <CheckCircle2 className="w-7 h-7" />
+                    </div>
 
-                  <div>
-                    <label
-                      htmlFor="studentName"
-                      className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                    >
-                      Student's Full Name <span className="text-gold-dark">*</span>
-                    </label>
-                    <input
-                      id="studentName"
-                      name="studentName"
-                      type="text"
-                      required
-                      placeholder="e.g. Dev Patel"
-                      value={formData.studentName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-[16px] bg-ivory-light border border-border-soft text-charcoal placeholder:text-charcoal-muted/60 text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
-                    />
-                  </div>
-                </div>
+                    <h4 className="font-serif text-2xl font-bold text-charcoal mb-2">
+                      Enquiry Received
+                    </h4>
+                    <p className="text-xs sm:text-sm text-charcoal-muted max-w-md mx-auto mb-6 leading-relaxed font-normal">
+                      Thank you. Your admission enquiry has been safely received. Saif Sir will review and reach out to you directly regarding batch availability.
+                    </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="standard"
-                      className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                    >
-                      Student's Current Standard <span className="text-gold-dark">*</span>
-                    </label>
-                    <select
-                      id="standard"
-                      name="standard"
-                      required
-                      value={formData.standard}
-                      onChange={handleStandardChange}
-                      className="w-full px-4 py-3 rounded-[16px] bg-ivory-light border border-border-soft text-charcoal text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors cursor-pointer"
-                    >
-                      <option value="Std 3">Standard 3</option>
-                      <option value="Std 4">Standard 4</option>
-                      <option value="Std 5">Standard 5</option>
-                      <option value="Std 6">Standard 6</option>
-                      <option value="Std 7">Standard 7</option>
-                      <option value="Std 8">Standard 8</option>
-                      <option value="Std 9">Standard 9 (GSEB)</option>
-                      <option value="Std 10">Standard 10 (GSEB Board)</option>
-                      <option value="Std 11">Standard 11 (Commerce)</option>
-                      <option value="Std 12">Standard 12 (Commerce Board)</option>
-                    </select>
-                  </div>
+                    {submittedData && (
+                      <div className="bg-surface-pure p-4 rounded-[16px] border border-border-soft max-w-md mx-auto text-left text-xs mb-6 space-y-1.5">
+                        <div className="flex justify-between text-charcoal">
+                          <span className="text-charcoal-muted">Student:</span>
+                          <strong>{submittedData.studentName}</strong>
+                        </div>
+                        <div className="flex justify-between text-charcoal">
+                          <span className="text-charcoal-muted">Standard & Board:</span>
+                          <strong>{submittedData.standard} ({submittedData.board})</strong>
+                        </div>
+                        <div className="flex justify-between text-charcoal">
+                          <span className="text-charcoal-muted">Contact:</span>
+                          <strong>+91 {submittedData.phoneNumber}</strong>
+                        </div>
+                      </div>
+                    )}
 
-                  <div>
-                    <label
-                      htmlFor="board"
-                      className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                    >
-                      Educational Board <span className="text-gold-dark">*</span>
-                    </label>
-                    <select
-                      id="board"
-                      name="board"
-                      required
-                      value={formData.board}
-                      onChange={handleChange}
-                      disabled={["Std 9", "Std 10", "Std 11", "Std 12"].includes(
-                        formData.standard
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      {submittedData && (
+                        <a
+                          href={getFormSubmissionWhatsAppUrl(submittedData)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>Speed up via WhatsApp</span>
+                        </a>
                       )}
-                      className="w-full px-4 py-3 rounded-[16px] bg-ivory-light border border-border-soft text-charcoal text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      <option value="GSEB">GSEB (Gujarat State Board)</option>
-                      {["Std 3", "Std 4", "Std 5", "Std 6", "Std 7", "Std 8"].includes(
-                        formData.standard
-                      ) && <option value="CBSE">CBSE (Central Board)</option>}
-                    </select>
-                    {["Std 9", "Std 10"].includes(formData.standard) && (
-                      <span className="text-[10px] text-charcoal-muted mt-1 block">
-                        * GSEB board exclusively for Standards 9–10
-                      </span>
-                    )}
-                    {["Std 11", "Std 12"].includes(formData.standard) && (
-                      <span className="text-[10px] text-charcoal-muted mt-1 block">
-                        * GSEB Commerce stream curriculum
-                      </span>
-                    )}
-                  </div>
-                </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSubmissionSuccess(false);
+                          setSubmittedData(null);
+                        }}
+                        className="px-5 py-3 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                      >
+                        Submit Another Enquiry
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Parent's Name */}
+                      <div>
+                        <label
+                          htmlFor="parentName"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Parent / Guardian Name <span className="text-gold-dark">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="parentName"
+                          name="parentName"
+                          required
+                          value={formData.parentName}
+                          onChange={handleChange}
+                          placeholder="e.g. Ramesh Patel"
+                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                        />
+                      </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="phoneNumber"
-                      className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                    >
-                      WhatsApp / Contact Number <span className="text-gold-dark">*</span>
-                    </label>
-                    <div className="flex">
-                      <span className="inline-flex items-center px-4 rounded-l-[16px] bg-ivory border border-r-0 border-border-soft text-charcoal-muted text-xs font-semibold">
-                        +91
-                      </span>
-                      <input
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        type="tel"
-                        required
-                        placeholder="98765 43210"
-                        value={formData.phoneNumber}
+                      {/* Student's Name */}
+                      <div>
+                        <label
+                          htmlFor="studentName"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Student Name <span className="text-gold-dark">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="studentName"
+                          name="studentName"
+                          required
+                          value={formData.studentName}
+                          onChange={handleChange}
+                          placeholder="e.g. Aryan Patel"
+                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Standard Selection */}
+                      <div>
+                        <label
+                          htmlFor="standard"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Standard / Class <span className="text-gold-dark">*</span>
+                        </label>
+                        <select
+                          id="standard"
+                          name="standard"
+                          value={formData.standard}
+                          onChange={handleStandardChange}
+                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                        >
+                          <option value="Std 3">Standard 3 (Primary)</option>
+                          <option value="Std 4">Standard 4 (Primary)</option>
+                          <option value="Std 5">Standard 5 (Primary)</option>
+                          <option value="Std 6">Standard 6 (Middle)</option>
+                          <option value="Std 7">Standard 7 (Middle)</option>
+                          <option value="Std 8">Standard 8 (Middle)</option>
+                          <option value="Std 9">Standard 9 (Secondary - GSEB)</option>
+                          <option value="Std 10">Standard 10 (Board - GSEB)</option>
+                          <option value="Std 11">Standard 11 (Commerce)</option>
+                          <option value="Std 12">Standard 12 (Commerce Board)</option>
+                        </select>
+                      </div>
+
+                      {/* Board Selection */}
+                      <div>
+                        <label
+                          htmlFor="board"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Curriculum Board <span className="text-gold-dark">*</span>
+                        </label>
+                        <select
+                          id="board"
+                          name="board"
+                          value={formData.board}
+                          onChange={handleChange}
+                          disabled={["Std 9", "Std 10", "Std 11", "Std 12"].includes(formData.standard)}
+                          className={`w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors ${
+                            ["Std 9", "Std 10", "Std 11", "Std 12"].includes(formData.standard)
+                              ? "opacity-60 cursor-not-allowed"
+                              : ""
+                          }`}
+                        >
+                          <option value="GSEB">Gujarat State Board (GSEB)</option>
+                          <option value="CBSE">Central Board (CBSE)</option>
+                        </select>
+                        {["Std 9", "Std 10"].includes(formData.standard) && (
+                          <span className="text-[10px] text-charcoal-muted mt-1 block">
+                            * Standards 9–10 are exclusively GSEB
+                          </span>
+                        )}
+                        {["Std 11", "Std 12"].includes(formData.standard) && (
+                          <span className="text-[10px] text-charcoal-muted mt-1 block">
+                            * Higher Secondary Commerce Stream
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Phone Number */}
+                      <div>
+                        <label
+                          htmlFor="phoneNumber"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Mobile / WhatsApp Number <span className="text-gold-dark">*</span>
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-charcoal-muted">
+                            +91
+                          </span>
+                          <input
+                            type="tel"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            required
+                            maxLength={10}
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            placeholder="98765 43210"
+                            className="w-full pl-12 pr-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors font-medium tracking-wide"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Preferred Contact Mode */}
+                      <div>
+                        <label
+                          htmlFor="preferredContact"
+                          className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                        >
+                          Preferred Mode of Contact
+                        </label>
+                        <select
+                          id="preferredContact"
+                          name="preferredContact"
+                          value={formData.preferredContact}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors"
+                        >
+                          <option value="WhatsApp">WhatsApp (Recommended)</option>
+                          <option value="Phone Call">Phone Call</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Additional Notes */}
+                    <div>
+                      <label
+                        htmlFor="message"
+                        className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-1.5"
+                      >
+                        Academic Notes / Specific Queries (Optional)
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={3}
+                        value={formData.message}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-r-[16px] bg-ivory-light border border-border-soft text-charcoal placeholder:text-charcoal-muted/60 text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
+                        placeholder="Mention any specific subject difficulty, school shift timings, or previous marks..."
+                        className="w-full px-4 py-3 rounded-[14px] bg-ivory border border-border-soft text-xs text-charcoal placeholder:text-charcoal-muted/50 focus:bg-surface-pure focus:outline-none focus:border-gold transition-colors resize-none font-normal"
                       />
                     </div>
-                  </div>
 
-                  <div>
-                    <span className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2">
-                      Preferred Contact Method
-                    </span>
-                    <div className="grid grid-cols-2 gap-2 pt-0.5">
-                      <label className="flex items-center gap-2 p-3 rounded-[16px] bg-ivory-light border border-border-soft cursor-pointer hover:bg-ivory transition-colors">
-                        <input
-                          type="radio"
-                          name="preferredContact"
-                          value="WhatsApp"
-                          checked={formData.preferredContact === "WhatsApp"}
-                          onChange={handleChange}
-                          className="accent-midnight"
-                        />
-                        <span className="text-xs font-medium text-charcoal">WhatsApp</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 p-3 rounded-[16px] bg-ivory-light border border-border-soft cursor-pointer hover:bg-ivory transition-colors">
-                        <input
-                          type="radio"
-                          name="preferredContact"
-                          value="Phone Call"
-                          checked={formData.preferredContact === "Phone Call"}
-                          onChange={handleChange}
-                          className="accent-midnight"
-                        />
-                        <span className="text-xs font-medium text-charcoal">Phone Call</span>
-                      </label>
+                    {/* Submit Button with Morphing State */}
+                    <div className="pt-2">
+                      <motion.button
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-6 rounded-full bg-midnight hover:bg-midnight-card text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-colors shadow-sm border border-gold/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                            <span>Submitting Enquiry...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Submit Admission Enquiry</span>
+                          </>
+                        )}
+                      </motion.button>
                     </div>
-                  </div>
-                </div>
 
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-xs font-bold text-charcoal uppercase tracking-wider mb-2"
-                  >
-                    Subject Focus or Notes (Optional)
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows="3"
-                    placeholder="Tell us about specific subjects (e.g. Maths, Science, Accountancy), current school, or batch timing queries..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-[16px] bg-ivory-light border border-border-soft text-charcoal placeholder:text-charcoal-muted/60 text-xs focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
-                  ></textarea>
-                </div>
-
-                <div className="pt-2">
-                  <motion.button
-                    whileHover={{ scale: 1.015, boxShadow: "0 10px 25px -5px rgba(7,8,23,0.3)" }}
-                    whileTap={{ scale: 0.985 }}
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 px-6 rounded-full bg-midnight hover:bg-midnight-card text-gold hover:text-gold-light font-bold text-xs tracking-widest uppercase transition-colors shadow-md flex items-center justify-center gap-2 border border-gold/40 disabled:opacity-70 disabled:cursor-wait"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                        <span>Submitting Enquiry...</span>
-                      </span>
-                    ) : (
-                      <>
-                        <span>Submit Admission Enquiry</span>
-                        <Send className="w-3.5 h-3.5 text-gold" />
-                      </>
-                    )}
-                  </motion.button>
-                </div>
-
-                <p className="text-[11px] text-charcoal-muted text-center pt-1 font-normal">
-                  Your contact details are treated with strict confidentiality solely to address
-                  your academic enquiry. Zero spam.
-                </p>
-              </form>
+                    <p className="text-[10.5px] text-charcoal-muted text-center pt-1 font-normal">
+                      Information is securely stored and directly reviewed by Saif Barkat Vegdani.
+                    </p>
+                  </form>
+                )}
+              </AnimatePresence>
             </SpotlightCard>
           </div>
         </div>

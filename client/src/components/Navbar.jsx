@@ -3,28 +3,85 @@ import { MessageCircle, Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 import logoImg from "../assets/logo.png";
+import MagneticButton from "./ui/MagneticButton";
+
+const NAV_LINKS = [
+  { name: "Home", href: "#hero", id: "hero" },
+  { name: "Results", href: "#results", id: "results" },
+  { name: "Classes", href: "#classes", id: "classes" },
+  { name: "Diagnostic", href: "#curriculum-diagnostic", id: "curriculum-diagnostic" },
+  { name: "Philosophy", href: "#philosophy", id: "philosophy" },
+  { name: "Timings", href: "#timings", id: "timings" },
+  { name: "Admissions", href: "#admissions", id: "admissions" }
+];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
 
+  // Directional scroll handler (hides on scroll down, reveals on scroll up)
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 24);
+
+      if (currentScrollY > 120 && currentScrollY > lastScrollY && !mobileMenuOpen) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, [mobileMenuOpen]);
+
+  // Track active section via IntersectionObserver
+  useEffect(() => {
+    const sectionIds = NAV_LINKS.map((l) => l.id);
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: "-25% 0px -60% 0px",
+      threshold: 0
+    });
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Classes", href: "#classes" },
-    { name: "Diagnostic", href: "#curriculum-diagnostic" },
-    { name: "Teaching Approach", href: "#philosophy" },
-    { name: "Batch Timings", href: "#timings" },
-    { name: "Contact", href: "#admissions" }
-  ];
+  // Body scroll lock on mobile menu open + Escape key handler
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e) => {
+        if (e.key === "Escape") setMobileMenuOpen(false);
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = "unset";
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [mobileMenuOpen]);
 
   const handleLinkClick = () => {
     setMobileMenuOpen(false);
@@ -35,186 +92,199 @@ export default function Navbar() {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50">
-
-      {/* Main Navigation Bar */}
-      <motion.div
-        animate={{
-          backgroundColor: isScrolled ? "rgba(7, 8, 23, 0.95)" : "rgba(7, 8, 23, 1)",
-          boxShadow: isScrolled ? "0 10px 30px -10px rgba(0,0,0,0.5)" : "0 0 0 rgba(0,0,0,0)"
-        }}
-        transition={{ duration: 0.25 }}
-        className={`w-full backdrop-blur-md transition-all ${
-          isScrolled
-            ? "border-b border-gold/25"
-            : "border-b border-gold/10"
-        }`}
+    <>
+      <motion.header
+        animate={{ y: isHidden ? "-100%" : "0%" }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-0 left-0 right-0 w-full z-50"
       >
-        <div className="max-w-[1340px] mx-auto h-[68px] px-4 lg:px-12 flex items-center justify-between gap-4">
-          {/* Brand Monogram Identity with Official Logo */}
-          <motion.a
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            href="#hero"
-            className="flex items-center gap-3 group focus:outline-none"
-            aria-label="S.V. Tutorial - Saif Barkat Vegdani Tuition Classes"
-          >
-            <div className="relative">
-              <img
-                src={logoImg}
-                alt="S.V. Tutorial Official Logo"
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-contain bg-midnight border border-gold/40 p-0.5 shadow-sm shrink-0 transition-all group-hover:border-gold group-hover:shadow-[0_0_15px_rgba(198,161,91,0.4)]"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif font-bold text-[17px] text-white tracking-tight leading-tight group-hover:text-gold-light transition-colors">
-                S.V. Tutorial
-              </span>
-              <span className="text-[9px] font-sans font-semibold tracking-[0.22em] text-gold uppercase">
-                Saif Barkat Vegdani · Standards 3–12
-              </span>
-            </div>
-          </motion.a>
-
-          {/* Desktop Nav Links */}
-          <nav
-            className="hidden lg:flex items-center gap-1 text-[13px] font-medium text-white/80"
-            aria-label="Main Navigation"
-          >
-            {navLinks.map((link) => (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                whileHover={{ y: -1, color: "#FFFFFF" }}
-                whileTap={{ y: 0 }}
-                className="px-3.5 py-1.5 rounded-full hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold relative"
-              >
-                {link.name}
-              </motion.a>
-            ))}
-          </nav>
-
-          {/* Header Action Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <motion.a
-              whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(198,161,91,0.4)" }}
-              whileTap={{ scale: 0.97 }}
-              href={whatsappGeneralUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold text-midnight hover:bg-gold-light font-bold text-xs tracking-wider uppercase transition-colors shadow-sm border border-gold-light/40"
+        <div
+          className={`w-full transition-all duration-300 ${
+            isScrolled
+              ? "bg-ivory/90 backdrop-blur-md border-b border-border-soft shadow-[0_4px_24px_-4px_rgba(29,28,22,0.06)]"
+              : "bg-ivory/70 backdrop-blur-sm border-b border-border-soft/40"
+          }`}
+        >
+          <div className="max-w-[1340px] mx-auto h-[64px] sm:h-[72px] px-4 sm:px-6 lg:px-12 flex items-center justify-between gap-4">
+            {/* Brand Monogram Identity with Official Intertwined SV Logo */}
+            <a
+              href="#hero"
+              className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xl p-1"
+              aria-label="S.V. Tutorial - Saif Barkat Vegdani Tuition Classes"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Enquire on WhatsApp</span>
-            </motion.a>
-          </div>
+              <div className="relative">
+                <img
+                  src={logoImg}
+                  alt="S.V. Tutorial Official Logo"
+                  className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl object-contain bg-surface-pure border border-gold/40 p-0.5 shadow-2xs shrink-0 transition-all duration-300 group-hover:border-gold group-hover:shadow-[0_0_14px_rgba(198,161,91,0.3)]"
+                  width={44}
+                  height={44}
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif font-bold text-[16px] sm:text-[18px] text-charcoal tracking-tight leading-tight group-hover:text-midnight transition-colors">
+                  S.V. Tutorial
+                </span>
+                <span className="text-[8.5px] sm:text-[9px] font-sans font-semibold tracking-[0.22em] text-gold-dark uppercase mt-0.5">
+                  Saif Barkat Vegdani · Standards 3–12
+                </span>
+              </div>
+            </a>
 
-          {/* Mobile Menu Hamburger */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            type="button"
-            className="lg:hidden p-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
-          >
-            <AnimatePresence mode="wait" initial={false}>
+            {/* Desktop Nav Links */}
+            <nav
+              className="hidden lg:flex items-center gap-1 text-[13px] font-medium text-charcoal/80"
+              aria-label="Main Navigation"
+            >
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className={`relative px-3.5 py-1.5 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold ${
+                      isActive
+                        ? "text-midnight font-bold bg-gold/10"
+                        : "text-charcoal/75 hover:text-charcoal hover:bg-ivory-tint"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    {isActive && (
+                      <motion.span
+                        layoutId="navActiveUnderline"
+                        className="absolute bottom-0.5 left-3.5 right-3.5 h-[2px] bg-gold-dark rounded-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </a>
+                );
+              })}
+            </nav>
+
+            {/* Header Action Button (Desktop Magnetic Button) */}
+            <div className="hidden sm:flex items-center gap-3">
+              <MagneticButton
+                as="a"
+                href={whatsappGeneralUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-midnight hover:bg-midnight-card text-gold hover:text-gold-light font-bold text-xs tracking-wider uppercase transition-colors shadow-xs border border-gold/40 relative overflow-hidden group cursor-pointer"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Enquire on WhatsApp</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+              </MagneticButton>
+            </div>
+
+            {/* Mobile Menu Hamburger */}
+            <button
+              type="button"
+              className="lg:hidden p-2 rounded-xl text-charcoal hover:bg-ivory-tint transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+            >
               {mobileMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-6 h-6 text-gold" />
-                </motion.div>
+                <X className="w-6 h-6 text-charcoal" />
               ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-6 h-6 text-gold" />
-                </motion.div>
+                <Menu className="w-6 h-6 text-charcoal" />
               )}
-            </AnimatePresence>
-          </motion.button>
+            </button>
+          </div>
         </div>
-      </motion.div>
+      </motion.header>
 
-      {/* Mobile Drawer Menu with Framer Motion AnimatePresence */}
+      {/* Full-Screen Premium Light Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-midnight/98 border-b border-gold/25 px-6 py-6 text-white shadow-2xl backdrop-blur-xl overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[60] bg-ivory flex flex-col justify-between p-6 sm:p-10 lg:hidden overflow-y-auto"
           >
-            <motion.nav
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={{
-                open: {
-                  transition: { staggerChildren: 0.05, delayChildren: 0.05 }
-                },
-                closed: {
-                  transition: { staggerChildren: 0.03, staggerDirection: -1 }
-                }
-              }}
-              className="flex flex-col gap-2.5"
-            >
-              {navLinks.map((link) => (
-                <motion.a
-                  key={link.name}
-                  variants={{
-                    open: { opacity: 1, x: 0 },
-                    closed: { opacity: 0, x: -16 }
-                  }}
-                  href={link.href}
-                  onClick={handleLinkClick}
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-white/90 hover:text-gold hover:bg-white/5 transition-colors border border-transparent hover:border-gold/20"
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-              <motion.div
-                variants={{
-                  open: { opacity: 1, y: 0 },
-                  closed: { opacity: 0, y: 10 }
-                }}
-                className="pt-4 border-t border-white/10 flex flex-col gap-3"
+            {/* Top Bar inside Menu */}
+            <div className="flex items-center justify-between pb-6 border-b border-border-soft">
+              <div className="flex items-center gap-3">
+                <img
+                  src={logoImg}
+                  alt="S.V. Tutorial"
+                  className="w-10 h-10 rounded-xl object-contain bg-surface-pure border border-gold/40 p-0.5"
+                  width={40}
+                  height={40}
+                />
+                <div>
+                  <span className="font-serif font-bold text-lg text-charcoal block">S.V. Tutorial</span>
+                  <span className="text-[9px] font-sans font-semibold tracking-widest text-gold-dark uppercase block">
+                    Standards 3–12
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-10 h-10 rounded-full bg-ivory-tint border border-border-soft flex items-center justify-center text-charcoal hover:bg-border-soft transition-colors cursor-pointer"
+                aria-label="Close menu"
               >
-                <motion.a
-                  whileTap={{ scale: 0.98 }}
-                  href={whatsappGeneralUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleLinkClick}
-                  className="w-full py-3 rounded-full bg-gold text-midnight font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-md hover:bg-gold-light transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Enquire on WhatsApp</span>
-                </motion.a>
-                <motion.a
-                  whileTap={{ scale: 0.98 }}
-                  href="#admissions"
-                  onClick={handleLinkClick}
-                  className="w-full py-3 rounded-full bg-white/10 text-white font-semibold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-2 hover:bg-white/15 transition-colors"
-                >
-                  <span>Admission Form</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-gold" />
-                </motion.a>
-              </motion.div>
-            </motion.nav>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Navigation Links with Editorial Serif Typography */}
+            <nav className="flex flex-col gap-4 py-8">
+              {NAV_LINKS.map((link, idx) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <motion.a
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * idx, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    href={link.href}
+                    onClick={handleLinkClick}
+                    className="flex items-baseline justify-between group"
+                  >
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-[11px] font-mono text-gold-dark font-semibold">0{idx + 1}</span>
+                      <span
+                        className={`font-serif text-2xl sm:text-3xl font-bold transition-colors ${
+                          isActive ? "text-gold-dark italic" : "text-charcoal group-hover:text-gold-dark"
+                        }`}
+                      >
+                        {link.name}
+                      </span>
+                    </div>
+                    {isActive && <span className="w-2 h-2 rounded-full bg-gold-dark" />}
+                  </motion.a>
+                );
+              })}
+            </nav>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 border-t border-border-soft flex flex-col gap-3">
+              <a
+                href={whatsappGeneralUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleLinkClick}
+                className="w-full py-3.5 rounded-full bg-midnight text-gold font-bold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-sm hover:bg-midnight-card transition-colors border border-gold/40"
+              >
+                <MessageCircle className="w-4 h-4 text-gold" />
+                <span>Enquire on WhatsApp</span>
+              </a>
+              <a
+                href="#admissions"
+                onClick={handleLinkClick}
+                className="w-full py-3.5 rounded-full bg-surface-pure text-charcoal font-semibold text-xs uppercase tracking-wider text-center flex items-center justify-center gap-2 hover:bg-ivory-tint transition-colors border border-border-soft"
+              >
+                <span>Admission Form</span>
+                <ArrowRight className="w-3.5 h-3.5 text-gold-dark" />
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

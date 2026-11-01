@@ -17,6 +17,12 @@
 
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-devanagari: "Noto Sans Devanagari", "Noto Serif Devanagari", Georgia, serif;
+  --font-urdu: "Noto Nastaliq Urdu", serif;
+  --font-gujarati: "Noto Sans Gujarati", "Noto Serif Gujarati", Georgia, serif;
+  --font-tamil: "Noto Sans Tamil", system-ui, sans-serif;
+  --font-bengali: "Noto Sans Bengali", system-ui, sans-serif;
+  --font-kannada: "Noto Sans Kannada", system-ui, sans-serif;
 }
 
 @layer base {
@@ -107,7 +113,7 @@
   animation: shimmer-sweep 4s linear infinite;
 }
 
-/* 21st.dev Marquee Keyframes & Utilities */
+/* Marquee Keyframes & Utilities */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -142,12 +148,44 @@
   animation-play-state: paused;
 }
 
-/* 21st.dev Border Beam Animation */
+/* Border Beam Animation */
 @keyframes border-beam {
   0% {
     offset-distance: 0%;
   }
   100% {
     offset-distance: 100%;
+  }
+}
+
+/* Hairline dividers & editorial decorative accents */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(198, 161, 91, 0.4), transparent);
+}
+
+.gold-divider-subtle {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(198, 161, 91, 0.35), transparent);
+}
+
+/* Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none !important;
+  }
+  .animate-gold-pulse,
+  .animate-subtle-float,
+  .shimmer-text {
+    animation: none !important;
   }
 }

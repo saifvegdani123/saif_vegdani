@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
+import { Plus, MessageCircle } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,15 +15,19 @@ export default function FAQSection() {
   const listRef = useRef(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       // Header
       gsap.from(headerRef.current, {
         opacity: 0,
-        y: 25,
-        duration: 0.8,
+        y: 24,
+        duration: 0.75,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -35,9 +39,9 @@ export default function FAQSection() {
       // FAQ List items stagger
       gsap.from(listRef.current?.children || [], {
         opacity: 0,
-        y: 25,
-        duration: 0.7,
-        stagger: 0.08,
+        y: 20,
+        duration: 0.65,
+        stagger: 0.07,
         ease: "power3.out",
         scrollTrigger: {
           trigger: listRef.current,
@@ -86,52 +90,65 @@ export default function FAQSection() {
   );
 
   return (
-    <section ref={sectionRef} id="faq" className="py-20 lg:py-28 bg-ivory border-b border-border-soft">
-      <div className="max-w-[1000px] mx-auto px-4 lg:px-8">
+    <section
+      ref={sectionRef}
+      id="faq"
+      className="py-20 lg:py-28 bg-ivory border-b border-border-soft"
+      aria-label="Frequently Asked Questions"
+    >
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Eyebrow */}
+        <div className="flex items-center justify-between mb-8 pb-3 border-b border-border-soft/60">
+          <span className="text-[10.5px] font-mono font-bold tracking-[0.22em] text-gold-dark uppercase">
+            10 / COMMON QUESTIONS
+          </span>
+          <span className="text-[11px] font-sans text-charcoal-muted font-medium">
+            Academic Policy & Admissions
+          </span>
+        </div>
+
         {/* Header */}
         <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface-pure border border-border-soft text-[10.5px] font-bold tracking-[0.2em] uppercase text-gold-dark mb-3">
-            <HelpCircle className="w-3.5 h-3.5 text-gold" />
-            Common Questions
-          </div>
-          <h2 className="font-serif text-3xl sm:text-4xl text-charcoal font-bold tracking-tight leading-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[44px] text-charcoal font-bold tracking-tight leading-tight">
             Frequently Asked Questions
           </h2>
-          <p className="text-xs sm:text-sm text-charcoal-muted mt-3 leading-relaxed">
+          <p className="text-xs sm:text-sm text-charcoal-muted mt-3 leading-relaxed font-normal">
             Essential information for parents and students regarding boards, subject coverage,
             timings, and admissions.
           </p>
         </div>
 
-        {/* Accordion List */}
-        <div ref={listRef} className="space-y-3.5">
+        {/* Accordion List with Hairline Dividers & Plus-to-Cross Icon */}
+        <div ref={listRef} className="space-y-3">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
-              <motion.div
+              <div
                 key={idx}
-                whileHover={{ y: -2 }}
-                transition={{ duration: 0.2 }}
                 className="bg-surface-pure rounded-[20px] border border-border-soft overflow-hidden transition-colors shadow-2xs hover:border-gold/40"
               >
                 <button
                   type="button"
                   onClick={() => toggleFAQ(idx)}
-                  className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  className="w-full px-6 py-5 sm:py-6 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold cursor-pointer"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${idx}`}
                 >
-                  <span className="font-serif font-bold text-base sm:text-lg text-charcoal">
+                  <span className="font-serif font-bold text-base sm:text-[19px] text-charcoal leading-snug">
                     {faq.q}
                   </span>
+
+                  {/* Plus to Cross Morphing Icon */}
                   <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className={`w-8 h-8 rounded-full border border-border-soft flex items-center justify-center shrink-0 transition-colors ${
-                      isOpen ? "bg-midnight text-gold border-gold/40" : "text-charcoal-muted bg-ivory-light"
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                      isOpen
+                        ? "bg-midnight text-gold border-gold"
+                        : "text-charcoal-muted bg-ivory border-border-soft"
                     }`}
                   >
-                    <ChevronDown className="w-4 h-4" />
+                    <Plus className="w-4 h-4" />
                   </motion.div>
                 </button>
 
@@ -144,21 +161,21 @@ export default function FAQSection() {
                         height: "auto",
                         opacity: 1,
                         transition: {
-                          height: { duration: 0.35, ease: [0.04, 0.62, 0.23, 0.98] },
-                          opacity: { duration: 0.25, delay: 0.08 }
+                          height: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+                          opacity: { duration: 0.22, delay: 0.05 }
                         }
                       }}
                       exit={{
                         height: 0,
                         opacity: 0,
                         transition: {
-                          height: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
-                          opacity: { duration: 0.15 }
+                          height: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+                          opacity: { duration: 0.12 }
                         }
                       }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 pt-1 text-xs sm:text-[13px] text-charcoal/80 leading-relaxed border-t border-border-soft/60">
+                      <div className="px-6 pb-6 pt-1 text-xs sm:text-[13.5px] text-charcoal/80 leading-relaxed border-t border-border-soft/60 font-normal">
                         {faq.a.split("\n").map((line, lIdx) => (
                           <p key={lIdx} className={lIdx > 0 ? "mt-2" : ""}>
                             {line}
@@ -168,7 +185,7 @@ export default function FAQSection() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -178,9 +195,7 @@ export default function FAQSection() {
           <p className="text-xs text-charcoal-muted mb-3 font-normal">
             Have a question not addressed above?
           </p>
-          <motion.a
-            whileHover={{ scale: 1.03, boxShadow: "0 0 16px rgba(198,161,91,0.2)" }}
-            whileTap={{ scale: 0.97 }}
+          <a
             href={whatsappFaqUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -188,7 +203,7 @@ export default function FAQSection() {
           >
             <MessageCircle className="w-3.5 h-3.5 text-gold-dark" />
             <span>Ask Saif Sir on WhatsApp</span>
-          </motion.a>
+          </a>
         </div>
       </div>
     </section>

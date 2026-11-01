@@ -35,3 +35,5 @@ Thumbs.db
 # Temporary and references
 stitch_reference/
 *.local
+
+*.zip

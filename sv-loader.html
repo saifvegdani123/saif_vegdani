@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>S.V Tutorials</title>
+
+<!-- ============ LOADER FONTS (put in your <head>) ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Gujarati:wght@700&family=Noto+Sans+Tamil:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Kannada:wght@700&display=swap" rel="stylesheet">
+
+<!-- ============ LOADER CSS (put in your <head>) ============ -->
+<style>
+  #sv-loader {
+    /* ---- tweak these ---- */
+    --sv-bg:  #FFFFF0;   /* ivory */
+    --sv-ink: #121212;   /* text + progress line */
+    --sv-track: rgba(18,18,18,.14);
+
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--sv-bg); color: var(--sv-ink);
+    font-family: "Inter", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+                 "Noto Sans Bengali", "Noto Sans Kannada", system-ui, sans-serif;
+    border-radius: 0;
+    will-change: transform, border-radius;
+    overflow: hidden;
+    touch-action: none;
+  }
+  #sv-loader .sv-stage {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 24px;
+  }
+  #sv-loader .sv-word {
+    display: flex; align-items: center; gap: .55em;
+    font-size: clamp(30px, 9vw, 64px);
+    font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
+    opacity: 0; white-space: nowrap;
+  }
+  #sv-loader .sv-dot {
+    width: .2em; height: .2em; min-width: 8px; min-height: 8px;
+    border-radius: 50%; background: currentColor; flex: none;
+  }
+  #sv-loader .sv-word.is-brand {
+    font-weight: 800; text-transform: uppercase;
+    letter-spacing: .26em; margin-right: -.26em;
+    font-size: clamp(18px, 5.6vw, 40px);
+  }
+
+  #sv-loader .sv-bar {
+    position: absolute; left: 24px; right: 24px;
+    bottom: calc(26px + env(safe-area-inset-bottom));
+  }
+  #sv-loader .sv-meta {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  #sv-loader .sv-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  }
+  #sv-loader .sv-pct {
+    font-size: clamp(22px, 5.5vw, 34px); font-weight: 700; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  #sv-loader .sv-line { height: 2px; background: var(--sv-track); }
+  #sv-loader .sv-line i {
+    display: block; height: 100%; width: 100%;
+    background: var(--sv-ink); transform-origin: left; transform: scaleX(0);
+  }
+
+  body { margin: 0; }
+  html.sv-lock, html.sv-lock body { overflow: hidden; }
+  @media (prefers-reduced-motion: reduce) {
+    #sv-loader .sv-word { filter: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ============ LOADER MARKUP (first thing inside <body>) ============ -->
+<div id="sv-loader" aria-hidden="true">
+  <div class="sv-stage">
+    <div class="sv-word"><span class="sv-dot"></span><span class="sv-text"></span></div>
+  </div>
+  <div class="sv-bar">
+    <div class="sv-meta">
+      <span class="sv-label">S.V Tutorials</span>
+      <span class="sv-pct">0%</span>
+    </div>
+    <div class="sv-line"><i></i></div>
+  </div>
+</div>
+
+<!-- ============ DEMO SITE (replace with your real page) ============ -->
+<main style="min-height:100vh;display:grid;place-items:center;background:#0f2a22;color:#FFFFF0;font-family:Inter,system-ui,sans-serif;text-align:center;padding:24px">
+  <div>
+    <p style="letter-spacing:.3em;font-size:12px;opacity:.6;margin:0 0 16px">WELCOME TO</p>
+    <h1 style="font-size:clamp(40px,10vw,96px);margin:0;font-weight:800;letter-spacing:-.02em">S.V Tutorials</h1>
+  </div>
+</main>
+
+<!-- ============ LOADER JS (end of <body>) ============ -->
+<script>
+(() => {
+  const loader = document.getElementById('sv-loader');
+  if (!loader) return;
+
+  /* ---- settings ---- */
+  const GREETINGS = ['नमस्ते', 'Hello', 'வணக்கம்', 'Bonjour', 'નમસ્તે', 'Ciao',
+                     'নমস্কার', 'Hola', 'ನಮಸ್ಕಾರ', 'Welcome'];
+  const BRAND      = 'S.V Tutorials';
+  const COUNT_MS   = 1400;   // 0 → 100%
+  const WORD_MS    = 560;    // time each greeting stays on screen
+  const BRAND_MS   = 1100;   // brand hold
+  const WIPE_MS    = 1000;   // exit
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wordEl = loader.querySelector('.sv-word');
+  const textEl = loader.querySelector('.sv-text');
+  const pctEl  = loader.querySelector('.sv-pct');
+  const fill   = loader.querySelector('.sv-line i');
+  const root   = document.documentElement;
+  root.classList.add('sv-lock');
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const ease  = t => 1 - Math.pow(1 - t, 3);
+
+  /* counter + progress line */
+  function runCounter() {
+    const t0 = performance.now();
+    return new Promise(res => {
+      (function tick(now) {
+        const p = Math.min((now - t0) / COUNT_MS, 1), v = ease(p);
+        pctEl.textContent = Math.round(v * 100) + '%';
+        fill.style.transform = `scaleX(${v})`;
+        p < 1 ? requestAnimationFrame(tick) : res();
+      })(t0);
+    });
+  }
+
+  /* blur-fade a word in, hold, fade out */
+  async function show(text, hold, brand = false) {
+    textEl.textContent = text;
+    wordEl.classList.toggle('is-brand', brand);
+    const IN = 240, OUT = 200;
+    await wordEl.animate(
+      [{ opacity: 0, filter: 'blur(10px)', transform: 'translateY(10px)' },
+       { opacity: 1, filter: 'blur(0)',    transform: 'translateY(0)' }],
+      { duration: IN, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }).finished;
+    await sleep(Math.max(0, hold - IN - OUT));
+    if (!brand) {
+      await wordEl.animate(
+        [{ opacity: 1, filter: 'blur(0)',   transform: 'translateY(0)' },
+         { opacity: 0, filter: 'blur(8px)',  transform: 'translateY(-8px)' }],
+        { duration: OUT, easing: 'ease-in', fill: 'forwards' }).finished;
+    }
+  }
+
+  /* exit: panel lifts away with a curved bottom edge */
+  function wipe() {
+    const a = loader.animate(
+      [{ transform: 'translateY(0)',     borderRadius: '0 0 50% 50% / 0 0 0vh 0vh' },
+       { transform: 'translateY(-100%)', borderRadius: '0 0 50% 50% / 0 0 24vh 24vh' }],
+      { duration: WIPE_MS, easing: 'cubic-bezier(.76,0,.24,1)', fill: 'forwards' });
+    return a.finished;
+  }
+
+  async function run() {
+    const loaded = new Promise(r =>
+      document.readyState === 'complete' ? r() : addEventListener('load', r, { once: true }));
+    runCounter();
+    const gap = reduce ? 250 : WORD_MS;
+    for (const g of GREETINGS) await show(g, gap);
+    await show(BRAND, reduce ? 500 : BRAND_MS, true);
+    await loaded;                       // never reveal a half-loaded page
+    await wipe();
+    loader.remove();
+    root.classList.remove('sv-lock');
+    document.dispatchEvent(new Event('sv:loader-done'));   // hook for your hero animations
+  }
+  run();
+})();
+</script>
+</body>
+</html>
