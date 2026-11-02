@@ -16,7 +16,7 @@ export default function AcademicMarquee() {
     },
     {
       icon: Award,
-      label: "12 YEARS TEACHING RECORD",
+      label: "9 YEARS TEACHING RECORD",
       detail: "School Faculty & Academy Tenure"
     },
     {

@@ -40,7 +40,7 @@ export default function TrustCredentials() {
   const credentials = [
     {
       icon: Award,
-      num: 12,
+      num: 9,
       suffix: " Years",
       title: "Teaching Record",
       subtitle: "Verified Career Experience",

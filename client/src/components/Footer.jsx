@@ -70,7 +70,7 @@ export default function Footer() {
             <div className="flex flex-wrap items-center gap-2.5">
               <div className="inline-flex items-center gap-2 text-xs text-charcoal font-semibold px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft shadow-2xs">
                 <ShieldCheck className="w-4 h-4 text-gold-dark shrink-0" />
-                <span>12 Years Verified Record</span>
+                <span>9 Years Verified Record</span>
               </div>
               <div className="inline-flex items-center gap-1.5 text-xs text-charcoal-muted font-medium px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft font-mono">
                 <span>B.Com, B.Ed</span>
