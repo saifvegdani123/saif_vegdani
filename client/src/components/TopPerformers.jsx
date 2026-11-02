@@ -115,9 +115,9 @@ export default function TopPerformers() {
           </p>
         </div>
 
-        {/* Clean Segmented Tab Switcher - Fully Responsive for Mobile */}
-        <div className="flex justify-center mb-6 sm:mb-8 max-w-full overflow-hidden px-2">
-          <div className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-surface-pure border border-border-soft shadow-xs gap-1 sm:gap-2 max-w-full overflow-x-auto no-scrollbar">
+        {/* Segmented Tab Switcher - Perfectly Balanced for Mobile, Tablet & Desktop */}
+        <div className="w-full max-w-sm sm:max-w-xl lg:max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
+          <div className="grid grid-cols-3 p-1 sm:p-1.5 rounded-full bg-surface-pure border border-border-soft shadow-xs gap-1 sm:gap-2">
             {BATCH_RESULTS.map((batch, idx) => {
               const isSelected = currentIndex === idx;
               return (
@@ -125,9 +125,11 @@ export default function TopPerformers() {
                   key={batch.id}
                   type="button"
                   onClick={() => setCurrentIndex(idx)}
-                  className={`relative px-3 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-colors cursor-pointer select-none min-h-[44px] flex items-center shrink-0 whitespace-nowrap ${
+                  className={`relative px-2 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-colors cursor-pointer select-none min-h-[44px] flex items-center justify-center text-center whitespace-nowrap ${
                     isSelected ? "text-midnight" : "text-charcoal/70 hover:text-charcoal"
                   }`}
+                  aria-pressed={isSelected}
+                  aria-label={`${batch.title} - ${batch.badge}`}
                 >
                   {isSelected && (
                     <motion.div
@@ -136,11 +138,11 @@ export default function TopPerformers() {
                       className="absolute inset-0 bg-gradient-to-r from-gold-light/40 via-gold/30 to-gold-light/40 border border-gold/60 rounded-full shadow-2xs"
                     />
                   )}
-                  <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                  <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
                     <Calendar className="w-3.5 h-3.5 text-gold-dark shrink-0 hidden sm:inline" />
-                    <span className="whitespace-nowrap">{batch.label}</span>
+                    <span>{batch.label}</span>
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-mono font-bold hidden sm:inline-flex ${
+                      className={`text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-mono font-bold hidden sm:inline-flex ${
                         isSelected
                           ? "bg-midnight text-gold"
                           : "bg-charcoal/5 text-charcoal/60"
@@ -148,7 +150,7 @@ export default function TopPerformers() {
                     >
                       {batch.badge}
                     </span>
-                    {/* Compact gold dot indicator on mobile */}
+                    {/* Compact gold dot indicator on mobile when active */}
                     {isSelected && (
                       <span className="sm:hidden w-1.5 h-1.5 rounded-full bg-gold-dark shrink-0" />
                     )}
@@ -156,6 +158,16 @@ export default function TopPerformers() {
                 </button>
               );
             })}
+          </div>
+
+          {/* Active Batch Mobile Descriptor Pill */}
+          <div className="sm:hidden text-center mt-2.5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-pure border border-border-soft text-[11px] font-mono font-semibold text-charcoal shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-dark shrink-0" />
+              <span>{activeBatch.badge}</span>
+              <span className="text-charcoal/30">•</span>
+              <span className="text-charcoal-muted">GSEB SSC Board</span>
+            </span>
           </div>
         </div>
 
@@ -217,10 +229,10 @@ export default function TopPerformers() {
                   e.stopPropagation();
                   handlePrev();
                 }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 min-h-[44px] min-w-[44px] rounded-full bg-surface-pure/90 hover:bg-surface-pure text-charcoal hover:text-midnight border border-border-soft flex items-center justify-center shadow-md transition-all cursor-pointer hover:scale-105"
+                className="absolute left-1.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] rounded-full bg-surface-pure/90 hover:bg-surface-pure text-charcoal hover:text-midnight border border-border-soft flex items-center justify-center shadow-md transition-all cursor-pointer hover:scale-105"
                 aria-label="Previous batch poster"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
               <button
@@ -229,10 +241,10 @@ export default function TopPerformers() {
                   e.stopPropagation();
                   handleNext();
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 min-h-[44px] min-w-[44px] rounded-full bg-surface-pure/90 hover:bg-surface-pure text-charcoal hover:text-midnight border border-border-soft flex items-center justify-center shadow-md transition-all cursor-pointer hover:scale-105"
+                className="absolute right-1.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] rounded-full bg-surface-pure/90 hover:bg-surface-pure text-charcoal hover:text-midnight border border-border-soft flex items-center justify-center shadow-md transition-all cursor-pointer hover:scale-105"
                 aria-label="Next batch poster"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 

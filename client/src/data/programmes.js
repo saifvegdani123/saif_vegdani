@@ -77,17 +77,22 @@ export const TEACHER_DATA = {
     {
       institution: "Ignite Academy",
       subjects: "Mathematics & Science",
-      duration: "2 years"
+      duration: "3 years"
     },
     {
-      institution: "Saraswati Classes",
-      subjects: "Social Science",
-      duration: "3 years"
+      institution: "Saraswati Coaching Classes",
+      subjects: "Secondary Education",
+      duration: "4 years"
+    },
+    {
+      institution: "Saraswati Commerce Classes",
+      subjects: "Commerce Stream Studies",
+      duration: "4 years"
     },
     {
       institution: "Good Shepherd Mission School",
       subjects: "School Teaching Faculty",
-      duration: "4 years"
+      duration: "5 years"
     }
   ],
   batchTimings: "4:30 PM – 8:00 PM",

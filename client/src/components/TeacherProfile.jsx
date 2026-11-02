@@ -226,57 +226,32 @@ export default function TeacherProfile() {
               </div>
 
               {/* Timeline Cards */}
-              <div ref={timelineRef} className="grid grid-cols-1 sm:grid-cols-3 gap-3 relative">
-                <div className="bg-ivory-light p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40">
-                  <div>
-                    <span className="text-sm font-bold text-charcoal block">Ignite Academy</span>
-                    <span className="text-xs text-charcoal-muted block mt-0.5">
-                      Mathematics &amp; Science
-                    </span>
+              <div ref={timelineRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 relative">
+                {TEACHER_DATA.previousExperience.map((exp, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-ivory-light p-3.5 sm:p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40"
+                  >
+                    <div>
+                      <span className="text-sm font-bold text-charcoal block">{exp.institution}</span>
+                      <span className="text-xs text-charcoal-muted block mt-0.5">
+                        {exp.subjects}
+                      </span>
+                    </div>
+                    <div className="mt-3">
+                      <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1 shadow-2xs">
+                        <Calendar className="w-3.5 h-3.5 text-gold" />
+                        <span>{exp.duration}</span>
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-3">
-                    <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1 shadow-2xs">
-                      <Calendar className="w-3.5 h-3.5 text-gold" />
-                      <span>2 Years</span>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="bg-ivory-light p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40">
-                  <div>
-                    <span className="text-sm font-bold text-charcoal block">Saraswati Classes</span>
-                    <span className="text-xs text-charcoal-muted block mt-0.5">
-                      Social Science
-                    </span>
-                  </div>
-                  <div className="mt-3">
-                    <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1 shadow-2xs">
-                      <Calendar className="w-3.5 h-3.5 text-gold" />
-                      <span>3 Years</span>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="bg-ivory-light p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40">
-                  <div>
-                    <span className="text-sm font-bold text-charcoal block">Good Shepherd Mission</span>
-                    <span className="text-xs text-charcoal-muted block mt-0.5">
-                      School Faculty
-                    </span>
-                  </div>
-                  <div className="mt-3">
-                    <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1 shadow-2xs">
-                      <Calendar className="w-3.5 h-3.5 text-gold" />
-                      <span>4 Years</span>
-                    </span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Internal Auditor Note (Preserved in code for owner review):
-                Supplied institutional tenures (Ignite Academy 2 yrs + Saraswati Classes 3 yrs +
-                Good Shepherd Mission School 4 yrs) total 9 years if viewed as distinct non-overlapping
+                Supplied institutional tenures (Ignite Academy 3 yrs + Saraswati Coaching Classes 4 yrs +
+                Saraswati Commerce Classes 4 yrs + Good Shepherd Mission School 5 yrs) if viewed as distinct non-overlapping
                 intervals, while the stated overall career is 8 years. Flagged for owner confirmation. */}
           </div>
         </div>

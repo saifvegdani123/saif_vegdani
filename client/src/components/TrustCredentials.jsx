@@ -58,12 +58,12 @@ export default function TrustCredentials() {
     },
     {
       icon: Building2,
-      num: 3,
+      num: 4,
       suffix: " Institutions",
       title: "Prior Tenures",
       subtitle: "School & Academy Background",
       description:
-        "Instruction across Ignite Academy, Saraswati Classes, and Good Shepherd Mission School."
+        "Instruction across Ignite Academy, Saraswati Coaching Classes, Saraswati Commerce Classes, and Good Shepherd Mission School."
     },
     {
       icon: UserCheck,
