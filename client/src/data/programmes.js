@@ -72,7 +72,7 @@ export const TEACHER_DATA = {
   name: "Saif Barkat Vegdani",
   age: 26,
   qualifications: ["Bachelor of Commerce (B.Com)", "Bachelor of Education (B.Ed)"],
-  overallExperienceYears: 8,
+  overallExperienceYears: 12,
   previousExperience: [
     {
       institution: "Ignite Academy",
@@ -80,13 +80,9 @@ export const TEACHER_DATA = {
       duration: "3 years"
     },
     {
-      institution: "Saraswati Coaching Classes",
-      subjects: "Secondary Education",
-      duration: "4 years"
-    },
-    {
-      institution: "Saraswati Commerce Classes",
-      subjects: "Commerce Stream Studies",
+      institution: "Saraswati Classes",
+      subTitle: "Coaching & Commerce Streams",
+      subjects: "Secondary Education & Commerce Studies",
       duration: "4 years"
     },
     {

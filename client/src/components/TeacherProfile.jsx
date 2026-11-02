@@ -169,7 +169,7 @@ export default function TeacherProfile() {
                     Experience
                   </span>
                   <span className="font-serif font-bold text-charcoal text-sm px-2.5 py-0.5 rounded-full bg-surface-pure border border-border-soft inline-block mt-0.5 shadow-2xs">
-                    8 Years Record
+                    12 Years Record
                   </span>
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function TeacherProfile() {
             </div>
 
             <p className="text-xs sm:text-sm font-semibold text-charcoal-muted uppercase tracking-wider mb-6 font-mono">
-              Age {TEACHER_DATA.age} • 8 Years Dedicated Classroom Teaching
+              Age {TEACHER_DATA.age} • 12 Years Dedicated Classroom Teaching
             </p>
 
             {/* Qualifications Badges as Refined Chips */}
@@ -203,7 +203,7 @@ export default function TeacherProfile() {
               </div>
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-surface-pure border border-border-soft text-charcoal text-xs sm:text-sm font-semibold shadow-2xs">
                 <Award className="w-4 h-4 text-gold shrink-0" />
-                <span>8 Years Continuous Record</span>
+                <span>12 Years Continuous Record</span>
               </div>
             </div>
 
@@ -226,20 +226,25 @@ export default function TeacherProfile() {
               </div>
 
               {/* Timeline Cards */}
-              <div ref={timelineRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 relative">
+              <div ref={timelineRef} className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 relative">
                 {TEACHER_DATA.previousExperience.map((exp, idx) => (
                   <div
                     key={idx}
-                    className="bg-ivory-light p-3.5 sm:p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40"
+                    className="bg-ivory-light p-4 rounded-xl border border-border-soft flex flex-col justify-between transition-colors hover:border-gold/40 shadow-2xs"
                   >
                     <div>
                       <span className="text-sm font-bold text-charcoal block">{exp.institution}</span>
+                      {exp.subTitle && (
+                        <span className="text-[11px] font-semibold text-gold-dark block mt-0.5">
+                          {exp.subTitle}
+                        </span>
+                      )}
                       <span className="text-xs text-charcoal-muted block mt-0.5">
                         {exp.subjects}
                       </span>
                     </div>
-                    <div className="mt-3">
-                      <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1 shadow-2xs">
+                    <div className="mt-3.5">
+                      <span className="text-xs font-semibold text-gold-dark px-2.5 py-1 rounded-full bg-surface-pure border border-border-soft inline-flex items-center gap-1.5 shadow-2xs">
                         <Calendar className="w-3.5 h-3.5 text-gold" />
                         <span>{exp.duration}</span>
                       </span>
@@ -250,9 +255,7 @@ export default function TeacherProfile() {
             </div>
 
             {/* Internal Auditor Note (Preserved in code for owner review):
-                Supplied institutional tenures (Ignite Academy 3 yrs + Saraswati Coaching Classes 4 yrs +
-                Saraswati Commerce Classes 4 yrs + Good Shepherd Mission School 5 yrs) if viewed as distinct non-overlapping
-                intervals, while the stated overall career is 8 years. Flagged for owner confirmation. */}
+                Supplied institutional tenures: Ignite Academy (3 yrs) + Saraswati Classes (Coaching & Commerce - 4 yrs) + Good Shepherd Mission School (5 yrs) = 12 years cumulative teaching experience. */}
           </div>
         </div>
       </div>

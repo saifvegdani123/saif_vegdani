@@ -40,7 +40,7 @@ export default function TrustCredentials() {
   const credentials = [
     {
       icon: Award,
-      num: 8,
+      num: 12,
       suffix: " Years",
       title: "Teaching Record",
       subtitle: "Verified Career Experience",
@@ -58,12 +58,12 @@ export default function TrustCredentials() {
     },
     {
       icon: Building2,
-      num: 4,
+      num: 3,
       suffix: " Institutions",
       title: "Prior Tenures",
       subtitle: "School & Academy Background",
       description:
-        "Instruction across Ignite Academy, Saraswati Coaching Classes, Saraswati Commerce Classes, and Good Shepherd Mission School."
+        "Instruction across Ignite Academy, Saraswati Classes (Coaching & Commerce), and Good Shepherd Mission School."
     },
     {
       icon: UserCheck,

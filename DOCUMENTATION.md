@@ -25,7 +25,7 @@ The **S.V. Tutorial** digital platform is engineered to deliver a bespoke, high-
 > 1. **Production Domain & Canonical URL:** Confirmed as `https://svtutorial.in` (configured across canonical tags, Open Graph, Twitter/X, JSON-LD, sitemap.xml, and robots.txt).
 > 2. **Official Business Email:** Confirmed as `saif@svtutorial.in` (configured in `client/.env`, footer, and direct consultation mailto generator).
 > 3. **WhatsApp Contact Number:** Configured in `client/.env` as `918238843699`.
-> 4. **Career Timeline Flag:** The supplied institutional tenures (Ignite Academy 2 yrs + Saraswati Classes 3 yrs + Good Shepherd Mission School 4 yrs) total 9 years if sequential, whereas overall stated career is 8 years. All durations are preserved exactly and await owner confirmation regarding concurrent roles.
+> 4. **Verified Career Timeline:** Institutional tenures: Ignite Academy (3 yrs), Saraswati Classes (Coaching & Commerce - 4 yrs), Good Shepherd Mission School (5 yrs), totaling 12 years of verified teaching record.
 
 ---
 

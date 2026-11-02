@@ -163,7 +163,7 @@ export default function Hero() {
               />
               <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-midnight/90 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-gold/30 text-white flex items-center justify-between text-xs">
                 <span className="font-semibold text-white">Saif Barkat Vegdani</span>
-                <span className="text-gold-light font-medium text-xs">8 Yrs Record</span>
+                <span className="text-gold-light font-medium text-xs">12 Yrs Record</span>
               </div>
             </div>
 
@@ -245,7 +245,7 @@ export default function Hero() {
                       B.Com, B.Ed Qualified
                     </span>
                     <span className="text-xs text-gold-light block mt-0.5 font-semibold">
-                      8 Years Record
+                      12 Years Record
                     </span>
                   </div>
                 </div>
