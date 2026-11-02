@@ -96,3 +96,4 @@ export const REVIEWS_DATA = [
       "Saif Sir makes tough formulas and Social Science topics easy to remember through clear summaries and regular chapter tests. He never leaves any doubt unresolved. Learning directly from the founder without any substitute teachers gives us immense clarity and peace of mind during board exam preparation."
   }
 ];
+
