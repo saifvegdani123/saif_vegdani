@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { name: "Philosophy", href: "#philosophy", id: "philosophy" },
   { name: "Educator", href: "#about", id: "about" },
   { name: "Timings", href: "#timings", id: "timings" },
+  { name: "Reviews", href: "#reviews", id: "reviews" },
   { name: "Admissions", href: "#admissions", id: "admissions" },
   { name: "FAQ", href: "#faq", id: "faq" }
 ];

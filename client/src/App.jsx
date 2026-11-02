@@ -13,6 +13,7 @@ import CurriculumDiagnostic from "./components/CurriculumDiagnostic";
 import TeachingPhilosophy from "./components/TeachingPhilosophy";
 import TeacherProfile from "./components/TeacherProfile";
 import BatchTimings from "./components/BatchTimings";
+import ReviewsSection from "./components/ReviewsSection";
 import AdmissionsEnquiry from "./components/AdmissionsEnquiry";
 import FAQSection from "./components/FAQSection";
 import Footer from "./components/Footer";
@@ -108,6 +109,7 @@ export default function App() {
         <TeachingPhilosophy />
         <TeacherProfile />
         <BatchTimings />
+        <ReviewsSection />
         <AdmissionsEnquiry />
         <FAQSection />
       </main>

@@ -75,6 +75,16 @@ export default function Footer() {
               <div className="inline-flex items-center gap-1.5 text-xs text-charcoal-muted font-medium px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft font-mono">
                 <span>B.Com, B.Ed</span>
               </div>
+              <a
+                href="https://maps.app.goo.gl/TdDxLHbiobLT4dtdA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-charcoal font-semibold px-3 py-1.5 rounded-full bg-surface-pure hover:bg-gold/10 border border-border-soft hover:border-gold/40 shadow-2xs transition-colors"
+                title="View 5.0 Star Reviews on Google Maps"
+              >
+                <span className="text-gold font-bold">★ 5.0</span>
+                <span>Google Reviews</span>
+              </a>
             </div>
           </div>
 
@@ -133,6 +143,14 @@ export default function Footer() {
                   className="hover:text-gold-dark transition-colors block group"
                 >
                   <span className="group-hover:translate-x-1 transition-transform inline-block">Teaching Methodology</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#reviews"
+                  className="hover:text-gold-dark transition-colors block group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">Google Verified Reviews</span>
                 </a>
               </li>
               <li>
