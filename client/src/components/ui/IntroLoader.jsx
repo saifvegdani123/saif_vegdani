@@ -18,16 +18,22 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const GREETINGS = [
   { text: "नमस्ते", lang: "hi", font: "font-[var(--font-devanagari)]" },
+  { text: "Hello", lang: "en", font: "font-sans" },
+  { text: "வணக்கம்", lang: "ta", font: "font-[var(--font-tamil)]" },
+  { text: "Bonjour", lang: "fr", font: "font-sans" },
   { text: "નમસ્તે", lang: "gu", font: "font-[var(--font-gujarati)]" },
-  { text: "Hello", lang: "en", font: "font-[var(--font-sans)]" },
-  { text: "السلام علیکم", lang: "ur", font: "font-[var(--font-urdu)] leading-relaxed", dir: "rtl" }
+  { text: "Ciao", lang: "it", font: "font-sans" },
+  { text: "নমস্কার", lang: "bn", font: "font-[var(--font-bengali)]" },
+  { text: "Hola", lang: "es", font: "font-sans" },
+  { text: "ನಮಸ್ಕಾರ", lang: "kn", font: "font-[var(--font-kannada)]" },
+  { text: "Welcome", lang: "en", font: "font-sans" }
 ];
 
-const BRAND = "S.V TUTORIALS";
-const COUNT_MS = 1400; // Counter 0 → 100% in 1.4s
-const WORD_MS = 220; // 220ms visible time per greeting
-const BRAND_MS = 550; // Brand hold before wipe
-const WIPE_MS = 550; // Lift wipe duration (≤ 600ms)
+const BRAND = "S.V Tutorials";
+const COUNT_MS = 1800; // Counter 0 → 100% in 1.8s
+const WORD_MS = 210; // 210ms visible time per greeting
+const BRAND_MS = 750; // Brand hold before wipe
+const WIPE_MS = 600; // Lift wipe duration
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
@@ -293,7 +299,7 @@ export default function IntroLoader({ onComplete }) {
         <div className="flex items-end justify-between mb-3 text-charcoal">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-charcoal/80">
-              S.V TUTORIALS
+              S.V Tutorials
             </span>
             <span className="text-xs text-gold font-mono">•</span>
             <span className="text-xs tracking-wider uppercase text-charcoal/60 hidden sm:inline">

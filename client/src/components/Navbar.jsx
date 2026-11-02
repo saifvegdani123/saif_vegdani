@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { name: "Classes", href: "#classes", id: "classes" },
   { name: "Diagnostic", href: "#curriculum-diagnostic", id: "curriculum-diagnostic" },
   { name: "Philosophy", href: "#philosophy", id: "philosophy" },
+  { name: "Educator", href: "#about", id: "about" },
   { name: "Timings", href: "#timings", id: "timings" },
   { name: "Admissions", href: "#admissions", id: "admissions" },
   { name: "FAQ", href: "#faq", id: "faq" }
@@ -140,7 +141,7 @@ export default function Navbar() {
 
             {/* Desktop Nav Links (Engages strictly at ≥ 1180px to avoid crowding) */}
             <nav
-              className="hidden min-[1180px]:flex items-center gap-1 text-[13px] font-medium text-charcoal/80"
+              className="hidden min-[1180px]:flex items-center gap-0.5 xl:gap-1 text-[12.5px] xl:text-[13px] font-medium text-charcoal/80"
               aria-label="Main Navigation"
             >
               {NAV_LINKS.map((link) => {
@@ -149,7 +150,7 @@ export default function Navbar() {
                   <a
                     key={link.name}
                     href={link.href}
-                    className={`relative px-3 py-1.5 rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold min-h-[36px] flex items-center ${
+                    className={`relative px-2.5 xl:px-3 py-1.5 rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold min-h-[36px] flex items-center ${
                       isActive
                         ? "text-midnight font-bold bg-gold/15"
                         : "text-charcoal/75 hover:text-charcoal hover:bg-ivory-tint"

@@ -22,6 +22,9 @@
   --font-devanagari: "Noto Sans Devanagari", Georgia, serif;
   --font-urdu: "Noto Nastaliq Urdu", serif;
   --font-gujarati: "Noto Sans Gujarati", Georgia, serif;
+  --font-tamil: "Noto Sans Tamil", sans-serif;
+  --font-bengali: "Noto Sans Bengali", sans-serif;
+  --font-kannada: "Noto Sans Kannada", sans-serif;
 
   /* Strict 3-Tier Radius Scale */
   --radius-xl: 12px;

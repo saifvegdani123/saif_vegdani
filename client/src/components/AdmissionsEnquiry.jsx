@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Send, CheckCircle2, AlertTriangle, Clock, Loader2, Sparkles } from "lucide-react";
-import { getFormSubmissionWhatsAppUrl, createWhatsAppUrl } from "../utils/whatsapp";
+import { MessageCircle, Mail, Send, CheckCircle2, AlertTriangle, Clock, Sparkles, ExternalLink, RefreshCw, MapPin } from "lucide-react";
+import { getFormSubmissionWhatsAppUrl, getFormSubmissionEmailUrl, createWhatsAppUrl } from "../utils/whatsapp";
 import saifDeskImg from "../assets/saif-vegdani-desk.jpg";
 import logoImg from "../assets/logo.png";
 
@@ -61,7 +61,6 @@ export default function AdmissionsEnquiry() {
     message: ""
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
   const [submittedData, setSubmittedData] = useState(null);
@@ -87,10 +86,26 @@ export default function AdmissionsEnquiry() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSubmissionError("");
     setHasShakeError(false);
+
+    // Validate parent / guardian name
+    const pName = formData.parentName.trim();
+    if (!pName || pName.length < 2) {
+      setSubmissionError("Please provide the parent or guardian's full name (at least 2 characters).");
+      setHasShakeError(true);
+      return;
+    }
+
+    // Validate student name
+    const sName = formData.studentName.trim();
+    if (!sName || sName.length < 2) {
+      setSubmissionError("Please provide the student's full name (at least 2 characters).");
+      setHasShakeError(true);
+      return;
+    }
 
     // Strict 10-digit Indian mobile validation: starts with 6, 7, 8, or 9
     const cleanPhone = formData.phoneNumber.replace(/[^0-9]/g, "");
@@ -101,56 +116,24 @@ export default function AdmissionsEnquiry() {
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/enquiries", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          parentName: formData.parentName,
-          studentName: formData.studentName,
-          standard: formData.standard,
-          board: formData.board,
-          phoneNumber: cleanPhone,
-          preferredContact: formData.preferredContact,
-          message: formData.message
-        })
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setSubmissionSuccess(true);
-        setSubmittedData({ ...formData, phoneNumber: cleanPhone });
-        setFormData({
-          parentName: "",
-          studentName: "",
-          standard: "Std 10",
-          board: "GSEB",
-          phoneNumber: "",
-          preferredContact: "WhatsApp",
-          message: ""
-        });
-      } else {
-        const errorMsg =
-          result.errors && result.errors.length > 0
-            ? result.errors.join(", ")
-            : result.message || "Failed to submit enquiry. Please try again.";
-        setSubmissionError(errorMsg);
-        setHasShakeError(true);
-      }
-    } catch (err) {
-      console.warn("Direct API call encountered network error:", err);
-      setSubmissionError(
-        "Direct server connection is currently unavailable. You can connect immediately with Saif Sir via WhatsApp below."
-      );
-      setHasShakeError(true);
-    } finally {
-      setIsSubmitting(false);
+    // Enforce academic rules: Standards 9-12 are GSEB
+    let finalBoard = formData.board;
+    if (["Std 9", "Std 10", "Std 11", "Std 12"].includes(formData.standard)) {
+      finalBoard = "GSEB";
     }
+
+    const payload = {
+      parentName: pName,
+      studentName: sName,
+      standard: formData.standard,
+      board: finalBoard,
+      phoneNumber: cleanPhone,
+      preferredContact: formData.preferredContact,
+      message: formData.message.trim()
+    };
+
+    setSubmittedData(payload);
+    setSubmissionSuccess(true);
   };
 
   const directWhatsAppUrl = createWhatsAppUrl(
@@ -234,6 +217,23 @@ export default function AdmissionsEnquiry() {
                     </p>
                     <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
                       Direct phone &amp; classroom accountability
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-ivory-light border border-border-soft">
+                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
+                      Academy Location
+                    </h4>
+                    <p className="text-sm text-charcoal mt-0.5 font-medium">
+                      Rander, Surat, Gujarat
+                    </p>
+                    <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
+                      Centrally accessible for GSEB &amp; CBSE students
                     </span>
                   </div>
                 </div>
@@ -323,66 +323,134 @@ export default function AdmissionsEnquiry() {
                 )}
               </AnimatePresence>
 
-              {/* Form or Success State */}
+              {/* Form or Direct Dispatch State */}
               <AnimatePresence mode="wait">
-                {submissionSuccess ? (
+                {submissionSuccess && submittedData ? (
                   <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    key="dispatch-screen"
+                    initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="p-7 sm:p-8 rounded-2xl bg-ivory border border-gold/40 text-center"
+                    className="p-6 sm:p-8 rounded-2xl bg-ivory-light border border-gold/40 text-center"
                   >
-                    <div className="w-14 h-14 rounded-full bg-gold/15 border-2 border-gold flex items-center justify-center text-gold-dark mx-auto mb-4">
-                      <CheckCircle2 className="w-7 h-7" />
+                    {/* Status Badge */}
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold-dark text-xs font-mono font-bold uppercase tracking-wider mb-4">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>Details Validated &amp; Ready to Send</span>
                     </div>
 
-                    <h4 className="font-serif text-2xl font-bold text-charcoal mb-2">
-                      Enquiry Received
+                    <h4 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal mb-2 tracking-tight">
+                      Choose Your Preferred Channel
                     </h4>
-                    <p className="text-sm text-charcoal-muted max-w-md mx-auto mb-6 leading-relaxed font-normal">
-                      Thank you. Your admission enquiry has been safely received. Saif Sir will review and reach out to you directly regarding batch availability.
+                    <p className="text-xs sm:text-sm text-charcoal-muted max-w-lg mx-auto mb-6 leading-relaxed font-normal">
+                      Your admission enquiry has been formatted. Choose WhatsApp or Email below to deliver it directly to Saif Sir.
                     </p>
 
-                    {submittedData && (
-                      <div className="bg-surface-pure p-4 rounded-xl border border-border-soft max-w-md mx-auto text-left text-xs sm:text-sm mb-6 space-y-2">
-                        <div className="flex justify-between text-charcoal">
-                          <span className="text-charcoal-muted">Student:</span>
-                          <strong>{submittedData.studentName}</strong>
+                    {/* Structured Summary Card */}
+                    <div className="bg-surface-pure p-5 rounded-xl border border-border-soft max-w-lg mx-auto text-left text-xs sm:text-sm mb-6 space-y-2.5 shadow-2xs">
+                      <div className="text-[11px] font-mono uppercase tracking-wider text-gold-dark font-bold border-b border-border-soft pb-1.5 flex items-center justify-between">
+                        <span>Enquiry Summary</span>
+                        <span className="text-charcoal-muted font-normal">Personal Educator Review</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-charcoal">
+                        <div>
+                          <span className="text-charcoal-muted text-xs block">Student Name</span>
+                          <strong className="text-sm font-semibold">{submittedData.studentName}</strong>
                         </div>
-                        <div className="flex justify-between text-charcoal">
-                          <span className="text-charcoal-muted">Standard &amp; Board:</span>
-                          <strong>{submittedData.standard} ({submittedData.board})</strong>
-                        </div>
-                        <div className="flex justify-between text-charcoal">
-                          <span className="text-charcoal-muted">Contact:</span>
-                          <strong>+91 {submittedData.phoneNumber}</strong>
+                        <div>
+                          <span className="text-charcoal-muted text-xs block">Parent / Guardian</span>
+                          <strong className="text-sm font-semibold">{submittedData.parentName}</strong>
                         </div>
                       </div>
-                    )}
 
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      {submittedData && (
-                        <a
-                          href={getFormSubmissionWhatsAppUrl(submittedData)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-wider transition-all shadow-xs"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          <span>Speed up via WhatsApp</span>
-                        </a>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-border-soft/60 text-charcoal">
+                        <div>
+                          <span className="text-charcoal-muted text-xs block">Standard &amp; Board</span>
+                          <strong className="text-sm font-semibold">{submittedData.standard} ({submittedData.board})</strong>
+                        </div>
+                        <div>
+                          <span className="text-charcoal-muted text-xs block">Contact Phone</span>
+                          <strong className="text-sm font-semibold font-mono">+91 {submittedData.phoneNumber}</strong>
+                        </div>
+                      </div>
+
+                      {submittedData.message && (
+                        <div className="pt-2 border-t border-border-soft/60 text-charcoal">
+                          <span className="text-charcoal-muted text-xs block">Academic Notes</span>
+                          <p className="text-xs text-charcoal mt-0.5 italic">&ldquo;{submittedData.message}&rdquo;</p>
+                        </div>
                       )}
+                    </div>
+
+                    {/* Primary Channel Actions */}
+                    <div className="space-y-3 max-w-lg mx-auto">
+                      {/* WhatsApp Option */}
+                      <a
+                        href={getFormSubmissionWhatsAppUrl(submittedData)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between w-full min-h-[52px] p-3.5 sm:px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-all shadow-sm hover:shadow-md"
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                            <MessageCircle className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <span className="text-xs sm:text-sm font-bold block tracking-wide">
+                              Send via WhatsApp (Instant Reply)
+                            </span>
+                            <span className="text-[11px] text-white/80 font-normal block">
+                              Opens WhatsApp with pre-filled message for Saif Sir
+                            </span>
+                          </div>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-white/80 shrink-0 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+
+                      {/* Email Option */}
+                      <a
+                        href={getFormSubmissionEmailUrl(submittedData)}
+                        className="group flex items-center justify-between w-full min-h-[52px] p-3.5 sm:px-5 rounded-xl bg-surface-pure hover:bg-ivory border-2 border-gold/60 text-charcoal hover:border-gold transition-all shadow-2xs hover:shadow-sm"
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <div className="w-9 h-9 rounded-lg bg-gold/15 flex items-center justify-center shrink-0 text-gold-dark">
+                            <Mail className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <span className="text-xs sm:text-sm font-bold block text-charcoal tracking-wide">
+                              Send via Email (Official Record)
+                            </span>
+                            <span className="text-[11px] text-charcoal-muted font-normal block">
+                              Opens your default email app addressed to Saif Sir
+                            </span>
+                          </div>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gold-dark shrink-0 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                    </div>
+
+                    {/* Clear Instructions */}
+                    <div className="mt-5 p-3 rounded-xl bg-gold/10 border border-gold/20 max-w-lg mx-auto text-center">
+                      <p className="text-[11px] sm:text-xs text-charcoal leading-relaxed font-normal">
+                        <span className="font-semibold text-gold-dark font-mono uppercase mr-1">Instructions:</span>
+                        Clicking either button opens WhatsApp or your email client with your message pre-written.
+                        Please tap <strong>&ldquo;Send&rdquo;</strong> inside your app to complete your enquiry.
+                      </p>
+                    </div>
+
+                    {/* Reset Button */}
+                    <div className="mt-5 pt-4 border-t border-border-soft flex items-center justify-center">
                       <button
                         type="button"
                         onClick={() => {
                           setSubmissionSuccess(false);
-                          setSubmittedData(null);
                         }}
-                        className="min-h-[44px] px-5 py-2.5 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal font-semibold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-2 text-xs font-semibold text-charcoal-muted hover:text-charcoal underline underline-offset-4 transition-colors cursor-pointer"
                       >
-                        Submit Another Enquiry
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        <span>Edit details or submit another enquiry</span>
                       </button>
                     </div>
                   </motion.div>
@@ -571,25 +639,15 @@ export default function AdmissionsEnquiry() {
                     <div className="pt-2">
                       <button
                         type="submit"
-                        disabled={isSubmitting}
-                        className="inline-flex items-center justify-center gap-2.5 w-full min-h-[48px] py-3.5 px-6 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-sm border border-gold/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2.5 w-full min-h-[48px] py-3.5 px-6 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-sm border border-gold/40 cursor-pointer"
                       >
-                        {isSubmitting ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                            <span>Submitting Enquiry...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4" />
-                            <span>Submit Admission Enquiry</span>
-                          </>
-                        )}
+                        <Send className="w-4 h-4" />
+                        <span>Continue to Direct WhatsApp / Email</span>
                       </button>
                     </div>
 
                     <p className="text-xs text-charcoal-muted text-center pt-1 font-normal">
-                      Information is securely stored and directly reviewed by Saif Barkat Vegdani.
+                      Direct educator review • No intermediaries • Connect immediately with Saif Barkat Vegdani.
                     </p>
                   </form>
                 )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { MessageCircle, Clock, ShieldCheck, ArrowUp } from "lucide-react";
+import { MessageCircle, Clock, ShieldCheck, ArrowUp, Mail, MapPin } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 import logoImg from "../assets/logo.png";
 
@@ -7,6 +7,8 @@ export default function Footer() {
   const whatsappUrl = createWhatsAppUrl(
     "Hello Saif Sir, I would like to enquire about admission to your tuition classes."
   );
+
+  const officialEmail = import.meta.env.VITE_CONTACT_EMAIL || "saif@svtutorial.in";
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -43,11 +45,26 @@ export default function Footer() {
                 </div>
               </div>
 
-              <p className="text-sm text-charcoal-muted leading-relaxed mb-6 font-normal max-w-md">
-                Personalised tuition classes for Standards 3–12. Focused on building ironclad
+              <p className="text-sm text-charcoal-muted leading-relaxed mb-5 font-normal max-w-md">
+                Personalised tuition classes for Standards 3–12 in Surat, Gujarat. Focused on building ironclad
                 conceptual fundamentals, consistent daily practice, and confident exam performance under
                 the direct guidance of a B.Com &amp; B.Ed qualified educator.
               </p>
+
+              {/* Verified Contact Badges */}
+              <div className="space-y-2 mb-6">
+                <a
+                  href={`mailto:${officialEmail}`}
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-charcoal hover:text-gold-dark transition-colors"
+                >
+                  <Mail className="w-4 h-4 text-gold-dark shrink-0" />
+                  <span>{officialEmail}</span>
+                </a>
+                <div className="flex items-center gap-2 text-xs text-charcoal-muted">
+                  <MapPin className="w-4 h-4 text-gold-dark shrink-0" />
+                  <span>Rander, Surat, Gujarat — 395005</span>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5">
@@ -92,6 +109,14 @@ export default function Footer() {
                 >
                   <span className="group-hover:translate-x-1 transition-transform">Higher Secondary (Std 11–12)</span>
                   <span className="text-xs text-gold-dark font-medium font-mono">Commerce</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  className="hover:text-gold-dark transition-colors block group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">Principal Educator Profile</span>
                 </a>
               </li>
               <li>

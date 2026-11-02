@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://saifvegdani.edu/sitemap.xml
+Sitemap: https://svtutorial.in/sitemap.xml
+Host: https://svtutorial.in

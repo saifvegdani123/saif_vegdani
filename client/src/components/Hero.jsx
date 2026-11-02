@@ -170,7 +170,7 @@ export default function Hero() {
             {/* Single Focused Paragraph */}
             <div ref={subtextRef} className="max-w-xl mb-4">
               <p className="text-base sm:text-lg text-charcoal/90 leading-relaxed font-normal">
-                Personalised tuition for Classes 3–12 by <strong>Saif Barkat Vegdani</strong> (B.Com, B.Ed).
+                Personalised tuition classes in Surat for Classes 3–12 by <strong>Saif Barkat Vegdani</strong> (B.Com, B.Ed).
                 Cultivating conceptual understanding, disciplined study habits, and calm exam mastery
                 across GSEB and CBSE boards.
               </p>
@@ -179,7 +179,7 @@ export default function Hero() {
             {/* Understated Scope Line */}
             <div ref={scopeRef} className="mb-7">
               <p className="text-sm font-semibold tracking-wide text-charcoal/80">
-                GSEB &amp; CBSE · Standards 3–12 · Specialized Commerce 11–12
+                GSEB &amp; CBSE · Standards 3–12 · Commerce 11–12 · Surat, Gujarat
               </p>
             </div>
 

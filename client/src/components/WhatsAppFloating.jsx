@@ -4,7 +4,7 @@ import { Mail, ArrowUp } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 
 // Environment-backed contact credentials
-const emailAddress = import.meta.env.VITE_CONTACT_EMAIL || "saifvegdani@gmail.com";
+const emailAddress = import.meta.env.VITE_CONTACT_EMAIL || "saif@svtutorial.in";
 const linkedinUrl =
   import.meta.env.VITE_LINKEDIN_URL || "https://www.linkedin.com/in/saif-vegdani";
 

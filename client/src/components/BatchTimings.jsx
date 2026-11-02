@@ -163,38 +163,38 @@ export default function BatchTimings() {
 
               <div ref={rowsRef} className="space-y-3 mb-6">
                 <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 transition-colors hover:bg-white/10">
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                     <span className="text-white font-medium text-xs sm:text-sm">Primary &amp; Middle (Std 3–8)</span>
-                    <span className="text-gold text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-gold/15 font-mono">
-                      Evening
+                    <span className="text-gold text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30 font-mono w-fit">
+                      Fixed on Consultation
                     </span>
                   </div>
-                  <span className="text-xs text-white/60">
-                    GSEB &amp; CBSE · Conceptual foundation
+                  <span className="text-xs text-white/60 block">
+                    GSEB &amp; CBSE • Operational window: 4:30 PM – 8:00 PM
                   </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 transition-colors hover:bg-white/10">
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                     <span className="text-white font-medium text-xs sm:text-sm">Secondary Board (Std 9–10)</span>
-                    <span className="text-gold text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-gold/15 font-mono">
-                      GSEB Prep
+                    <span className="text-gold text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30 font-mono w-fit">
+                      Fixed on Consultation
                     </span>
                   </div>
-                  <span className="text-xs text-white/60">
-                    Intensive syllabus and board paper drills
+                  <span className="text-xs text-white/60 block">
+                    GSEB Board prep • Operational window: 4:30 PM – 8:00 PM
                   </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 transition-colors hover:bg-white/10">
-                  <div className="flex justify-between items-center mb-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                     <span className="text-white font-medium text-xs sm:text-sm">Commerce Stream (Std 11–12)</span>
-                    <span className="text-gold text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-gold/15 font-mono">
-                      Commerce
+                    <span className="text-gold text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30 font-mono w-fit">
+                      Fixed on Consultation
                     </span>
                   </div>
-                  <span className="text-xs text-white/60">
-                    Accountancy, Economics &amp; Statistics
+                  <span className="text-xs text-white/60 block">
+                    Commerce coaching • Operational window: 4:30 PM – 8:00 PM
                   </span>
                 </div>
               </div>

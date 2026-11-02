@@ -1,7 +1,7 @@
 /**
- * Reusable WhatsApp Enquiry Utility
- * Generates verified international phone links with URL-encoded messages.
- * Derives phone number exclusively from VITE_WHATSAPP_NUMBER.
+ * Reusable WhatsApp & Communication Enquiry Utility
+ * Generates verified international phone links with URL-encoded messages and email enquiry links.
+ * Derives phone number exclusively from VITE_WHATSAPP_NUMBER and contact email from VITE_CONTACT_EMAIL.
  */
 
 const envNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
@@ -15,6 +15,9 @@ if (import.meta.env.DEV && isPlaceholder) {
 
 // Configurable WhatsApp business phone number derived solely from environment
 export const DEFAULT_WHATSAPP_NUMBER = (envNumber || "").trim();
+
+// Configurable Academy contact email derived from environment with verified fallback
+export const DEFAULT_CONTACT_EMAIL = (import.meta.env.VITE_CONTACT_EMAIL || "saif@svtutorial.in").trim();
 
 /**
  * Creates a formatted WhatsApp click-to-chat URL
@@ -43,19 +46,19 @@ export function getProgrammeWhatsAppUrl(programmeTitle, board = "") {
 }
 
 /**
- * Pre-formatted message from the enquiry form
+ * Pre-formatted message from the enquiry form for WhatsApp
  * @param {Object} details - Parent and student details
  * @returns {string} - WhatsApp URL
  */
 export function getFormSubmissionWhatsAppUrl(details) {
   const { parentName, studentName, standard, board, phoneNumber, message } = details;
-  let text = `Hello Saif Sir (Tuition Classes),
+  let text = `Hello Saif Sir (S.V. Tutorial),
 
 I would like to enquire about admission:
-• Parent Name: ${parentName}
+• Parent / Guardian: ${parentName}
 • Student Name: ${studentName}
 • Standard: ${standard}
-• Board: ${board}
+• Curriculum Board: ${board}
 • Contact: +91 ${phoneNumber}`;
 
   if (message && message.trim()) {
@@ -63,4 +66,33 @@ I would like to enquire about admission:
   }
 
   return createWhatsAppUrl(text);
+}
+
+/**
+ * Pre-formatted mailto URL from the enquiry form for Direct Email
+ * @param {Object} details - Parent and student details
+ * @param {string} [recipientEmail] - Optional custom email recipient
+ * @returns {string} - Mailto URL
+ */
+export function getFormSubmissionEmailUrl(details, recipientEmail = DEFAULT_CONTACT_EMAIL) {
+  const { parentName, studentName, standard, board, phoneNumber, message } = details;
+  const subject = `New Admission Enquiry - S.V. Tutorials (${studentName} - ${standard})`;
+  
+  let body = `Dear Saif Sir,
+
+I would like to enquire about admission at S.V. Tutorial:
+
+• Parent / Guardian: ${parentName}
+• Student Name: ${studentName}
+• Standard: ${standard}
+• Curriculum Board: ${board}
+• Contact Number: +91 ${phoneNumber}`;
+
+  if (message && message.trim()) {
+    body += `\n• Additional Notes / Specific Queries:\n${message.trim()}`;
+  }
+
+  body += `\n\nLooking forward to your guidance regarding batch availability and enrolment details.`;
+
+  return `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

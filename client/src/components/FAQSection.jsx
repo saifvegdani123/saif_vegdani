@@ -69,11 +69,15 @@ export default function FAQSection() {
     },
     {
       q: "What are the batch timings?",
-      a: "Evening batches operate Monday through Saturday between 4:30 PM and 8:00 PM. Individual standard-wise batch schedules and daily timings are assigned during the academic consultation to ensure zero conflicts with school shift hours."
+      a: "Evening batches operate Monday through Saturday within our confirmed 4:30 PM – 8:00 PM operational window. Specific standard-wise slots are fixed on consultation with parents to guarantee zero conflicts with school shift hours and maximize focus."
     },
     {
       q: "What are the admission fees?",
       a: "Admission and tuition fees depend on the student's academic standard, subject selection, and individual doubt-clinic requirements. Rather than quoting standardized figures, fees are clearly and transparently shared during direct consultation with parents. We invite you to contact us on WhatsApp or submit the enquiry form for fee details."
+    },
+    {
+      q: "Where is S.V. Tutorial located in Surat?",
+      a: "S.V. Tutorial is located in Rander, Surat, Gujarat. The academy provides a focused, quiet learning environment centrally accessible for GSEB and CBSE students across Surat. Both morning and afternoon school shifts are accommodated during our 4:30 PM to 8:00 PM operational window."
     },
     {
       q: "How can I enquire about admission?",

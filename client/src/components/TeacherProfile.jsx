@@ -210,7 +210,7 @@ export default function TeacherProfile() {
             <p className="text-sm sm:text-base text-charcoal/85 leading-relaxed mb-6 font-normal">
               With formal pedagogical training (B.Ed) and a comprehensive background in commerce
               studies (B.Com), Saif Barkat Vegdani brings an intentional, patient, and concept-first
-              teaching style to students from middle school foundations up to board exam classes.
+              teaching style to students across Surat, from middle school foundations up to board exam classes.
             </p>
 
             {/* Teaching History Timeline Box */}

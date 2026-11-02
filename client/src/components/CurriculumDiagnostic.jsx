@@ -30,9 +30,9 @@ export default function CurriculumDiagnostic() {
         activeBoard: selectedBoard === "Commerce" ? "GSEB" : selectedBoard,
         subjects: ["Mathematics", "General Science / EVS", "English Grammar & Reader", "Social Studies"],
         scopeNote: "All school subjects included (except Sanskrit)",
-        timingSlot: "4:30 PM – 5:45 PM (Evening)",
-        pedagogyFocus: "Concrete illustrations, daily homework tracking, and building quiet study focus without rote pressure.",
-        days: "Monday to Saturday (6 Days/Wk)"
+        timingSlot: "4:30 PM – 8:00 PM (Fixed on Consultation)",
+        pedagogyFocus: "Foundational conceptual clarity, step-by-step arithmetic reasoning, and daily homework guidance without exam anxiety.",
+        days: "Monday to Saturday (Evening Window)"
       };
     } else if (std >= 6 && std <= 8) {
       return {
@@ -42,9 +42,9 @@ export default function CurriculumDiagnostic() {
         activeBoard: selectedBoard === "Commerce" ? "GSEB" : selectedBoard,
         subjects: ["Mathematics & Algebra", "Science & Physics/Chemistry Basics", "English Language", "Social Science"],
         scopeNote: "All school subjects included (except Sanskrit)",
-        timingSlot: "5:00 PM – 6:15 PM (Evening)",
-        pedagogyFocus: "Deconstructing abstract syllabus formulas, systematic notebook checks, and chapter-end testing.",
-        days: "Monday to Saturday (6 Days/Wk)"
+        timingSlot: "4:30 PM – 8:00 PM (Fixed on Consultation)",
+        pedagogyFocus: "Deconstructing core formula derivations, systematic notebook presentation checks, and regular diagnostic assessments.",
+        days: "Monday to Saturday (Evening Window)"
       };
     } else if (std >= 9 && std <= 10) {
       return {
@@ -55,9 +55,9 @@ export default function CurriculumDiagnostic() {
         boardRestrictionNote: "Standards 9 & 10 are exclusively dedicated to Gujarat State Board (GSEB) syllabus preparation.",
         subjects: ["Mathematics", "Science & Technology", "Social Science", "English (Second/First Language)", "Gujarati / Hindi"],
         scopeNote: "All subjects included (except Computer and Sanskrit)",
-        timingSlot: "6:00 PM – 7:15 PM (Evening)",
-        pedagogyFocus: "Strict alignment with GSEB blueprint question structures, past paper practice, and timed board simulations.",
-        days: "Monday to Saturday (6 Days/Wk)"
+        timingSlot: "4:30 PM – 8:00 PM (Fixed on Consultation)",
+        pedagogyFocus: "Rigorous GSEB board blueprint practice, past-paper presentation drills, full-length simulations, and 1-on-1 doubt clinics.",
+        days: "Monday to Saturday (Evening Window)"
       };
     } else {
       // Standards 11 & 12 (Commerce Stream Only)
@@ -75,14 +75,14 @@ export default function CurriculumDiagnostic() {
           "Commercial Correspondence / English"
         ],
         scopeNote: "All core commerce subjects covered under direct guidance of Saif Sir (B.Com, B.Ed)",
-        timingSlot: "6:45 PM – 8:00 PM (Evening)",
-        pedagogyFocus: "Deep ledger problem solving, commercial terminology mastery, balance sheet analysis, and scoring frameworks.",
-        days: "Monday to Saturday (6 Days/Wk)"
+        timingSlot: "4:30 PM – 8:00 PM (Fixed on Consultation)",
+        pedagogyFocus: "Deep numerical derivation in Accountancy & Statistics, commercial terminology mastery, and board examination frameworks by Saif Sir (B.Com, B.Ed).",
+        days: "Monday to Saturday (Evening Window)"
       };
     }
   }, [selectedStandard, selectedBoard]);
 
-  const whatsappMessage = `Hello Saif Sir, I used the Curriculum Diagnostic tool for Class ${selectedStandard} (${diagnosticData.activeBoard}). I would like to check availability for the ${diagnosticData.timingSlot} batch.`;
+  const whatsappMessage = `Hello Saif Sir, I used the Curriculum Diagnostic tool for Class ${selectedStandard} (${diagnosticData.activeBoard}). I would like to check available batch timings during your 4:30 PM – 8:00 PM operational window.`;
   const whatsappUrl = createWhatsAppUrl(whatsappMessage);
 
   const standardsList = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
