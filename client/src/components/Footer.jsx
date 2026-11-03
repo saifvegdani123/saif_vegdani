@@ -1,6 +1,7 @@
 import React from "react";
 import { MessageCircle, Clock, ShieldCheck, ArrowUp, Mail, MapPin } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
+import { GOOGLE_MAPS_URL } from "../data/reviews";
 import logoImg from "../assets/logo.png";
 
 export default function Footer() {
@@ -76,7 +77,7 @@ export default function Footer() {
                 <span>B.Com, B.Ed</span>
               </div>
               <a
-                href="https://maps.app.goo.gl/TdDxLHbiobLT4dtdA"
+                href={GOOGLE_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs text-charcoal font-semibold px-3 py-1.5 rounded-full bg-surface-pure hover:bg-gold/10 border border-border-soft hover:border-gold/40 shadow-2xs transition-colors"

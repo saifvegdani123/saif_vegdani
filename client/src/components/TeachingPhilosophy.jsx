@@ -138,6 +138,7 @@ export default function TeachingPhilosophy() {
                   alt="Saif Barkat Vegdani demonstrating curriculum textbook breakdown"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
                   loading="lazy"
+                  decoding="async"
                   width={420}
                   height={525}
                 />

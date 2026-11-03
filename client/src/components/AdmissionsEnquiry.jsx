@@ -181,6 +181,7 @@ export default function AdmissionsEnquiry() {
                     width={80}
                     height={80}
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 border border-gold/30 rounded-2xl pointer-events-none" />
                 </div>

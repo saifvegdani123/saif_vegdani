@@ -192,8 +192,8 @@ export default function TopPerformers() {
                   exit={{ opacity: 0, scale: 1.01 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.01]"
-                  loading="eager"
-                  fetchPriority="high"
+                  loading="lazy"
+                  decoding="async"
                 />
               </AnimatePresence>
 

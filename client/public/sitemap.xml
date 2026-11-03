@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://svtutorial.in/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <loc>https://www.svtutorial.in/</loc>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.svtutorial.in/logo.png</image:loc>
+      <image:title>S.V. Tutorials Official Monogram</image:title>
+      <image:caption>S.V. Tutorials - Best Tuition Classes in Surat &amp; Rander</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.svtutorial.in/images/01_standing_by_whiteboard.png</image:loc>
+      <image:title>Saif Barkat Vegdani Classroom Instruction</image:title>
+      <image:caption>Principal Educator Saif Sir conducting classroom board mentorship in Surat</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.svtutorial.in/images/03_arms_crossed.png</image:loc>
+      <image:title>Saif Barkat Vegdani - Lead Faculty Portrait</image:title>
+      <image:caption>9 Years Verified Teaching Record at S.V. Tutorials</image:caption>
+    </image:image>
   </url>
 </urlset>

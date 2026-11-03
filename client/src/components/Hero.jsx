@@ -154,7 +154,7 @@ export default function Hero() {
             <div className="lg:hidden w-full max-w-[280px] mx-auto my-6 aspect-[4/5] rounded-2xl overflow-hidden border border-border-soft bg-surface-pure shadow-md relative">
               <img
                 src={saifHeroImg}
-                alt="Saif Barkat Vegdani - Principal Educator"
+                alt="Saif Barkat Vegdani - Principal Educator at S.V. Tutorials Surat"
                 className="w-full h-full object-cover object-top"
                 loading="eager"
                 fetchPriority="high"
@@ -170,16 +170,16 @@ export default function Hero() {
             {/* Single Focused Paragraph */}
             <div ref={subtextRef} className="max-w-xl mb-4">
               <p className="text-base sm:text-lg text-charcoal/90 leading-relaxed font-normal">
-                Personalised tuition classes in Surat for Classes 3–12 by <strong>Saif Barkat Vegdani</strong> (B.Com, B.Ed).
+                Personalised tuition classes in Surat and Rander for Classes 3–12 by <strong>Saif Barkat Vegdani</strong> (B.Com, B.Ed).
                 Cultivating conceptual understanding, disciplined study habits, and calm exam mastery
-                across GSEB and CBSE boards.
+                across GSEB, CBSE, and Commerce streams.
               </p>
             </div>
 
             {/* Understated Scope Line */}
             <div ref={scopeRef} className="mb-7">
               <p className="text-sm font-semibold tracking-wide text-charcoal/80">
-                GSEB &amp; CBSE · Standards 3–12 · Commerce 11–12 · Surat, Gujarat
+                GSEB &amp; CBSE · Standards 3–12 · Commerce 11–12 · Rander, Surat, Gujarat
               </p>
             </div>
 
