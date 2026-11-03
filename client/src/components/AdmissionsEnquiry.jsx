@@ -4,7 +4,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Mail, Send, CheckCircle2, AlertTriangle, Clock, Sparkles, ExternalLink, RefreshCw, MapPin } from "lucide-react";
 import { getFormSubmissionWhatsAppUrl, getFormSubmissionEmailUrl, createWhatsAppUrl } from "../utils/whatsapp";
-import saifDeskImg from "../assets/saif-vegdani-desk.jpg";
 import logoImg from "../assets/logo.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -152,7 +151,7 @@ export default function AdmissionsEnquiry() {
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <div className="eyebrow-badge mb-3">
             <Sparkles className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>08 / ADMISSION CONSULTATION</span>
+            <span>09 / ADMISSION CONSULTATION</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">
@@ -171,14 +170,40 @@ export default function AdmissionsEnquiry() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Column: Context & Direct Contact Information (5 cols) */}
           <div ref={leftColRef} className="lg:col-span-5 flex flex-col justify-between space-y-6">
-            <div className="bg-surface-pure rounded-2xl border border-border-soft p-6 sm:p-7 shadow-xs">
-              <h3 className="font-serif text-2xl font-bold text-charcoal tracking-tight mb-3">
-                Direct Educator Consultation
-              </h3>
+            <div className="bg-surface-pure rounded-2xl border border-border-soft p-5 sm:p-7 shadow-xs">
+              {/* Educator Consultation Header with Portrait */}
+              <div className="flex items-center gap-4 pb-5 mb-5 border-b border-border-soft">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-gold/40 shadow-sm shrink-0 bg-midnight/5">
+                  <img
+                    src="/images/05_thoughtful_portrait.png"
+                    alt="Saif Barkat Vegdani - Academic Consultation Advisor"
+                    className="w-full h-full object-cover object-top"
+                    width={80}
+                    height={80}
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 border border-gold/30 rounded-2xl pointer-events-none" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gold-dark font-mono block">
+                    Principal Faculty Advisor
+                  </span>
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-charcoal tracking-tight">
+                    Saif Barkat Vegdani
+                  </h3>
+                  <p className="text-xs text-charcoal-muted mt-0.5 font-medium">
+                    B.Com, B.Ed · 9 Years Verified Record
+                  </p>
+                </div>
+              </div>
 
-              <p className="text-sm text-charcoal-muted mb-6 leading-relaxed font-normal">
+              <h4 className="font-serif text-base sm:text-lg font-bold text-charcoal tracking-tight mb-2">
+                Direct Educator Consultation
+              </h4>
+
+              <p className="text-xs sm:text-sm text-charcoal-muted mb-5 leading-relaxed font-normal">
                 No administrative sales representatives or intermediaries. You speak directly with the
-                principal educator who will guide your child.
+                principal educator who will guide your child across standards and batch slots.
               </p>
 
               {/* Consultation Details List */}
@@ -201,22 +226,18 @@ export default function AdmissionsEnquiry() {
                 </div>
 
                 <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-ivory-light border border-border-soft">
-                  <img
-                    src={saifDeskImg}
-                    alt="Saif Barkat Vegdani"
-                    className="w-10 h-10 rounded-full object-cover object-top border-2 border-gold/40 shadow-xs shrink-0 mt-0.5"
-                    width={40}
-                    height={40}
-                  />
+                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  </div>
                   <div>
                     <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
-                      Lead Faculty
+                      Direct Accountability
                     </h4>
                     <p className="text-sm text-charcoal mt-0.5 font-medium">
-                      Saif Barkat Vegdani (B.Com, B.Ed)
+                      Zero Substitute Teachers
                     </p>
                     <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
-                      Direct phone &amp; classroom accountability
+                      Direct phone &amp; classroom instruction by Saif Sir
                     </span>
                   </div>
                 </div>

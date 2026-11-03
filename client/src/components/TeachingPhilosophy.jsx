@@ -127,42 +127,72 @@ export default function TeachingPhilosophy() {
           </p>
         </div>
 
-        {/* Editorial Two-Column Numbered List with Hairline Dividers (No chunky card boxes) */}
-        <div
-          ref={listRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-8 sm:gap-y-10 mb-10"
-        >
-          {principles.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.num}
-                className="pt-6 border-t border-border-soft group transition-colors"
-              >
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-3">
-                    <span className="font-serif font-bold text-2xl sm:text-3xl text-gold-dark tracking-tight">
-                      {item.num}
+        {/* Editorial Layout: Portrait of Rigor + 4 Principles */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-10 sm:mb-14">
+          {/* Left: Framed Pedagogical Portrait (5 cols) */}
+          <div className="lg:col-span-5">
+            <div className="bg-surface-pure rounded-2xl p-3 border border-border-soft shadow-md overflow-hidden relative group">
+              <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-midnight/5">
+                <img
+                  src="/images/06_seated_with_open_book.png"
+                  alt="Saif Barkat Vegdani demonstrating curriculum textbook breakdown"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                  loading="lazy"
+                  width={420}
+                  height={525}
+                />
+                {/* Floating Micro-Badge */}
+                <div className="absolute bottom-3 left-3 right-3 bg-midnight/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-gold/30 text-white flex items-center justify-between text-xs shadow-lg">
+                  <div>
+                    <span className="text-[11px] font-bold text-gold uppercase tracking-wider block font-mono">
+                      Method in Practice
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-[0.14em] text-gold-dark/90 font-mono">
-                      {item.eyebrow}
+                    <span className="text-xs text-white/90 font-medium">
+                      Textbook Breakdown &amp; Logic
                     </span>
                   </div>
-                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-border-soft flex items-center justify-center text-gold-dark group-hover:border-gold group-hover:bg-ivory-light transition-all shrink-0">
-                    <Icon className="w-4 h-4 text-gold-dark" />
-                  </div>
+                  <span className="text-[10px] font-mono text-gold-light bg-gold/15 px-2 py-0.5 rounded-full border border-gold/30 shrink-0">
+                    B.Com, B.Ed
+                  </span>
                 </div>
-
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-charcoal tracking-tight mb-2.5 group-hover:text-midnight transition-colors">
-                  {item.title}
-                </h3>
-
-                <p className="text-sm sm:text-base text-charcoal/80 leading-relaxed font-normal">
-                  {item.narrative}
-                </p>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
+          {/* Right: 4 Principles (7 cols) */}
+          <div ref={listRef} className="lg:col-span-7 space-y-5 sm:space-y-6">
+            {principles.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.num}
+                  className="pt-4 border-t border-border-soft group transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4 mb-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-serif font-bold text-xl sm:text-2xl text-gold-dark tracking-tight">
+                        {item.num}
+                      </span>
+                      <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-gold-dark/90 font-mono">
+                        {item.eyebrow}
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-surface-pure border border-border-soft flex items-center justify-center text-gold-dark group-hover:border-gold group-hover:bg-ivory-light transition-all shrink-0">
+                      <Icon className="w-3.5 h-3.5 text-gold-dark" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-charcoal tracking-tight mb-1.5 group-hover:text-midnight transition-colors">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-charcoal/80 leading-relaxed font-normal">
+                    {item.narrative}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Editorial Philosophical Statement Quote - Midnight Band */}

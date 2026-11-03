@@ -90,10 +90,11 @@ html.lenis, html.lenis body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 6px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #FEF9EF;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #C6A15B;
@@ -101,6 +102,17 @@ html.lenis, html.lenis body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #775A1A;
+}
+
+/* Suppress Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* Text Selection */

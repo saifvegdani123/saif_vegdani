@@ -105,7 +105,7 @@ export default function FAQSection() {
         <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <div className="eyebrow-badge mb-3">
             <HelpCircle className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>09 / COMMON QUESTIONS</span>
+            <span>10 / COMMON QUESTIONS</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">

@@ -4,13 +4,35 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, Calendar, CheckCircle2, User, Award } from "lucide-react";
 import { TEACHER_DATA } from "../data/programmes";
-import saifDeskImg from "../assets/saif-vegdani-desk.jpg";
-import saifStandingImg from "../assets/saif-vegdani-standing.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TEACHER_PERSPECTIVES = [
+  {
+    id: "classroom",
+    label: "Classroom",
+    src: "/images/01_standing_by_whiteboard.png",
+    alt: "Saif Barkat Vegdani teaching in the classroom at the whiteboard",
+    caption: "Active Whiteboard Instruction"
+  },
+  {
+    id: "executive",
+    label: "Executive",
+    src: "/images/03_arms_crossed.png",
+    alt: "Saif Barkat Vegdani - Principal Educator & Founder",
+    caption: "Founder & Lead Faculty"
+  },
+  {
+    id: "desk",
+    label: "Study Desk",
+    src: "/images/02_seated_at_desk.png",
+    alt: "Saif Barkat Vegdani at his instructional desk with curriculum books",
+    caption: "Personalized Doubt Clinic"
+  }
+];
+
 export default function TeacherProfile() {
-  const [activePhoto, setActivePhoto] = useState("desk");
+  const [activePhoto, setActivePhoto] = useState("classroom");
 
   const sectionRef = useRef(null);
   const leftColRef = useRef(null);
@@ -71,11 +93,8 @@ export default function TeacherProfile() {
     return () => ctx.revert();
   }, []);
 
-  const currentImage = activePhoto === "desk" ? saifDeskImg : saifStandingImg;
-  const currentAlt =
-    activePhoto === "desk"
-      ? "Saif Barkat Vegdani at his study desk with curriculum resources"
-      : "Saif Barkat Vegdani - Principal Educator & Founder";
+  const currentPerspective =
+    TEACHER_PERSPECTIVES.find((p) => p.id === activePhoto) || TEACHER_PERSPECTIVES[0];
 
   return (
     <section
@@ -113,8 +132,8 @@ export default function TeacherProfile() {
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={activePhoto}
-                    src={currentImage}
-                    alt={currentAlt}
+                    src={currentPerspective.src}
+                    alt={currentPerspective.alt}
                     initial={{ opacity: 0, scale: 1.02 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
@@ -127,31 +146,32 @@ export default function TeacherProfile() {
                 </AnimatePresence>
 
                 {/* Perspective Selector Pill */}
-                <div className="absolute top-3.5 right-3.5 bg-midnight/90 backdrop-blur-md p-1 rounded-full border border-gold/30 flex items-center gap-1 shadow-md z-10">
-                  <button
-                    type="button"
-                    onClick={() => setActivePhoto("desk")}
-                    className={`px-3 py-1.5 min-h-[36px] rounded-full text-xs font-bold tracking-wide uppercase transition-colors cursor-pointer ${
-                      activePhoto === "desk"
-                        ? "bg-gold text-midnight shadow-xs"
-                        : "text-white/80 hover:text-white"
-                    }`}
-                    aria-pressed={activePhoto === "desk"}
-                  >
-                    Classroom
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActivePhoto("standing")}
-                    className={`px-3 py-1.5 min-h-[36px] rounded-full text-xs font-bold tracking-wide uppercase transition-colors cursor-pointer ${
-                      activePhoto === "standing"
-                        ? "bg-gold text-midnight shadow-xs"
-                        : "text-white/80 hover:text-white"
-                    }`}
-                    aria-pressed={activePhoto === "standing"}
-                  >
-                    Executive
-                  </button>
+                <div className="absolute top-3 right-3 bg-midnight/90 backdrop-blur-md p-1 rounded-full border border-gold/30 flex items-center gap-1 shadow-md z-10">
+                  {TEACHER_PERSPECTIVES.map((persp) => (
+                    <button
+                      key={persp.id}
+                      type="button"
+                      onClick={() => setActivePhoto(persp.id)}
+                      className={`px-2.5 sm:px-3 py-1.5 min-h-[34px] rounded-full text-[11px] sm:text-xs font-bold tracking-wide uppercase transition-colors cursor-pointer ${
+                        activePhoto === persp.id
+                          ? "bg-gold text-midnight shadow-xs"
+                          : "text-white/80 hover:text-white"
+                      }`}
+                      aria-pressed={activePhoto === persp.id}
+                    >
+                      {persp.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Floating Caption on Image Bottom */}
+                <div className="absolute bottom-3 left-3 right-3 bg-midnight/85 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-gold/25 text-white flex items-center justify-between text-xs">
+                  <span className="text-gold-light font-mono text-[11px]">
+                    {currentPerspective.caption}
+                  </span>
+                  <span className="text-white/60 text-[10px] uppercase font-mono">
+                    Direct Instruction
+                  </span>
                 </div>
               </div>
 

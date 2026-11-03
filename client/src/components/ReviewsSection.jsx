@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Star,
-  CheckCircle2,
   ExternalLink,
   MessageSquare,
-  Sparkles,
   Quote,
-  ShieldCheck,
-  MapPin
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+  X
 } from "lucide-react";
-import SpotlightCard from "./ui/SpotlightCard";
 import BorderBeam from "./ui/BorderBeam";
-import MagneticButton from "./ui/MagneticButton";
+import Marquee from "./ui/Marquee";
 import {
   GOOGLE_MAPS_URL,
-  GOOGLE_BUSINESS_STATS,
+  GOOGLE_WRITE_REVIEW_URL,
   REVIEW_CATEGORIES,
   REVIEWS_DATA
 } from "../data/reviews";
@@ -25,7 +25,7 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 // Official Google "G" SVG Component
-function GoogleIcon({ className = "w-5 h-5 shrink-0" }) {
+function GoogleIcon({ className = "w-4 h-4 shrink-0" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <path
@@ -48,14 +48,104 @@ function GoogleIcon({ className = "w-5 h-5 shrink-0" }) {
   );
 }
 
+// Directional spring variants for smooth card transition
+const cardSlideVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 32 : -32,
+    opacity: 0,
+    scale: 0.99
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      x: { type: "spring", stiffness: 380, damping: 32 },
+      opacity: { duration: 0.22 },
+      scale: { duration: 0.22 }
+    }
+  },
+  exit: (direction) => ({
+    zIndex: 0,
+    x: direction < 0 ? 32 : -32,
+    opacity: 0,
+    scale: 0.99,
+    transition: {
+      x: { type: "spring", stiffness: 380, damping: 32 },
+      opacity: { duration: 0.16 }
+    }
+  })
+};
+
 export default function ReviewsSection() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [selectedReviewModal, setSelectedReviewModal] = useState(null);
+
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const statsBoxRef = useRef(null);
-  const cardsGridRef = useRef(null);
+  const mainCardRef = useRef(null);
 
-  // GSAP ScrollTrigger Entrance Animations
+  // Filter reviews based on active category
+  const filteredReviews = useMemo(() => {
+    return activeTab === "all"
+      ? REVIEWS_DATA
+      : REVIEWS_DATA.filter((rev) => rev.category === activeTab);
+  }, [activeTab]);
+
+  const safeIndex = currentIndex >= filteredReviews.length ? 0 : currentIndex;
+  const activeReview = filteredReviews[safeIndex] || REVIEWS_DATA[0];
+
+  // Carousel navigation handlers
+  const handleNext = useCallback(() => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % (filteredReviews.length || 1));
+  }, [filteredReviews.length]);
+
+  const handlePrev = useCallback(() => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + (filteredReviews.length || 1)) % (filteredReviews.length || 1));
+  }, [filteredReviews.length]);
+
+  // Autoplay timer with pause on interaction
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      handleNext();
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, handleNext]);
+
+  // Keyboard navigation & modal escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedReviewModal) {
+        if (e.key === "Escape") setSelectedReviewModal(null);
+        return;
+      }
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedReviewModal, handlePrev, handleNext]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedReviewModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedReviewModal]);
+
+  // GSAP ScrollTrigger for smooth section entrance
   useEffect(() => {
     const prefersReducedMotion =
       typeof window !== "undefined" &&
@@ -65,43 +155,26 @@ export default function ReviewsSection() {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Header entrance
       gsap.from(headerRef.current, {
         opacity: 0,
-        y: 28,
-        duration: 0.8,
+        y: 20,
+        duration: 0.7,
         ease: "power3.out",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 82%",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // Stats card entrance
-      gsap.from(statsBoxRef.current, {
-        opacity: 0,
-        y: 24,
-        scale: 0.98,
-        duration: 0.85,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: statsBoxRef.current,
           start: "top 85%",
           toggleActions: "play none none none"
         }
       });
 
-      // Cards stagger reveal
-      gsap.from(cardsGridRef.current?.children || [], {
+      gsap.from(mainCardRef.current, {
         opacity: 0,
-        y: 24,
-        duration: 0.7,
-        stagger: 0.1,
+        y: 20,
+        duration: 0.75,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: cardsGridRef.current,
-          start: "top 85%",
+          trigger: mainCardRef.current,
+          start: "top 88%",
           toggleActions: "play none none none"
         }
       });
@@ -110,122 +183,100 @@ export default function ReviewsSection() {
     return () => ctx.revert();
   }, []);
 
-  const filteredReviews =
-    activeCategory === "all"
-      ? REVIEWS_DATA
-      : REVIEWS_DATA.filter((rev) => rev.category === activeCategory);
+  // Handle touch swipe on mobile card
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 40;
+    if (info.offset.x < -swipeThreshold) {
+      handleNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handlePrev();
+    }
+  };
 
   return (
     <section
       ref={sectionRef}
       id="reviews"
-      className="py-12 sm:py-20 bg-ivory border-b border-border-soft relative overflow-hidden"
-      aria-label="Verified Google Reviews and Parent Testimonials"
+      className="py-8 sm:py-14 bg-ivory border-b border-border-soft relative overflow-hidden"
+      aria-label="Verified Google Reviews and Student Testimonials"
     >
+      {/* Background Ambient Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-gold/10 rounded-full blur-3xl pointer-events-none -z-0" />
+
       <div className="site-container relative z-10">
-        {/* Section Header */}
-        <div ref={headerRef} className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-          <div className="eyebrow-badge mb-3">
+        {/* ========================================================================= */}
+        {/* COMPACT SECTION HEADER (Integrated with Google Social Proof)              */}
+        {/* ========================================================================= */}
+        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-4 sm:mb-7">
+          {/* Integrated Google 5.0 Eyebrow Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-pure border border-border-soft shadow-2xs mb-2">
             <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
-            <span>08 / VERIFIED GOOGLE REVIEWS</span>
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 fill-gold text-gold shrink-0" />
+              ))}
+            </div>
+            <span className="text-[11px] font-mono font-bold text-charcoal">
+              5.0 RATED ON GOOGLE MAPS
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">
+          <h2 className="text-xl sm:text-3xl lg:text-4xl font-serif font-bold text-charcoal tracking-tight mb-1.5">
             Voices of Trust &amp;{" "}
             <span className="font-serif italic font-normal text-gold-dark">
-              Proven Growth.
+              Proven Results.
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal mx-auto max-w-2xl">
-            Real, unfiltered feedback from students and parents across Surat on Google Maps.
-            Reflecting genuine conceptual transformation and personal mentorship under Saif Sir.
+          <p className="text-xs sm:text-sm text-charcoal-muted leading-relaxed font-normal mx-auto max-w-lg mb-3">
+            Real feedback from students and parents across Surat on Google Maps. Direct concept
+            mentorship under Saif Sir.
           </p>
-        </div>
 
-        {/* Featured Google Rating Banner Card */}
-        <div ref={statsBoxRef} className="max-w-4xl mx-auto mb-10 sm:mb-12">
-          <div className="relative rounded-2xl bg-surface-pure border border-border-soft p-5 sm:p-7 shadow-lg overflow-hidden">
-            <BorderBeam duration={12} borderWidth={2} radius={20} />
+          {/* Quick External Actions */}
+          <div className="flex items-center justify-center gap-2.5 text-xs relative z-20">
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-[11px] uppercase tracking-wider transition-colors shadow-2xs border border-gold/40 cursor-pointer min-h-[36px]"
+              title="Open Google Maps listing"
+            >
+              <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
+              <span>Google Maps Listing</span>
+              <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
+            </a>
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              {/* Left Column: Rating Score & Stars */}
-              <div className="flex items-center gap-4 text-center sm:text-left">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-midnight flex flex-col items-center justify-center p-2 border border-gold/40 shadow-md shrink-0">
-                  <span className="font-serif font-bold text-2xl sm:text-3xl text-gold-light leading-none">
-                    {GOOGLE_BUSINESS_STATS.rating.toFixed(1)}
-                  </span>
-                  <div className="flex items-center gap-0.5 mt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-gold text-gold shrink-0"
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                    <GoogleIcon className="w-4 h-4 shrink-0" />
-                    <span className="font-serif font-bold text-base sm:text-lg text-charcoal">
-                      Google Verified Business
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      <span>{GOOGLE_BUSINESS_STATS.recommendationRate} Recommended</span>
-                    </span>
-                  </div>
-                  <p className="text-xs sm:text-sm text-charcoal-muted">
-                    Based on authentic student &amp; parent reviews in Rander &amp; Surat.
-                  </p>
-                  <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-charcoal/70 mt-1 font-mono">
-                    <MapPin className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                    <span>S.V. Tutorial · {GOOGLE_BUSINESS_STATS.location}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Direct Google Maps Actions */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-                <a
-                  href={GOOGLE_MAPS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-all shadow-sm border border-gold/40 min-h-[44px] cursor-pointer"
-                  title="View authentic reviews on official Google Maps listing"
-                >
-                  <GoogleIcon className="w-4 h-4 shrink-0" />
-                  <span>View on Google Maps</span>
-                  <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
-                </a>
-
-                <a
-                  href={GOOGLE_MAPS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-3 rounded-full bg-surface-pure hover:bg-ivory-light text-charcoal hover:text-midnight font-bold text-xs uppercase tracking-wider transition-all border border-border-soft min-h-[44px] cursor-pointer"
-                  title="Write a Google review for S.V. Tutorial"
-                >
-                  <MessageSquare className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                  <span>Write a Review</span>
-                </a>
-              </div>
-            </div>
+            <a
+              href={GOOGLE_WRITE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-pure hover:bg-ivory-light text-charcoal hover:text-midnight font-semibold text-[11px] uppercase tracking-wider transition-colors border border-border-soft cursor-pointer shadow-2xs min-h-[36px]"
+              title="Open direct review card on Google"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+              <span>Write Review</span>
+            </a>
           </div>
         </div>
 
-        {/* Category Filter Pills (Mobile Friendly & Non-Wrapping) */}
-        <div className="flex justify-center mb-8 sm:mb-10 overflow-x-auto no-scrollbar px-2 max-w-full">
-          <div className="inline-flex items-center p-1 rounded-full bg-surface-pure border border-border-soft shadow-2xs gap-1 max-w-full">
+        {/* ========================================================================= */}
+        {/* COMPACT CATEGORY FILTER PILLS                                             */}
+        {/* ========================================================================= */}
+        <div className="flex justify-center mb-4 sm:mb-6 px-2 w-full">
+          <div className="inline-flex items-center p-1 rounded-full bg-surface-pure border border-border-soft shadow-2xs gap-0.5 sm:gap-1 max-w-full">
             {REVIEW_CATEGORIES.map((cat) => {
-              const isSelected = activeCategory === cat.id;
+              const isSelected = activeTab === cat.id;
               return (
                 <button
                   key={cat.id}
                   type="button"
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`relative px-3.5 sm:px-5 py-2 rounded-full text-xs font-bold tracking-wide transition-colors cursor-pointer select-none whitespace-nowrap min-h-[40px] flex items-center shrink-0 ${
+                  onClick={() => {
+                    setActiveTab(cat.id);
+                    setCurrentIndex(0);
+                  }}
+                  className={`relative px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold tracking-wide transition-colors cursor-pointer select-none whitespace-nowrap min-h-[30px] sm:min-h-[32px] flex items-center shrink-0 ${
                     isSelected ? "text-midnight" : "text-charcoal/70 hover:text-charcoal"
                   }`}
                   aria-pressed={isSelected}
@@ -233,142 +284,368 @@ export default function ReviewsSection() {
                   {isSelected && (
                     <motion.div
                       layoutId="activeReviewCategoryPill"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
                       className="absolute inset-0 bg-gradient-to-r from-gold-light/40 via-gold/30 to-gold-light/40 border border-gold/60 rounded-full shadow-2xs"
                     />
                   )}
-                  <span className="relative z-10">{cat.label}</span>
+                  <span className="relative z-10">
+                    <span className="sm:hidden">{cat.shortLabel || cat.label}</span>
+                    <span className="hidden sm:inline">{cat.label}</span>
+                  </span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Reviews Cards Grid */}
-        <div
-          ref={cardsGridRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredReviews.map((rev) => (
+        {/* ========================================================================= */}
+        {/* COMPACT, MOBILE-OPTIMIZED SPOTLIGHT CARD (Visible at a Single Glance)     */}
+        {/* ========================================================================= */}
+        <div ref={mainCardRef} className="max-w-2xl mx-auto px-1 sm:px-0">
+          <div className="relative rounded-2xl bg-surface-pure border border-border-soft shadow-md p-3.5 sm:p-6 overflow-hidden">
+            <BorderBeam duration={16} borderWidth={2} radius={18} />
+
+            {/* Subtle Autoplay Progress Line at Top */}
+            {isAutoPlaying && (
               <motion.div
-                key={rev.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-              >
-                <SpotlightCard className="h-full rounded-2xl bg-surface-pure border border-border-soft p-5 sm:p-6 shadow-xs hover:border-gold/50 transition-all duration-300 flex flex-col justify-between group">
-                  <div>
-                    {/* Card Top Row: Reviewer Avatar, Name & Google Verified Badge */}
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-midnight via-midnight/90 to-charcoal text-gold font-bold font-serif text-sm flex items-center justify-center shrink-0 border border-gold/40 shadow-xs">
-                          {rev.initials}
-                        </div>
-                        <div className="min-w-0">
-                          <h3 className="font-serif font-bold text-charcoal text-base truncate">
-                            {rev.author}
-                          </h3>
-                          <p className="text-[11px] text-charcoal-muted line-clamp-1">
-                            {rev.role}
-                          </p>
-                        </div>
+                key={`progress-${activeReview.id}`}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 6, ease: "linear" }}
+                className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-gold via-gold-dark to-gold origin-left pointer-events-none z-20 opacity-80"
+              />
+            )}
+
+            {/* Swipeable Testimonial Card Area */}
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.15}
+              onDragEnd={handleDragEnd}
+              className="touch-pan-y cursor-grab active:cursor-grabbing"
+              title="Swipe left or right to switch review"
+            >
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={activeReview.id}
+                  custom={direction}
+                  variants={cardSlideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className="flex flex-col justify-between"
+                >
+                  {/* Top Header Row: Reviewer Details + Google Verified Badge */}
+                  <div className="flex items-start justify-between gap-2.5 pb-2.5 border-b border-border-soft mb-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div
+                        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${activeReview.avatarBg} text-white font-bold font-serif text-xs sm:text-sm flex items-center justify-center shrink-0 shadow-xs ring-1 ring-gold/40`}
+                      >
+                        {activeReview.initials}
                       </div>
 
-                      <div
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-ivory-light border border-border-soft shrink-0"
-                        title="Verified Review on Google Maps"
-                      >
-                        <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="font-serif font-bold text-charcoal text-sm sm:text-base truncate">
+                            {activeReview.author}
+                          </h3>
+                        </div>
+                        <p className="text-[11px] text-charcoal-muted truncate">
+                          {activeReview.role}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Star Rating & Batch Tag */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <div className="flex items-center gap-1">
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-4 h-4 fill-gold text-gold shrink-0"
-                          />
-                        ))}
-                      </div>
-                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-ivory-light border border-border-soft text-charcoal-muted uppercase tracking-wider">
-                        {rev.batch}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold border border-emerald-200">
+                        <GoogleIcon className="w-3 h-3 shrink-0" />
+                        <span>Verified 5.0</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Stars + Cohort Highlight Pill */}
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center gap-1">
+                      {[...Array(activeReview.rating)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="w-3.5 h-3.5 fill-gold text-gold shrink-0 drop-shadow-2xs"
+                        />
+                      ))}
+                      <span className="text-[11px] font-mono font-bold text-gold-dark ml-1">
+                        5.0
                       </span>
                     </div>
 
-                    {/* Quote Highlight */}
-                    <div className="mb-3 p-2.5 rounded-xl bg-ivory-light/60 border border-border-soft/60 flex items-start gap-2">
-                      <Quote className="w-4 h-4 text-gold shrink-0 mt-0.5 rotate-180" />
-                      <p className="text-xs font-serif italic text-charcoal font-medium leading-snug">
-                        &ldquo;{rev.highlightSnippet}&rdquo;
-                      </p>
-                    </div>
+                    <span className="text-[10px] sm:text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-ivory-light border border-border-soft text-charcoal truncate max-w-[190px] sm:max-w-none">
+                      {activeReview.studentHighlight}
+                    </span>
+                  </div>
 
-                    {/* Detailed Review Text */}
-                    <p className="text-xs sm:text-sm text-charcoal/80 leading-relaxed font-normal">
-                      {rev.content}
+                  {/* Highlight Quote */}
+                  <div className="mb-2.5 p-2 sm:p-2.5 rounded-xl bg-ivory-light/70 border-l-2 border-gold flex items-start gap-2">
+                    <Quote className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5 rotate-180" />
+                    <p className="font-serif italic font-semibold text-xs sm:text-sm text-charcoal leading-snug">
+                      &ldquo;{activeReview.highlightSnippet}&rdquo;
                     </p>
                   </div>
 
-                  {/* Card Bottom Meta */}
-                  <div className="mt-5 pt-3.5 border-t border-border-soft flex items-center justify-between text-[11px] text-charcoal-muted font-mono">
-                    <span className="inline-flex items-center gap-1 text-gold-dark font-semibold">
-                      <Sparkles className="w-3 h-3 text-gold" />
-                      <span>Verified Google Feedback</span>
-                    </span>
+                  {/* Review Body (Compact & readable, no overflow) */}
+                  <p className="text-xs sm:text-sm text-charcoal/85 leading-relaxed font-normal mb-3 line-clamp-3 sm:line-clamp-4">
+                    {activeReview.content}
+                  </p>
+
+                  {/* Action Link & Lightbox Trigger */}
+                  <div className="flex items-center justify-between text-[11px] font-mono pt-2 border-t border-border-soft">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedReviewModal(activeReview)}
+                      className="text-gold-dark hover:text-charcoal font-semibold underline underline-offset-2 cursor-pointer transition-colors"
+                    >
+                      Read Complete Review
+                    </button>
+
                     <a
                       href={GOOGLE_MAPS_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-charcoal/60 hover:text-midnight transition-colors"
-                      title="Inspect review on Google Maps"
+                      className="inline-flex items-center gap-1 text-charcoal-muted hover:text-midnight transition-colors"
                     >
-                      <span>Google Maps</span>
+                      <span>Verify on Google Maps</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
-                </SpotlightCard>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+
+            {/* =================================================================== */}
+            {/* COMPACT BOTTOM CONTROLS (Dots + Counter + Prev/Next Buttons)        */}
+            {/* =================================================================== */}
+            <div className="mt-3 pt-2.5 border-t border-border-soft flex items-center justify-between gap-2">
+              {/* Dot Indicators */}
+              <div className="flex items-center gap-1">
+                {filteredReviews.map((rev, idx) => {
+                  const isActive = safeIndex === idx;
+                  return (
+                    <button
+                      key={rev.id}
+                      type="button"
+                      onClick={() => {
+                        setDirection(idx > safeIndex ? 1 : -1);
+                        setCurrentIndex(idx);
+                      }}
+                      className="min-h-[22px] min-w-[18px] flex items-center justify-center cursor-pointer"
+                      aria-label={`Jump to review ${idx + 1}`}
+                    >
+                      <span
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          isActive ? "w-5 bg-gold-dark" : "w-1.5 bg-charcoal/20 hover:bg-charcoal/40"
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Prev / Next & Pause Controls */}
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono font-semibold text-charcoal-muted">
+                  {safeIndex + 1} / {filteredReviews.length}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setIsAutoPlaying((prev) => !prev)}
+                  className="w-7 h-7 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal flex items-center justify-center transition-colors cursor-pointer"
+                  aria-label={isAutoPlaying ? "Pause autoplay" : "Play autoplay"}
+                  title={isAutoPlaying ? "Pause" : "Play"}
+                >
+                  {isAutoPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3 ml-0.5" />}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  className="w-8 h-8 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal hover:text-midnight flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                  aria-label="Previous review"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="w-8 h-8 rounded-full bg-surface-pure hover:bg-ivory-light border border-border-soft text-charcoal hover:text-midnight flex items-center justify-center transition-all cursor-pointer shadow-2xs active:scale-95"
+                  aria-label="Next review"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Callout Banner: Direct invitation to read or leave review */}
-        <div className="mt-10 sm:mt-12 p-6 sm:p-8 rounded-2xl bg-midnight text-white border border-gold/40 flex flex-col sm:flex-row sm:items-center justify-between gap-5 shadow-xl">
-          <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 text-gold text-xs font-bold tracking-widest uppercase mb-1.5 font-mono">
-              <ShieldCheck className="w-4 h-4 text-gold shrink-0" />
-              <span>Authentic Community Reputation</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-white tracking-tight">
-              Has Your Child Studied at S.V. Tutorial?
-            </h3>
-            <p className="text-xs sm:text-sm text-white/75 mt-1 leading-relaxed">
-              We take deep pride in every student&apos;s academic growth. Read all community reviews
-              or share your own experience directly on our official Google Business Profile.
-            </p>
+        {/* ========================================================================= */}
+        {/* COMPACT TICKER STREAM OF ALL VERIFIED REVIEWS                             */}
+        {/* ========================================================================= */}
+        <div className="mt-8 pt-4">
+          <div className="text-center mb-3">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-charcoal-muted font-bold">
+              Continuous Google Reviews Feed · Tap Any Card to Inspect
+            </span>
           </div>
 
-          <div className="shrink-0">
-            <MagneticButton
-              as="a"
-              href={GOOGLE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gold hover:bg-gold-light text-midnight font-bold text-xs tracking-wider uppercase transition-colors shadow-lg cursor-pointer min-h-[44px]"
-            >
-              <GoogleIcon className="w-4 h-4 shrink-0" />
-              <span>Open Google Maps Profile</span>
-              <ExternalLink className="w-3.5 h-3.5 ml-1" />
-            </MagneticButton>
-          </div>
+          <Marquee pauseOnHover={true} duration={34} gap="gap-3.5" fadeEdges={true}>
+            {REVIEWS_DATA.map((rev) => (
+              <div
+                key={`ticker-${rev.id}`}
+                onClick={() => setSelectedReviewModal(rev)}
+                className="w-[280px] sm:w-[320px] p-3.5 rounded-xl bg-surface-pure border border-border-soft hover:border-gold/50 shadow-2xs transition-all duration-200 cursor-pointer flex flex-col justify-between shrink-0 select-none group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div
+                        className={`w-7 h-7 rounded-full bg-gradient-to-br ${rev.avatarBg} text-white font-bold font-serif text-xs flex items-center justify-center shrink-0`}
+                      >
+                        {rev.initials}
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-serif font-bold text-charcoal text-xs truncate">
+                          {rev.author}
+                        </h4>
+                        <p className="text-[10px] text-charcoal-muted truncate">
+                          {rev.role}
+                        </p>
+                      </div>
+                    </div>
+                    <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
+                  </div>
+
+                  <p className="text-[11px] text-charcoal/80 line-clamp-2 leading-relaxed">
+                    &ldquo;{rev.content}&rdquo;
+                  </p>
+                </div>
+
+                <div className="mt-2.5 pt-2 border-t border-border-soft flex items-center justify-between text-[10px] font-mono text-gold-dark font-semibold">
+                  <span>{rev.batch}</span>
+                  <span className="group-hover:translate-x-0.5 transition-transform">Read ↗</span>
+                </div>
+              </div>
+            ))}
+          </Marquee>
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* REVIEW LIGHTBOX MODAL (Detailed Full Inspection)                         */}
+      {/* ========================================================================= */}
+      <AnimatePresence>
+        {selectedReviewModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSelectedReviewModal(null)}
+            className="fixed inset-0 z-[120] bg-midnight/90 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <motion.div
+              initial={{ scale: 0.94, opacity: 0, y: 14 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.94, opacity: 0, y: 14 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-lg w-full bg-surface-pure p-5 sm:p-7 rounded-2xl border border-gold/40 shadow-2xl cursor-default max-h-[90vh] overflow-y-auto"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedReviewModal(null)}
+                className="absolute top-4 right-4 z-20 min-h-[36px] min-w-[36px] rounded-full bg-charcoal/5 hover:bg-charcoal/10 text-charcoal flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Reviewer Header */}
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className={`w-11 h-11 rounded-full bg-gradient-to-br ${selectedReviewModal.avatarBg} text-white font-bold font-serif text-base flex items-center justify-center shrink-0 shadow-md ring-1 ring-gold/40`}
+                >
+                  {selectedReviewModal.initials}
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-serif font-bold text-charcoal text-base">
+                      {selectedReviewModal.author}
+                    </h3>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold border border-emerald-200">
+                      <GoogleIcon className="w-3 h-3 shrink-0" />
+                      <span>Verified Google Review</span>
+                    </span>
+                  </div>
+                  <p className="text-xs text-charcoal-muted">
+                    {selectedReviewModal.role} · <span className="font-mono">{selectedReviewModal.timeAgo}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Stars & Cohort Tag */}
+              <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(selectedReviewModal.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-gold text-gold shrink-0 drop-shadow-2xs"
+                    />
+                  ))}
+                </div>
+                <span className="text-xs font-mono font-bold text-gold-dark">
+                  5.0 / 5.0
+                </span>
+                <span className="text-border-soft">•</span>
+                <span className="text-xs font-mono text-charcoal-muted">
+                  {selectedReviewModal.batch}
+                </span>
+              </div>
+
+              {/* Highlight callout */}
+              <div className="mb-3.5 p-3 rounded-xl bg-ivory-light border border-border-soft">
+                <p className="text-xs font-mono font-semibold text-gold-dark">
+                  Student Cohort: {selectedReviewModal.studentHighlight}
+                </p>
+              </div>
+
+              {/* Full Content */}
+              <p className="text-xs sm:text-sm text-charcoal/90 leading-relaxed font-normal mb-5">
+                &ldquo;{selectedReviewModal.content}&rdquo;
+              </p>
+
+              {/* Modal Actions */}
+              <div className="pt-3.5 border-t border-border-soft flex items-center justify-between gap-3">
+                <span className="text-xs font-mono text-charcoal-muted">
+                  S.V. Tutorial · Rander, Surat
+                </span>
+
+                <a
+                  href={GOOGLE_MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light text-xs font-bold uppercase tracking-wider transition-colors min-h-[38px]"
+                >
+                  <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
+                  <span>Open on Google Maps</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
