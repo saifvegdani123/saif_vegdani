@@ -97,7 +97,7 @@ export default function WhatsAppFloating() {
                   className="absolute right-full mr-3 items-center px-3 py-1 rounded-full bg-surface-pure text-charcoal text-xs font-semibold whitespace-nowrap shadow-md border border-gold/50 pointer-events-none z-50 font-mono flex gap-1.5"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                  <span>WhatsApp (+91 82388 43699)</span>
+                  <span>WhatsApp (+91 78629 43917)</span>
                 </motion.div>
               )}
             </AnimatePresence>

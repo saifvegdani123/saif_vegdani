@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Mail, Send, CheckCircle2, AlertTriangle, Clock, Sparkles, ExternalLink, RefreshCw, MapPin } from "lucide-react";
+import { MessageCircle, Mail, Send, CheckCircle2, AlertTriangle, Clock, Sparkles, ExternalLink, RefreshCw, MapPin, Phone, Navigation } from "lucide-react";
 import { getFormSubmissionWhatsAppUrl, getFormSubmissionEmailUrl, createWhatsAppUrl } from "../utils/whatsapp";
+import { GOOGLE_MAPS_URL } from "../data/reviews";
 import logoImg from "../assets/logo.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -193,7 +194,7 @@ export default function AdmissionsEnquiry() {
                     Saif Barkat Vegdani
                   </h3>
                   <p className="text-xs text-charcoal-muted mt-0.5 font-medium">
-                    B.Com, B.Ed · 9 Years Verified Record
+                    B.Com, B.Ed · 8 Years Verified Record
                   </p>
                 </div>
               </div>
@@ -243,20 +244,40 @@ export default function AdmissionsEnquiry() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-ivory-light border border-border-soft">
-                  <div className="w-9 h-9 rounded-full bg-surface-pure border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4" />
+                <div className="p-3.5 rounded-xl bg-ivory-light border border-border-soft space-y-2.5">
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-full bg-surface-pure border border-gold/40 flex items-center justify-center text-gold-dark shrink-0 mt-0.5">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
+                        Academy Location
+                      </h4>
+                      <p className="text-xs sm:text-sm text-charcoal mt-0.5 font-medium leading-snug">
+                        Gulistan Nagar Society, 16, Old Olpad Road, near Hanuman Tekri Road, Rander, Surat, Gujarat 395005
+                      </p>
+                      <span className="text-[11px] text-charcoal-muted block mt-1 font-normal">
+                        Centrally accessible for GSEB &amp; CBSE students across Rander, Adajan &amp; Surat
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider font-mono">
-                      Academy Location
-                    </h4>
-                    <p className="text-sm text-charcoal mt-0.5 font-medium">
-                      Rander, Surat, Gujarat
-                    </p>
-                    <span className="text-xs text-charcoal-muted block mt-0.5 font-normal">
-                      Centrally accessible for GSEB &amp; CBSE students
-                    </span>
+                  <div className="pt-2 border-t border-border-soft/60 flex flex-wrap gap-2">
+                    <a
+                      href={GOOGLE_MAPS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-pure border border-gold/40 text-gold-dark hover:text-midnight hover:bg-gold/15 text-[11px] font-semibold transition-colors"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      <span>Get Directions on Google Maps</span>
+                    </a>
+                    <a
+                      href="tel:+917862943917"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-pure border border-border-soft text-charcoal hover:text-gold-dark text-[11px] font-semibold transition-colors"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-gold-dark" />
+                      <span>Call: 078629 43917</span>
+                    </a>
                   </div>
                 </div>
               </div>

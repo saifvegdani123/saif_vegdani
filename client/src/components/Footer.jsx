@@ -1,5 +1,5 @@
 import React from "react";
-import { MessageCircle, Clock, ShieldCheck, ArrowUp, Mail, MapPin } from "lucide-react";
+import { MessageCircle, Clock, ShieldCheck, ArrowUp, Mail, MapPin, Phone } from "lucide-react";
 import { createWhatsAppUrl } from "../utils/whatsapp";
 import { GOOGLE_MAPS_URL } from "../data/reviews";
 import logoImg from "../assets/logo.png";
@@ -10,6 +10,8 @@ export default function Footer() {
   );
 
   const officialEmail = import.meta.env.VITE_CONTACT_EMAIL || "saif@svtutorial.in";
+  const officialPhoneDisplay = "078629 43917";
+  const officialPhoneTel = "+917862943917";
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -26,11 +28,11 @@ export default function Footer() {
                 <a
                   href="#hero"
                   className="w-12 h-12 rounded-xl border border-gold/40 bg-surface-pure flex items-center justify-center p-0.5 shadow-2xs transition-all duration-300 hover:border-gold hover:shadow-[0_0_14px_rgba(198,161,91,0.3)] shrink-0"
-                  aria-label="S.V. Tutorial - Return to top"
+                  aria-label="S.V Tutorials - Return to top"
                 >
                   <img
                     src={logoImg}
-                    alt="S.V. Tutorial Official Logo"
+                    alt="S.V Tutorials Official Logo"
                     className="w-full h-full object-contain rounded-lg"
                     width={48}
                     height={48}
@@ -38,7 +40,7 @@ export default function Footer() {
                 </a>
                 <div>
                   <span className="font-serif font-bold text-xl text-charcoal tracking-tight block leading-tight">
-                    S.V. Tutorial
+                    S.V Tutorials
                   </span>
                   <span className="text-xs font-semibold tracking-[0.14em] text-gold-dark uppercase mt-0.5 block font-mono">
                     Saif Barkat Vegdani · Tuition Classes
@@ -47,13 +49,21 @@ export default function Footer() {
               </div>
 
               <p className="text-sm text-charcoal-muted leading-relaxed mb-5 font-normal max-w-md">
-                Personalised tuition classes for Standards 3–12 in Surat, Gujarat. Focused on building ironclad
+                Personalised tuition classes for Standards 3–12 in Rander, Surat, Gujarat. Focused on building ironclad
                 conceptual fundamentals, consistent daily practice, and confident exam performance under
-                the direct guidance of a B.Com &amp; B.Ed qualified educator.
+                the direct guidance of Saif Barkat Vegdani (B.Com &amp; B.Ed qualified educator).
               </p>
 
               {/* Verified Contact Badges */}
               <div className="space-y-2 mb-6">
+                <a
+                  href={`tel:${officialPhoneTel}`}
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-charcoal hover:text-gold-dark transition-colors"
+                >
+                  <Phone className="w-4 h-4 text-gold-dark shrink-0" />
+                  <span>{officialPhoneDisplay} (+91 78629 43917)</span>
+                </a>
+                <br />
                 <a
                   href={`mailto:${officialEmail}`}
                   className="inline-flex items-center gap-2 text-xs font-semibold text-charcoal hover:text-gold-dark transition-colors"
@@ -61,17 +71,22 @@ export default function Footer() {
                   <Mail className="w-4 h-4 text-gold-dark shrink-0" />
                   <span>{officialEmail}</span>
                 </a>
-                <div className="flex items-center gap-2 text-xs text-charcoal-muted">
-                  <MapPin className="w-4 h-4 text-gold-dark shrink-0" />
-                  <span>Rander, Surat, Gujarat — 395005</span>
-                </div>
+                <a
+                  href={GOOGLE_MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-2 text-xs text-charcoal-muted hover:text-gold-dark transition-colors"
+                >
+                  <MapPin className="w-4 h-4 text-gold-dark shrink-0 mt-0.5" />
+                  <span>Gulistan Nagar Society, 16, Old Olpad Road, near Hanuman Tekri Road, Rander, Surat, Gujarat 395005</span>
+                </a>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5">
               <div className="inline-flex items-center gap-2 text-xs text-charcoal font-semibold px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft shadow-2xs">
                 <ShieldCheck className="w-4 h-4 text-gold-dark shrink-0" />
-                <span>9 Years Verified Record</span>
+                <span>8 Years Verified Record</span>
               </div>
               <div className="inline-flex items-center gap-1.5 text-xs text-charcoal-muted font-medium px-3.5 py-1.5 rounded-full bg-surface-pure border border-border-soft font-mono">
                 <span>B.Com, B.Ed</span>

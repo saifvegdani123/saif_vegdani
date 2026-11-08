@@ -1,6 +1,19 @@
 {
   "buildCommand": "npm run build --prefix client",
   "outputDirectory": "client/dist",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.svtutorial.in"
+        }
+      ],
+      "destination": "https://svtutorial.in/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

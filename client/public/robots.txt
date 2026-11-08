@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.svtutorial.in/sitemap.xml
-Host: https://www.svtutorial.in
+Sitemap: https://svtutorial.in/sitemap.xml
+Host: https://svtutorial.in

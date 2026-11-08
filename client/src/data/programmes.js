@@ -72,7 +72,7 @@ export const TEACHER_DATA = {
   name: "Saif Barkat Vegdani",
   age: 26,
   qualifications: ["Bachelor of Commerce (B.Com)", "Bachelor of Education (B.Ed)"],
-  overallExperienceYears: 9,
+  overallExperienceYears: 8,
   previousExperience: [
     {
       institution: "Ignite Academy",

@@ -76,8 +76,8 @@ export default function FAQSection() {
       a: "Admission and tuition fees depend on the student's academic standard, subject selection, and individual doubt-clinic requirements. Rather than quoting standardized figures, fees are clearly and transparently shared during direct consultation with parents. We invite you to contact us on WhatsApp or submit the enquiry form for fee details."
     },
     {
-      q: "Where is S.V. Tutorial located in Surat?",
-      a: "S.V. Tutorial is located in Rander, Surat, Gujarat. The academy provides a focused, quiet learning environment centrally accessible for GSEB and CBSE students across Surat. Both morning and afternoon school shifts are accommodated during our 4:30 PM to 8:00 PM operational window."
+      q: "Where is S.V Tutorials located in Surat?",
+      a: "S.V Tutorials is located at Gulistan Nagar Society, 16, Old Olpad Road, near Hanuman Tekri Road, Rander, Surat, Gujarat 395005. The academy is easily accessible for students across Rander, Adajan, and Surat. Both morning and afternoon school shifts are accommodated during our 4:30 PM to 8:00 PM operational window."
     },
     {
       q: "How can I enquire about admission?",

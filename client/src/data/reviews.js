@@ -1,4 +1,4 @@
-export const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/eMpRpUGxhfV588Wc8";
+export const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/5huGNPsBFJQA52E18";
 export const GOOGLE_WRITE_REVIEW_URL = "https://www.google.com/maps/place/S.V.TUTORIAL/@21.2282297,72.7925439,17z/data=!4m18!1m9!3m8!1s0x3be04d00642dc26f:0xea650b1960cc4f27!2sS.V.TUTORIAL!8m2!3d21.2282297!4d72.7925439!9m1!1b1!16s%2Fg%2F11zh70khys!3m7!1s0x3be04d00642dc26f:0xea650b1960cc4f27!8m2!3d21.2282297!4d72.7925439!9m1!1b1!16s%2Fg%2F11zh70khys?entry=ttu&g_ep=EgoyMDI2MTEwMS4wIKXMDSoASAFQAw%3D%3D";
 
 export const GOOGLE_BUSINESS_STATS = {
@@ -6,8 +6,8 @@ export const GOOGLE_BUSINESS_STATS = {
   maxRating: 5,
   reviewCountDisplay: "5.0 Rated on Google Maps",
   recommendationRate: "100%",
-  location: "Rander, Surat, Gujarat",
-  listingName: "S.V. Tutorial — Best Tuition Classes in Surat",
+  location: "Gulistan Nagar Society, 16, Old Olpad Road, near Hanuman Tekri Road, Rander, Surat, Gujarat 395005",
+  listingName: "S.V Tutorials — Tuition Classes in Rander, Surat",
   verifiedBadge: "Verified Google Business Profile"
 };
 
