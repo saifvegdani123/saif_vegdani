@@ -119,12 +119,12 @@ export default function Navbar() {
             <a
               href="#hero"
               className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xl p-1"
-              aria-label="S.V. Tutorial - Saif Barkat Vegdani Tuition Classes"
+              aria-label="S.V Tutorials - Saif Barkat Vegdani Tuition Classes"
             >
               <div className="relative shrink-0">
                 <img
                   src={logoImg}
-                  alt="S.V. Tutorial Official Logo"
+                  alt="S.V Tutorials Official Logo"
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-contain bg-surface-pure border border-gold/40 p-0.5 shadow-2xs shrink-0 transition-transform duration-300 group-hover:scale-105"
                   width={40}
                   height={40}
@@ -132,7 +132,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-col shrink-0">
                 <span className="font-serif font-bold text-base sm:text-lg text-charcoal tracking-tight leading-tight group-hover:text-midnight transition-colors">
-                  S.V. Tutorial
+                  S.V Tutorials
                 </span>
                 <span className="text-xs font-sans font-semibold tracking-wider text-gold-dark uppercase mt-0.5 hidden xl:block">
                   Saif Barkat Vegdani · Standards 3–12
@@ -222,13 +222,13 @@ export default function Navbar() {
               <div className="flex items-center gap-3">
                 <img
                   src={logoImg}
-                  alt="S.V. Tutorial"
+                  alt="S.V Tutorials"
                   className="w-10 h-10 rounded-xl object-contain bg-surface-pure border border-gold/40 p-0.5"
                   width={40}
                   height={40}
                 />
                 <div>
-                  <span className="font-serif font-bold text-lg text-charcoal block">S.V. Tutorial</span>
+                  <span className="font-serif font-bold text-lg text-charcoal block">S.V Tutorials</span>
                   <span className="text-xs font-sans font-semibold tracking-wider text-gold-dark uppercase block">
                     Standards 3–12
                   </span>

@@ -32,7 +32,7 @@ export default function WhatsAppFloating() {
   }, []);
 
   const emailUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
-    "S.V. Tutorial — Admission Consultation Enquiry"
+    "S.V Tutorials — Admission Consultation Enquiry"
   )}&body=${encodeURIComponent(
     "Hello Saif Sir,\n\nI would like to enquire about admission to your tuition classes (Standards 3–12). Please share details regarding available batch timings and enrolment.\n\nThank you."
   )}`;

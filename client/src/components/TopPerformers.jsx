@@ -110,7 +110,7 @@ export default function TopPerformers() {
           </h2>
 
           <p className="text-sm sm:text-base text-charcoal-muted leading-relaxed font-normal mx-auto">
-            Real outcomes from S.V. Tutorial batches. Verified merit announcements and scorecards
+            Real outcomes from S.V Tutorials batches. Verified merit announcements and scorecards
             from GSEB SSC Board Examinations under Saif Sir&apos;s direct mentorship.
           </p>
         </div>
@@ -186,7 +186,7 @@ export default function TopPerformers() {
                 <motion.img
                   key={activeBatch.id}
                   src={activeBatch.poster}
-                  alt={`S.V. Tutorial ${activeBatch.title} Official Merit Poster`}
+                  alt={`S.V Tutorials ${activeBatch.title} Official Merit Poster`}
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.01 }}
@@ -217,7 +217,7 @@ export default function TopPerformers() {
               <div className="absolute top-2.5 left-2.5 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-midnight/90 backdrop-blur-md border border-gold/40 text-white text-xs font-bold tracking-wider uppercase shadow-lg">
                 <CheckCircle2 className="w-3.5 h-3.5 text-gold shrink-0" />
                 <span className="text-gold-light font-mono font-semibold">
-                  <span className="hidden sm:inline">Official S.V. Tutorial Result</span>
+                  <span className="hidden sm:inline">Official S.V Tutorials Result</span>
                   <span className="sm:hidden">Verified Record</span>
                 </span>
               </div>
@@ -388,7 +388,7 @@ export default function TopPerformers() {
               <div className="rounded-xl overflow-hidden bg-midnight/5 max-h-[85vh] flex items-center justify-center">
                 <img
                   src={lightboxImage}
-                  alt="S.V. Tutorial Official Board Result High Resolution Poster"
+                  alt="S.V Tutorials Official Board Result High Resolution Poster"
                   className="w-full h-auto max-h-[82vh] object-contain rounded-xl"
                 />
               </div>

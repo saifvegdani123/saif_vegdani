@@ -194,7 +194,7 @@ export default function AdmissionsEnquiry() {
                     Saif Barkat Vegdani
                   </h3>
                   <p className="text-xs text-charcoal-muted mt-0.5 font-medium">
-                    B.Com, B.Ed · 8 Years Verified Record
+                    B.Com, B.Ed · 9 Years Verified Record
                   </p>
                 </div>
               </div>
@@ -290,14 +290,14 @@ export default function AdmissionsEnquiry() {
               <div className="flex items-center gap-3 mb-3">
                 <img
                   src={logoImg}
-                  alt="S.V. Tutorial"
+                  alt="S.V Tutorials"
                   className="w-9 h-9 rounded-xl object-contain bg-midnight border border-gold/40 p-0.5 shrink-0 shadow-xs"
                   width={36}
                   height={36}
                 />
                 <div>
                   <span className="text-xs font-bold uppercase tracking-widest text-gold block font-mono">
-                    S.V. Tutorial
+                    S.V Tutorials
                   </span>
                   <h4 className="font-serif text-base font-bold text-white">
                     Direct Admission Desk

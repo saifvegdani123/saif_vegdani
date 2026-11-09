@@ -9,7 +9,7 @@ const isPlaceholder = !envNumber || envNumber === "919876543210" || envNumber.tr
 
 if (import.meta.env.DEV && isPlaceholder) {
   console.warn(
-    "[S.V. Tutorial Notice] VITE_WHATSAPP_NUMBER is missing or set to placeholder in client environment. Owner must supply real number in client/.env"
+    "[S.V Tutorials Notice] VITE_WHATSAPP_NUMBER is missing or set to placeholder in client environment. Owner must supply real number in client/.env"
   );
 }
 
@@ -52,7 +52,7 @@ export function getProgrammeWhatsAppUrl(programmeTitle, board = "") {
  */
 export function getFormSubmissionWhatsAppUrl(details) {
   const { parentName, studentName, standard, board, phoneNumber, message } = details;
-  let text = `Hello Saif Sir (S.V. Tutorial),
+  let text = `Hello Saif Sir (S.V Tutorials),
 
 I would like to enquire about admission:
 • Parent / Guardian: ${parentName}
@@ -76,11 +76,11 @@ I would like to enquire about admission:
  */
 export function getFormSubmissionEmailUrl(details, recipientEmail = DEFAULT_CONTACT_EMAIL) {
   const { parentName, studentName, standard, board, phoneNumber, message } = details;
-  const subject = `New Admission Enquiry - S.V. Tutorials (${studentName} - ${standard})`;
+  const subject = `New Admission Enquiry - S.V Tutorials (${studentName} - ${standard})`;
   
   let body = `Dear Saif Sir,
 
-I would like to enquire about admission at S.V. Tutorial:
+I would like to enquire about admission at S.V Tutorials:
 
 • Parent / Guardian: ${parentName}
 • Student Name: ${studentName}

@@ -190,7 +190,7 @@ export default function TeacherProfile() {
                     Experience
                   </span>
                   <span className="font-serif font-bold text-charcoal text-sm px-2.5 py-0.5 rounded-full bg-surface-pure border border-border-soft inline-block mt-0.5 shadow-2xs">
-                    8 Years Record
+                    9 Years Record
                   </span>
                 </div>
               </div>
@@ -209,7 +209,7 @@ export default function TeacherProfile() {
             </div>
 
             <p className="text-xs sm:text-sm font-semibold text-charcoal-muted uppercase tracking-wider mb-6 font-mono">
-              Age {TEACHER_DATA.age} • 8 Years Dedicated Classroom Teaching
+              Age {TEACHER_DATA.age} • 9 Years Dedicated Classroom Teaching
             </p>
 
             {/* Qualifications Badges as Refined Chips */}
@@ -224,7 +224,7 @@ export default function TeacherProfile() {
               </div>
               <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-surface-pure border border-border-soft text-charcoal text-xs sm:text-sm font-semibold shadow-2xs">
                 <Award className="w-4 h-4 text-gold shrink-0" />
-                <span>8 Years Continuous Record</span>
+                <span>9 Years Continuous Record</span>
               </div>
             </div>
 
@@ -276,7 +276,7 @@ export default function TeacherProfile() {
             </div>
 
             {/* Internal Note:
-                Verified teaching credentials: 8 years verified continuous teaching experience across primary, secondary and commerce coaching. */}
+                Verified teaching credentials: 9 years verified continuous teaching experience across primary, secondary and commerce coaching. */}
           </div>
         </div>
       </div>

@@ -40,12 +40,12 @@ export default function TrustCredentials() {
   const credentials = [
     {
       icon: Award,
-      num: 8,
+      num: 9,
       suffix: " Years",
       title: "Teaching Record",
       subtitle: "Verified Career Experience",
       description:
-        "Pedagogical background spanning secondary school faculty and specialized tuition batches with 8 years of continuous teaching experience."
+        "Pedagogical background spanning secondary school faculty and specialized tuition batches with 9 years of continuous teaching experience."
     },
     {
       icon: GraduationCap,

@@ -628,7 +628,7 @@ export default function ReviewsSection() {
               {/* Modal Actions */}
               <div className="pt-3.5 border-t border-border-soft flex items-center justify-between gap-3">
                 <span className="text-xs font-mono text-charcoal-muted">
-                  S.V. Tutorial · Rander, Surat
+                  S.V Tutorials · Rander, Surat
                 </span>
 
                 <a

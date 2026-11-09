@@ -128,7 +128,7 @@ export default function Hero() {
             {/* Academic Session Eyebrow */}
             <div className="eyebrow-badge mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
-              <span>S.V. TUTORIAL · ACADEMIC SESSION 2026–27</span>
+              <span>S.V TUTORIALS · ACADEMIC SESSION 2026–27</span>
             </div>
 
             {/* Signature Headline */}
@@ -214,7 +214,7 @@ export default function Hero() {
                 <div className="relative aspect-[4/5] rounded-[14px] overflow-hidden bg-midnight/5">
                   <img
                     src={saifHeroImg}
-                    alt="Saif Barkat Vegdani - Principal Educator & Founder of S.V. Tutorial"
+                    alt="Saif Barkat Vegdani - Principal Educator & Founder of S.V Tutorials"
                     className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.015]"
                     loading="eager"
                     fetchPriority="high"
@@ -228,14 +228,14 @@ export default function Hero() {
                   <div className="flex items-center gap-3">
                     <img
                       src={logoImg}
-                      alt="S.V. Tutorial Monogram"
+                      alt="S.V Tutorials Monogram"
                       className="w-9 h-9 rounded-lg object-contain bg-midnight border border-gold/40 p-0.5 shrink-0 shadow-xs"
                       width={36}
                       height={36}
                     />
                     <div>
                       <span className="text-xs font-bold tracking-widest uppercase text-gold block">
-                        S.V. Tutorial
+                        S.V Tutorials
                       </span>
                       <span className="text-xs font-semibold text-white">Saif Barkat Vegdani</span>
                     </div>
@@ -245,7 +245,7 @@ export default function Hero() {
                       B.Com, B.Ed Qualified
                     </span>
                     <span className="text-xs text-gold-light block mt-0.5 font-semibold">
-                      8 Years Record
+                      9 Years Record
                     </span>
                   </div>
                 </div>
