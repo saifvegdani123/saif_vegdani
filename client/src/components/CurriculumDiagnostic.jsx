@@ -90,23 +90,23 @@ export default function CurriculumDiagnostic() {
   return (
     <section
       id="curriculum-diagnostic"
-      className="py-10 sm:py-16 bg-ivory border-b border-border-soft relative overflow-hidden"
+      className="py-8 sm:py-12 lg:py-14 bg-ivory border-b border-border-soft relative overflow-hidden"
       aria-label="Curriculum Diagnostic Tool"
     >
       <div className="site-container relative z-10">
         {/* Section Eyebrow */}
-        <div className="flex items-center justify-between mb-6 pb-3 border-b border-border-soft">
+        <div className="flex items-center justify-between mb-5 pb-3 border-b border-border-soft">
           <div className="eyebrow-badge">
             <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
-            <span>04 / CURRICULUM DIAGNOSTIC</span>
+            <span>INTERACTIVE BATCH &amp; SUBJECT FINDER</span>
           </div>
-          <span className="text-xs text-charcoal-muted font-medium hidden sm:inline">
-            Interactive Eligibility &amp; Batch Matching
+          <span className="text-xs text-charcoal-muted font-medium hidden sm:inline font-mono">
+            Direct Consultation Matching
           </span>
         </div>
 
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-charcoal font-bold tracking-tight leading-tight">
             Find Your Child’s Ideal Batch &amp; Pathway
           </h2>

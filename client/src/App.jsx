@@ -6,14 +6,11 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import AcademicMarquee from "./components/AcademicMarquee";
-import TrustCredentials from "./components/TrustCredentials";
-import TopPerformers from "./components/TopPerformers";
+import TeacherProfile from "./components/TeacherProfile";
+import ReviewsSection from "./components/ReviewsSection";
 import ProgramsSection from "./components/ProgramsSection";
 import CurriculumDiagnostic from "./components/CurriculumDiagnostic";
-import TeachingPhilosophy from "./components/TeachingPhilosophy";
-import TeacherProfile from "./components/TeacherProfile";
-import BatchTimings from "./components/BatchTimings";
-import ReviewsSection from "./components/ReviewsSection";
+import TopPerformers from "./components/TopPerformers";
 import AdmissionsEnquiry from "./components/AdmissionsEnquiry";
 import FAQSection from "./components/FAQSection";
 import Footer from "./components/Footer";
@@ -100,16 +97,24 @@ export default function App() {
 
       {/* Main Experience Body */}
       <main id="main-content" className="flex-grow">
+        {/* 1. Hero Section */}
         <Hero />
         <AcademicMarquee />
-        <TrustCredentials />
-        <TopPerformers />
+
+        {/* 2. About Section (Educator Profile, Verified Credentials & Teaching Philosophy) */}
+        <TeacherProfile />
+
+        {/* 3. Google Reviews / Social Proof */}
+        <ReviewsSection />
+
+        {/* 4. Courses / Classes Offered + Schedule Protocol & Diagnostic Tool */}
         <ProgramsSection />
         <CurriculumDiagnostic />
-        <TeachingPhilosophy />
-        <TeacherProfile />
-        <BatchTimings />
-        <ReviewsSection />
+
+        {/* 5. Student Results / Achievements */}
+        <TopPerformers />
+
+        {/* 6. Contact / Admission Section & FAQ */}
         <AdmissionsEnquiry />
         <FAQSection />
       </main>

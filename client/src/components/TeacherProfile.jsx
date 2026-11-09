@@ -2,8 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, Calendar, CheckCircle2, User, Award } from "lucide-react";
+import {
+  Briefcase,
+  Calendar,
+  CheckCircle2,
+  User,
+  Award,
+  GraduationCap,
+  Building2,
+  UserCheck,
+  Lightbulb,
+  RotateCcw,
+  Trophy
+} from "lucide-react";
 import { TEACHER_DATA } from "../data/programmes";
+import NumberTicker from "./ui/NumberTicker";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,19 +109,94 @@ export default function TeacherProfile() {
   const currentPerspective =
     TEACHER_PERSPECTIVES.find((p) => p.id === activePhoto) || TEACHER_PERSPECTIVES[0];
 
+  const credentials = [
+    {
+      icon: Award,
+      num: 9,
+      suffix: " Years",
+      title: "Teaching Record",
+      subtitle: "Verified Career Experience",
+      description:
+        "Pedagogical background spanning secondary school faculty and specialized tuition batches with 9 years of continuous teaching experience."
+    },
+    {
+      icon: GraduationCap,
+      num: 2,
+      suffix: " Degrees",
+      title: "B.Com & B.Ed",
+      subtitle: "Dual Formal Qualifications",
+      description:
+        "Formal pedagogical training in modern teaching methodologies paired with commercial foundations."
+    },
+    {
+      icon: Building2,
+      num: 3,
+      suffix: " Institutions",
+      title: "Prior Tenures",
+      subtitle: "School & Academy Background",
+      description:
+        "Instruction across Ignite Academy, Saraswati Classes (Coaching & Commerce), and Good Shepherd Mission School."
+    },
+    {
+      icon: UserCheck,
+      num: 1,
+      prefix: "1 : ",
+      suffix: " Ratio",
+      title: "Direct Mentorship",
+      subtitle: "Personal Accountability",
+      description:
+        "Every batch and doubt clinic is conducted personally by Saif Sir with zero intermediaries."
+    }
+  ];
+
+  const principles = [
+    {
+      num: "01",
+      icon: Lightbulb,
+      title: "Concept Clarity Over Rote",
+      eyebrow: "Foundational Understanding",
+      narrative:
+        "Deconstructing chapters into transparent conceptual steps, ensuring mathematical formulas, scientific laws, and commerce principles are understood from origins."
+    },
+    {
+      num: "02",
+      icon: RotateCcw,
+      title: "Daily Problem Solving",
+      eyebrow: "Habitual Rigor",
+      narrative:
+        "Daily notebook checks, step-by-step problem breakdown, and consistent homework drills completed during our structured evening sessions."
+    },
+    {
+      num: "03",
+      icon: Trophy,
+      title: "Calm Exam Temperament",
+      eyebrow: "Tactical Readiness",
+      narrative:
+        "Timed simulations mirroring GSEB and CBSE marking blueprints, building calm, steady execution under exam conditions."
+    },
+    {
+      num: "04",
+      icon: UserCheck,
+      title: "Direct Accountability",
+      eyebrow: "Personal Mentorship",
+      narrative:
+        "Every batch taught directly by Saif Barkat Vegdani. Zero substitute instructors, ensuring full parent transparency and personal guidance."
+    }
+  ];
+
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
-      aria-label="Teacher Profile"
+      className="py-8 sm:py-12 lg:py-14 bg-ivory border-b border-border-soft"
+      aria-label="Teacher Profile & About S.V Tutorials"
     >
       <div className="site-container">
         {/* Section Eyebrow */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
           <div className="eyebrow-badge mb-3">
             <User className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>06 / PRINCIPAL EDUCATOR</span>
+            <span>01 / ABOUT THE EDUCATOR</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">
@@ -274,9 +362,104 @@ export default function TeacherProfile() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Internal Note:
-                Verified teaching credentials: 9 years verified continuous teaching experience across primary, secondary and commerce coaching. */}
+        {/* Verified Credentials 4-Stat Strip */}
+        <div className="mt-8 pt-8 border-t border-border-soft">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-bold uppercase tracking-[0.14em] text-gold-dark font-mono flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              VERIFIED EDUCATOR CREDENTIALS
+            </span>
+            <span className="text-xs text-charcoal-muted font-medium hidden sm:inline font-mono">
+              Direct Instruction by Saif Sir
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {credentials.map((cred, idx) => {
+              const Icon = cred.icon;
+              return (
+                <div
+                  key={idx}
+                  className="bg-surface-pure p-4 sm:p-5 rounded-xl border border-border-soft shadow-2xs flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <div className="w-8 h-8 rounded-lg border border-border-soft flex items-center justify-center text-gold-dark bg-ivory">
+                        <Icon className="w-4 h-4 text-gold-dark" />
+                      </div>
+                      <span className="text-[11px] font-mono text-gold-dark font-semibold">
+                        0{idx + 1}
+                      </span>
+                    </div>
+
+                    <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal tracking-tight flex items-baseline mb-1">
+                      {cred.prefix && <span className="mr-0.5">{cred.prefix}</span>}
+                      <NumberTicker value={cred.num} duration={1.2} delay={idx * 0.05} />
+                      <span className="text-xs sm:text-sm text-gold-dark font-medium ml-1">
+                        {cred.suffix}
+                      </span>
+                    </div>
+
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-gold-dark block mb-0.5 font-mono">
+                      {cred.subtitle}
+                    </span>
+                    <h3 className="font-serif text-sm font-bold text-charcoal tracking-tight mb-1">
+                      {cred.title}
+                    </h3>
+                    <p className="text-xs text-charcoal-muted leading-relaxed font-normal">
+                      {cred.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Core Teaching Philosophy Statement & 4 Pillars */}
+        <div className="mt-6 rounded-2xl bg-midnight text-white p-6 sm:p-8 border border-midnight-subtle shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            {/* Guiding Quote (5 cols) */}
+            <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-white/10 pb-5 lg:pb-0 lg:pr-6">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-gold font-mono block mb-2">
+                Pedagogical Core Principle
+              </span>
+              <p className="font-serif text-base sm:text-lg italic leading-relaxed text-ivory-light mb-4">
+                &ldquo;When students truly grasp foundational principles, fear disappears. With structured guidance and consistent practice, academic confidence becomes second nature.&rdquo;
+              </p>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold text-gold tracking-wider uppercase font-mono">
+                <span className="text-white">Saif Barkat Vegdani</span>
+                <span className="text-gold/50">•</span>
+                <span className="text-gold-light">B.Com, B.Ed</span>
+              </div>
+            </div>
+
+            {/* 4 Teaching Pillars (7 cols) */}
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {principles.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.num} className="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-6 h-6 rounded-md bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0">
+                        <Icon className="w-3.5 h-3.5 text-gold" />
+                      </div>
+                      <span className="text-xs font-bold text-white tracking-tight">
+                        {item.title}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-white/70 leading-relaxed font-normal">
+                      {item.narrative}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

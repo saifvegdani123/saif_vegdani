@@ -19,7 +19,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-[#F6F1E6] text-charcoal border-t border-border-soft relative overflow-hidden" aria-label="Institutional Footer">
-      <div className="site-container pt-12 pb-10 sm:pt-14 sm:pb-12 relative z-10">
+      <div className="site-container pt-10 pb-8 sm:pt-12 sm:pb-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-border-soft">
           {/* Col 1: Identity & Credentials (5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-between">
@@ -155,7 +155,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="#philosophy"
+                  href="#about"
                   className="hover:text-gold-dark transition-colors block group"
                 >
                   <span className="group-hover:translate-x-1 transition-transform inline-block">Teaching Methodology</span>

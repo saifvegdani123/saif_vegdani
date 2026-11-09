@@ -7,13 +7,10 @@ import MagneticButton from "./ui/MagneticButton";
 
 const NAV_LINKS = [
   { name: "Home", href: "#hero", id: "hero" },
-  { name: "Results", href: "#results", id: "results" },
-  { name: "Classes", href: "#classes", id: "classes" },
-  { name: "Diagnostic", href: "#curriculum-diagnostic", id: "curriculum-diagnostic" },
-  { name: "Philosophy", href: "#philosophy", id: "philosophy" },
-  { name: "Educator", href: "#about", id: "about" },
-  { name: "Timings", href: "#timings", id: "timings" },
+  { name: "About", href: "#about", id: "about" },
   { name: "Reviews", href: "#reviews", id: "reviews" },
+  { name: "Classes", href: "#classes", id: "classes" },
+  { name: "Results", href: "#results", id: "results" },
   { name: "Admissions", href: "#admissions", id: "admissions" },
   { name: "FAQ", href: "#faq", id: "faq" }
 ];

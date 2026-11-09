@@ -97,15 +97,15 @@ export default function FAQSection() {
     <section
       ref={sectionRef}
       id="faq"
-      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
+      className="py-8 sm:py-12 lg:py-14 bg-ivory border-b border-border-soft"
       aria-label="Frequently Asked Questions"
     >
       <div className="site-container max-w-4xl">
         {/* Section Header */}
-        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
           <div className="eyebrow-badge mb-3">
             <HelpCircle className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>10 / COMMON QUESTIONS</span>
+            <span>06 / FREQUENTLY ASKED QUESTIONS</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">

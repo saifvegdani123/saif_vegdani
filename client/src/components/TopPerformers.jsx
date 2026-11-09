@@ -93,13 +93,13 @@ export default function TopPerformers() {
   }, [lightboxImage]);
 
   return (
-    <section id="results" className="py-10 sm:py-16 bg-ivory border-b border-border-soft relative overflow-hidden">
+    <section id="results" className="py-8 sm:py-12 lg:py-14 bg-ivory border-b border-border-soft relative overflow-hidden">
       <div className="site-container relative z-10">
         {/* Section Eyebrow & Editorial Heading */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
           <div className="eyebrow-badge mb-3">
             <Trophy className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>02 / PROVEN BOARD RESULTS</span>
+            <span>04 / STUDENT RESULTS &amp; ACHIEVEMENTS</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">

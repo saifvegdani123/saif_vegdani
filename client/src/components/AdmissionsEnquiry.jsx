@@ -144,15 +144,15 @@ export default function AdmissionsEnquiry() {
     <section
       ref={sectionRef}
       id="admissions"
-      className="py-10 sm:py-16 bg-ivory border-b border-border-soft"
+      className="py-8 sm:py-12 lg:py-14 bg-ivory border-b border-border-soft"
       aria-label="Admissions Consultation Desk"
     >
       <div className="site-container">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
           <div className="eyebrow-badge mb-3">
             <Sparkles className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>09 / ADMISSION CONSULTATION</span>
+            <span>05 / ADMISSION &amp; CONSULTATION</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-charcoal tracking-tight mb-3">

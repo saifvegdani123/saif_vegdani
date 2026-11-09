@@ -9,10 +9,12 @@ import {
   Award,
   Sparkles,
   AlertCircle,
-  Calendar
+  Calendar,
+  Clock,
+  Users
 } from "lucide-react";
 import { PROGRAMMES_DATA } from "../data/programmes";
-import { getProgrammeWhatsAppUrl } from "../utils/whatsapp";
+import { getProgrammeWhatsAppUrl, createWhatsAppUrl } from "../utils/whatsapp";
 
 export default function ProgramsSection() {
   const getProgramIcon = (id) => {
@@ -24,15 +26,15 @@ export default function ProgramsSection() {
   return (
     <section
       id="classes"
-      className="py-10 sm:py-16 bg-ivory-light border-b border-border-soft"
-      aria-label="Academic Programmes"
+      className="py-8 sm:py-12 lg:py-14 bg-ivory-light border-b border-border-soft"
+      aria-label="Academic Programmes & Courses Offered"
     >
       <div className="site-container">
         {/* Section Eyebrow */}
         <div className="flex items-center justify-between mb-6 pb-3 border-b border-border-soft">
           <div className="eyebrow-badge">
             <BookOpen className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-            <span>03 / ACADEMIC PROGRAMMES</span>
+            <span>03 / COURSES &amp; CLASSES OFFERED</span>
           </div>
           <span className="text-xs text-charcoal-muted font-medium hidden sm:inline font-mono">
             Evening Batches (4:30 PM – 8:00 PM)
@@ -214,6 +216,53 @@ export default function ProgramsSection() {
               </motion.div>
             );
           })}
+        </div>
+
+        {/* Operational Evening Schedule & Batch Protocol */}
+        <div id="timings" className="mt-8 rounded-2xl bg-surface-pure border border-border-soft p-5 sm:p-7 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-border-soft">
+            <span className="text-xs font-bold uppercase tracking-[0.14em] text-gold-dark font-mono flex items-center gap-2">
+              <Clock className="w-4 h-4 text-gold-dark" />
+              OPERATIONAL BATCH SCHEDULE &amp; TIMINGS
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-ivory-light text-charcoal border border-border-soft flex items-center gap-1.5 font-mono">
+              <Calendar className="w-3.5 h-3.5 text-gold-dark" />
+              Monday – Saturday
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+            <div className="md:col-span-7">
+              <div className="flex flex-wrap items-baseline gap-2 mb-2">
+                <span className="font-serif text-2xl sm:text-3xl font-bold text-charcoal tracking-tight">
+                  4:30 PM – 8:00 PM
+                </span>
+                <span className="text-xs font-semibold text-gold-dark font-mono px-2.5 py-0.5 rounded-full bg-ivory-light border border-gold/30">
+                  Confirmed Evening Window
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-charcoal/80 leading-relaxed font-normal">
+                Sessions operate during evening hours to comfortably accommodate both morning and afternoon school shifts.
+                Exact standard-wise batch hours are finalized during direct parent consultation to ensure zero timetable conflicts.
+              </p>
+            </div>
+
+            <div className="md:col-span-5 flex flex-col sm:flex-row md:flex-col gap-3 justify-center">
+              <div className="p-3 rounded-xl bg-ivory-light border border-border-soft flex items-center gap-2.5 text-xs text-charcoal font-medium">
+                <Users className="w-4 h-4 text-gold-dark shrink-0" />
+                <span>Small-batch cohorts with zero substitute instructors</span>
+              </div>
+              <a
+                href={createWhatsAppUrl("Hello Saif Sir, I would like to check available batch timings between 4:30 PM and 8:00 PM.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-midnight hover:bg-midnight/90 text-gold hover:text-gold-light font-bold text-xs uppercase tracking-wider transition-colors shadow-2xs border border-gold/40 min-h-[40px]"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Check Available Batch Slots</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Advisory Consultation Notice */}

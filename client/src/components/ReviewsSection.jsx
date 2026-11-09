@@ -209,17 +209,23 @@ export default function ReviewsSection() {
         {/* ========================================================================= */}
         <div ref={headerRef} className="text-center max-w-2xl mx-auto mb-4 sm:mb-7">
           {/* Integrated Google 5.0 Eyebrow Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-pure border border-border-soft shadow-2xs mb-2">
-            <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
-            <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 fill-gold text-gold shrink-0" />
-              ))}
+          <div className="flex flex-col items-center gap-2 mb-2">
+            <div className="eyebrow-badge">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+              <span>02 / VERIFIED REVIEWS &amp; RATINGS</span>
             </div>
-            <span className="text-[11px] font-mono font-bold text-charcoal">
-              5.0 RATED ON GOOGLE MAPS
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-pure border border-border-soft shadow-2xs">
+              <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
+              <div className="flex items-center gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-gold text-gold shrink-0" />
+                ))}
+              </div>
+              <span className="text-[11px] font-mono font-bold text-charcoal">
+                5.0 RATED ON GOOGLE MAPS
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+            </div>
           </div>
 
           <h2 className="text-xl sm:text-3xl lg:text-4xl font-serif font-bold text-charcoal tracking-tight mb-1.5">
